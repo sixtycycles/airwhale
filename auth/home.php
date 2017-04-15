@@ -138,7 +138,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             var customLabel = {
                 'pothole': {label: 'POTHOLE'},
                 'noise complaint': {label: 'NOISE'},
-                'garbage loose!': {label: 'TRASH'},
+                'garbage loose': {label: 'TRASH'},
                 'dog poop': {label: 'POOP'}
             };
             //the map where we draw things and interact.

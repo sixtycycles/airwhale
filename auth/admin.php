@@ -54,7 +54,12 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Menu <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li> <a href="home.php">Report Problems</a></li>
+                        <li><a href="home.php">Report Problems</a></li>
+                        <?php
+                        if ($_SESSION['isAdmin']) {
+                            echo "<li> <a href='admin.php'>Admin Portal</a></li>";
+                        }
+                        ?>
                         <li role="separator" class="divider"></li>
                         <li><a href="logout.php">logout</a></li>
                     </ul>
@@ -72,109 +77,195 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             <div id="map" style="height:500px; width:100%"></div>
         </div>
 
-        <div class="col-lg-4 col-md-4">
+        <div class="col-md-4 col=lg-4">
+            <div id="form" class="panel panel-default">
+                <div class="panel-heading">Administer Problems</div>
+                <div class="panel-body">
+                    <h3>filters</h3>
 
+                    <?php
+
+                    require_once("phpsqlinfo_dbinfo.php");
+
+
+                    $connection=mysqli_connect('localhost',$username,$password,$database,$port);
+                    if (!$connection) {
+                        die('Not connected : ' . mysqli_error($connection));
+                    }
+
+                    $db_selected = mysqli_select_db($connection,$database);
+                    if (!$db_selected) {
+                        die ('Can\'t use db : ' . mysqli_error($connection));
+                    }
+                    $query = "SELECT id,type FROM Problems GROUP BY type ASC;";
+                    $result = mysqli_query($connection,$query);
+                    if (!$result) {
+                        die('Invalid query: ' . mysqli_error($connection));
+                    }
+
+
+                    echo "<div class='form-group'>";
+                    while($row=@mysqli_fetch_assoc($result)){
+                       echo '<button class=\'btn btn-default\' onclick=\'btnSelect(' .'"'.$row['id']. '"'.  ')\' id=\'' . $row['id']. '\'> ' . $row['type'] . ' </button> <br />';
+                    };
+                    echo "</div>";
+
+                    ?>
+
+
+                </div>
+            </div>
         </div>
 
-        </div>
+
     </div>
 
-<script>
-    var map;
-    var marker;
-    var infowindow;
-    //populate field with coords from the marker.
 
-//    function grabCoords(e){
-//        document.getElementById('lat').value = e.latLng.lat();
-//        document.getElementById('lng').value = e.latLng.lng();
-//    }
+    <script>
+        var map;
+        var marker;
+        var infowindow;
+        var messagewindow;
+        var ctaLayer;
+        var markers = [];
+        //populate field with coords from the marker.
 
-    function initMap() {
-        var oronoMaine = {lat: 44.88798544802555, lng: -68.70643615722656};
+        function grabCoords(e) {
+            document.getElementById('lat').value = e.latLng.lat();
+            document.getElementById('lng').value = e.latLng.lng();
+        }
 
-        var customLabel = {
-            pothole: {
-                label: 'POTHOLE'
+        //this might be a weird way to do this
+        function btnSelect(str){
+
+            if(document.getElementById(str).getAttribute("class") === "btn btn-default") {
+                document.getElementById(str).setAttribute("class", "btn btn-primary");
+
             }
-        };
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: oronoMaine,
-            zoom: 13
-        });
+            else{
+                document.getElementById(str).setAttribute("class", "btn btn-default")
+            }
+        }
 
-        infowindow = new google.maps.InfoWindow;
-        messagewindow = new google.maps.InfoWindow({
-            content: document.getElementById('message')
-        });
+        function initMap() {
+            var oronoMaine = {lat: 44.88798544802555, lng: -68.70643615722656};
+            //this thing holds labels fro markers by problem type.
+            var customLabel = {
+                'pothole': {label: 'POTHOLE'},
+                'noise complaint': {label: 'NOISE'},
+                'garbage loose': {label: 'TRASH'},
+                'dog poop': {label: 'POOP'}
+            };
+            //the map where we draw things and interact.
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: oronoMaine,
+                zoom: 13
+            });
+            //huh?
+            infowindow = new google.maps.InfoWindow({content:"yay"});
+            messagewindow = new google.maps.InfoWindow({content:"YAY"});
 
-        downloadUrl('dump.php', function(data) {
-            var xml = data.responseXML;
-            var markers = xml.documentElement.getElementsByTagName('marker');
-            Array.prototype.forEach.call(markers, function(markerElem) {
-                var id = markerElem.getAttribute('id');
-                var name = markerElem.getAttribute('name');
-                var address = markerElem.getAttribute('address');
-                var type = markerElem.getAttribute('type');
-                var point = new google.maps.LatLng(
-                    parseFloat(markerElem.getAttribute('lat')),
-                    parseFloat(markerElem.getAttribute('lng')));
+            //outline of town boundary for reference.
+            ctaLayer = new google.maps.KmlLayer({
+                url: 'http://sixtycycles.github.io/orono.kml',
+                map: map,
+                preserveViewport: true
+            });
 
-                var infowincontent = document.createElement('div');
-                var strong = document.createElement('strong');
-                strong.textContent = name;
-                infowincontent.appendChild(strong);
-                infowincontent.appendChild(document.createElement('br'));
+            //this grabs all the problems to display!
+            downloadUrl('dump.php', function(data) {
+                var xml = data.responseXML;
+                var markers = xml.documentElement.getElementsByTagName('marker');
+                Array.prototype.forEach.call(markers, function(markerElem) {
+                    var id = markerElem.getAttribute('id');
+                    var name = markerElem.getAttribute('name');
+                    var address = markerElem.getAttribute('address');
+                    var type = markerElem.getAttribute('type');
+                    var point = new google.maps.LatLng(
+                        parseFloat(markerElem.getAttribute('lat')),
+                        parseFloat(markerElem.getAttribute('lng')));
 
-                var text = document.createElement('text');
-                text.textContent = address;
-                infowincontent.appendChild(text);
-                var icon = customLabel[type] || {};
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: point,
-                    label: icon.label
+                    var infowincontent = document.createElement('div');
+                    var strong = document.createElement('strong');
+                    strong.textContent = name;
+                    infowincontent.appendChild(strong);
+                    infowincontent.appendChild(document.createElement('br'));
+
+                    var text = document.createElement('text');
+                    text.textContent = address;
+                    infowincontent.appendChild(text);
+                    var icon = customLabel[type] || {};
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: point,
+                        label: icon.label
+                    });
+                    marker.addListener('click', function() {
+                        infowindow.setContent(infowincontent);
+                        infowindow.open(map, marker);
+                    });
+
+
                 });
-                marker.addListener('click', function() {
-                    infoWindow.setContent(infowincontent);
-                    infoWindow.open(map, marker);
-                });
+            });
 
+            google.maps.event.addListener(map, 'click', function(event) {
+                grabCoords(event);
+                addMarker(event.latLng);
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.open(map, marker);
+                });
 
             });
-        });
-    }
+        } //END OF INIT MAP DUMMY
 
 
-
-    function downloadUrl(url,callback) {
-        var request = window.ActiveXObject ?
-            new ActiveXObject('Microsoft.XMLHTTP') :
-            new XMLHttpRequest;
-
-        request.onreadystatechange = function() {
-            if (request.readyState === 4) {
-                request.onreadystatechange = doNothing;
-                callback(request, request.status);
+        //handle markers added by user, while keeping existing problems. (use array)
+        function addMarker(location) {
+            clearMarkers();
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map
+            });
+            markers.push(marker);
+            console.log(marker);
+        }
+        function setMapOnAll(map) {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(map);
             }
-        };
+        }
+        function clearMarkers() {
+            setMapOnAll(null);
+        }
 
-        request.open('GET', url, true);
-        request.send(null);
-    }
+        function downloadUrl(url,callback) {
+            var request = window.ActiveXObject ?
+                new ActiveXObject('Microsoft.XMLHTTP') :
+                new XMLHttpRequest;
+
+            request.onreadystatechange = function() {
+                if (request.readyState === 4) {
+                    request.onreadystatechange = doNothing;
+                    callback(request, request.status);
+                }
+            };
+
+            request.open('GET', url, true);
+            request.send(null);
+        }
+        function doNothing() {
+        }
 
 
 
-
-            function doNothing() {
-    }
-
-</script>
+    </script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLpwvDNIXNMVz7GRsggZOfRMDGQE-pdPE&callback=initMap">
     </script>
 
 
+</div>
 
 </body>
 
