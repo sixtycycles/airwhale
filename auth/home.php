@@ -137,9 +137,9 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             //this thing holds labels fro markers by problem type.
             var customLabel = {
                 'pothole': {label: 'POTHOLE'},
-                'noise complaint': {label: 'NOISE'},
-                'garbage loose': {label: 'TRASH'},
-                'dog poop': {label: 'POOP'}
+                'noise': {label: 'NOISE'},
+                'garbage': {label: 'TRASH'},
+                'poop': {label: 'POOP'}
             };
             //the map where we draw things and interact.
             map = new google.maps.Map(document.getElementById('map'), {
@@ -185,6 +185,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var icon = customLabel[type] || {};
+
                     var marker = new google.maps.Marker({
                         map: map,
                         position: point,

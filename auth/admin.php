@@ -81,7 +81,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             <div id="form" class="panel panel-default">
                 <div class="panel-heading">Administer Problems</div>
                 <div class="panel-body">
-                    <h3>filters</h3>
+                    <h3>Hide Types of Problem:</h3>
 
                     <?php
 
@@ -105,7 +105,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
                     echo "<div class='form-group'>";
                     while($row=@mysqli_fetch_assoc($result)){
-                       echo '<button class=\'btn btn-default\' onclick=\'btnSelect(' .'"'.$row['type'].'"'.   ')\' id=\'' . $row['type']. '\'> ' . $row['type'] . ' </button> <br />';
+                       echo '<button name=\'filters_params\'class=\'btn btn-default\' onclick=\'btnSelect(' .'"'.$row['type'].'"'.   ')\' id=\'' . $row['type']. '\'> ' . $row['type'] . ' </button> <br />';
                     };
                     echo "</div>";
                     ?>
@@ -137,26 +137,38 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         //this might be a weird way to do this
         function btnSelect(str){
+            var fields = document.getElementsByName('filters_params');
+            if(str !== fields[0]['id']){console.log(str)}
 
+
+//            console.log(fields[0]['id']);
+//            console.log(fields[1]['id']);
+//            console.log(fields[2]['id']);
+//            console.log(fields[3]['id']);
             if(document.getElementById(str).getAttribute("class") === "btn btn-default") {
                 document.getElementById(str).setAttribute("class", "btn btn-primary");
 
-            }
-            else{
-                document.getElementById(str).setAttribute("class", "btn btn-default")
+                //updateMap(str);
                 initMap(str)
             }
+            else{
+                initMap();
+                document.getElementById(str).setAttribute("class", "btn btn-default")
+
+            }
+
         }
 
         function initMap(filter) {
-            console.log(filter);
+            //console.log(filter);
+            if (!filter){filter=""}
             var oronoMaine = {lat: 44.88798544802555, lng: -68.70643615722656};
             //this thing holds labels fro markers by problem type.
             var customLabel = {
-                'pothole': {label: 'POTHOLE'},
-                'noise complaint': {label: 'NOISE'},
-                'garbage loose': {label: 'TRASH'},
-                'dog poop': {label: 'POOP'}
+                'pothole': {label: 'pothole'},
+                'noise': {label: 'noise'},
+                'garbage': {label: 'garbage'},
+                'poop': {label: 'poop'}
             };
             //the map where we draw things and interact.
             map = new google.maps.Map(document.getElementById('map'), {
@@ -204,20 +216,24 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var icon = customLabel[type] || {};
+                    if(filter !== icon.label ) {
+                        //console.log(filter);
+                        //console.log(icon.label);
 
-                    var marker = new google.maps.Marker({
-                        map: map,
-                        position: point,
-                        label: icon.label
-                        //icon:"img/hazard.png"
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            position: point,
+                            label: icon.label,
+                            visible: true
+                            //icon:"img/hazard.png"
+                        });
 
-
-                    });
-                    marker.addListener('click', function() {
-                        //console.log(marker.label);
-                        infowindow.setContent(infowincontent);
-                        infowindow.open(map, marker);
-                    });
+                        marker.addListener('click', function () {
+                            //console.log(marker.label);
+                            infowindow.setContent(infowincontent);
+                            infowindow.open(map, marker);
+                        });
+                    }
 
 
                 });
