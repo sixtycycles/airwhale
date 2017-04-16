@@ -11,7 +11,7 @@ if (!empty($_POST)) {
     $type = htmlspecialchars($_POST['type']);
 
 // Opens a connection to a MySQL server.
-    $connection = mysqli_connect("localhost", $username, $password ,$database,8889);
+    $connection = mysqli_connect("localhost", $username, $password, $database, 8889);
 
     if ($connection->connect_error) {
         die("Connection failed: " . $connection->connect_error);

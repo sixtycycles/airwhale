@@ -124,7 +124,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         var infowindow;
         var messagewindow;
         var ctaLayer;
-        var markers = [];
+        //var markers = [];
         //populate field with coords from the marker.
 
         function grabCoords(e) {
@@ -146,8 +146,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 center: oronoMaine,
                 zoom: 13
             });
-            infowindow = new google.maps.InfoWindow({content:"yay"});
-            messagewindow = new google.maps.InfoWindow({content:"YAY"});
+            infowindow = new google.maps.InfoWindow({content: "yay"});
+            messagewindow = new google.maps.InfoWindow({content: "YAY"});
             //outline of town boundary for reference.
             ctaLayer = new google.maps.KmlLayer({
                 url: 'http://sixtycycles.github.io/orono.kml',
@@ -156,10 +156,10 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             });
 
 
-            downloadUrl('dump.php', function(data) {
+            downloadUrl('dump.php', function (data) {
                 var xml = data.responseXML;
                 var markers = xml.documentElement.getElementsByTagName('marker');
-                Array.prototype.forEach.call(markers, function(markerElem) {
+                Array.prototype.forEach.call(markers, function (markerElem) {
                     var id = markerElem.getAttribute('id');
                     var name = markerElem.getAttribute('name');
                     var address = markerElem.getAttribute('address');
@@ -192,7 +192,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                         label: icon.label
 
                     });
-                    marker.addListener('click', function() {
+                    marker.addListener('click', function () {
                         infowindow.setContent(infowincontent);
                         infowindow.open(map, marker);
                     });
@@ -200,13 +200,13 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 });
             });
-            google.maps.event.addListener(map, 'click', function(event) {
+            google.maps.event.addListener(map, 'click', function (event) {
 
                 grabCoords(event);
                 addMarker(event.latLng);
 
 
-                google.maps.event.addListener(marker, 'click', function() {
+                google.maps.event.addListener(marker, 'click', function () {
                     infowindow.open(map, marker);
                 });
 
@@ -214,7 +214,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         } //END OF INIT MAP DUMMY
 
 
-//handle markers added by user, while keeping existing problems. (use array)
+        //handle markers added by user, while keeping existing problems. (use array)
         function addMarker(location) {
             clearMarkers();
             var marker = new google.maps.Marker({
@@ -232,12 +232,12 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             setMapOnAll(null);
         }
 
-        function downloadUrl(url,callback) {
+        function downloadUrl(url, callback) {
             var request = window.ActiveXObject ?
                 new ActiveXObject('Microsoft.XMLHTTP') :
                 new XMLHttpRequest;
 
-            request.onreadystatechange = function() {
+            request.onreadystatechange = function () {
                 if (request.readyState === 4) {
                     request.onreadystatechange = doNothing;
                     callback(request, request.status);

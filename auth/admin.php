@@ -4,15 +4,13 @@ require_once 'class.user.php';
 
 $user_home = new USER();
 
-if( !$user_home->is_admin())
-{
+if (!$user_home->is_admin()) {
     $user_home->redirect('index.php');
 }
 
 $stmt = $user_home->runQuery("SELECT * FROM tbl_users WHERE userID=:uid");
-$stmt->execute(array(":uid"=>$_SESSION['userSession']));
+$stmt->execute(array(":uid" => $_SESSION['userSession']));
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
 
 
 //this bit grabs all the problems to display;
@@ -84,28 +82,26 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     <h3>Hide Types of Problem:</h3>
 
                     <?php
-
                     require_once("phpsqlinfo_dbinfo.php");
 
-
-                    $connection=mysqli_connect('localhost',$username,$password,$database,$port);
+                    $connection = mysqli_connect('localhost', $username, $password, $database, $port);
                     if (!$connection) {
                         die('Not connected : ' . mysqli_error($connection));
                     }
 
-                    $db_selected = mysqli_select_db($connection,$database);
+                    $db_selected = mysqli_select_db($connection, $database);
                     if (!$db_selected) {
                         die ('Can\'t use db : ' . mysqli_error($connection));
                     }
                     $query = "SELECT id,type FROM Problems GROUP BY type ASC;";
-                    $result = mysqli_query($connection,$query);
+                    $result = mysqli_query($connection, $query);
                     if (!$result) {
                         die('Invalid query: ' . mysqli_error($connection));
                     }
 
                     echo "<div class='form-group'>";
-                    while($row=@mysqli_fetch_assoc($result)){
-                       echo '<button name=\'filters_params\'class=\'btn btn-default\' onclick=\'btnSelect(' .'"'.$row['type'].'"'.   ')\' id=\'' . $row['type']. '\'> ' . $row['type'] . ' </button> <br />';
+                    while ($row = @mysqli_fetch_assoc($result)) {
+                        echo '<button name=\'filters_params\'class=\'btn btn-default\' onclick=\'btnSelect(' . '"' . $row['type'] . '"' . ')\' id=\'' . $row['type'] . '\'> ' . $row['type'] . ' </button> <br />';
                     };
                     echo "</div>";
                     ?>
@@ -113,10 +109,10 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 </div>
             </div>
         </div>
-<div style="visibility: hidden;" >
-    <input type="text" name="lat" id="lat" placeholder="lattitude">
-    <input type="text" name="lng" id="lng" placeholder="longitude">
-</div>
+        <div style="visibility: hidden;">
+            <input type="text" name="lat" id="lat" placeholder="lattitude">
+            <input type="text" name="lng" id="lng" placeholder="longitude">
+        </div>
 
     </div>
 
@@ -127,7 +123,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         var infowindow;
         var messagewindow;
         var ctaLayer;
-        var markers = [];
+        var filters = {};
+
         //populate field with coords from the marker.
 
         function grabCoords(e) {
@@ -136,32 +133,24 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         //this might be a weird way to do this
-        function btnSelect(str){
-            var fields = document.getElementsByName('filters_params');
-            if(str !== fields[0]['id']){console.log(str)}
+        function btnSelect(str) {
 
-
-//            console.log(fields[0]['id']);
-//            console.log(fields[1]['id']);
-//            console.log(fields[2]['id']);
-//            console.log(fields[3]['id']);
-            if(document.getElementById(str).getAttribute("class") === "btn btn-default") {
+            if (document.getElementById(str).getAttribute("class") === "btn btn-default") {
+                if (!filters[str]){filters[str] = str}
                 document.getElementById(str).setAttribute("class", "btn btn-primary");
-
-                //updateMap(str);
-                initMap(str)
-            }
-            else{
-                initMap();
-                document.getElementById(str).setAttribute("class", "btn btn-default")
+                initMap(str);
 
             }
+            else {
+                document.getElementById(str).setAttribute("class", "btn btn-default");
+                delete filters[str];
+                initMap(str);
+            }
+            console.log(filters);
 
         }
 
-        function initMap(filter) {
-            //console.log(filter);
-            if (!filter){filter=""}
+        function initMap(str) {
             var oronoMaine = {lat: 44.88798544802555, lng: -68.70643615722656};
             //this thing holds labels fro markers by problem type.
             var customLabel = {
@@ -176,8 +165,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 zoom: 13
             });
             //huh?
-            infowindow = new google.maps.InfoWindow({content:"yay"});
-            messagewindow = new google.maps.InfoWindow({content:"YAY"});
+            infowindow = new google.maps.InfoWindow({content: "yay"});
+            messagewindow = new google.maps.InfoWindow({content: "YAY"});
 
             //outline of town boundary for reference.
             ctaLayer = new google.maps.KmlLayer({
@@ -187,14 +176,16 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             });
 
             //this grabs all the problems to display!
-            downloadUrl('dump.php', function(data) {
+            downloadUrl('dump.php', function (data) {
                 var xml = data.responseXML;
                 var markers = xml.documentElement.getElementsByTagName('marker');
-                Array.prototype.forEach.call(markers, function(markerElem) {
+                Array.prototype.forEach.call(markers, function (markerElem) {
+
                     var id = markerElem.getAttribute('id');
                     var name = markerElem.getAttribute('name');
                     var address = markerElem.getAttribute('address');
                     var type = markerElem.getAttribute('type');
+
                     var point = new google.maps.LatLng(
                         parseFloat(markerElem.getAttribute('lat')),
                         parseFloat(markerElem.getAttribute('lng')));
@@ -216,66 +207,36 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var icon = customLabel[type] || {};
-                    if(filter !== icon.label ) {
-                        //console.log(filter);
-                        //console.log(icon.label);
-
+                    if(!filters[type]) {
                         var marker = new google.maps.Marker({
                             map: map,
                             position: point,
-                            label: icon.label,
-                            visible: true
-                            //icon:"img/hazard.png"
+                            label: icon.label
                         });
 
+
                         marker.addListener('click', function () {
-                            //console.log(marker.label);
+
                             infowindow.setContent(infowincontent);
                             infowindow.open(map, marker);
                         });
                     }
 
-
                 });
             });
 
-            google.maps.event.addListener(map, 'click', function(event) {
-                grabCoords(event);
-                addMarker(event.latLng);
-                google.maps.event.addListener(marker, 'click', function() {
-                    infowindow.open(map, marker);
 
-                });
-
-            });
         } //END OF INIT MAP DUMMY
 
 
         //handle markers added by user, while keeping existing problems. (use array)
-        function addMarker(location) {
-            clearMarkers();
-            var marker = new google.maps.Marker({
-                position: location,
-                map: map
-            });
-            markers.push(marker);
-            console.log(marker);
-        }
-        function setMapOnAll(map) {
-            for (var i = 0; i < markers.length; i++) {
-                markers[i].setMap(map);
-            }
-        }
-        function clearMarkers() {
-            setMapOnAll(null);
-        }
 
-        function downloadUrl(url,callback) {
+        function downloadUrl(url, callback) {
             var request = window.ActiveXObject ?
                 new ActiveXObject('Microsoft.XMLHTTP') :
                 new XMLHttpRequest;
 
-            request.onreadystatechange = function() {
+            request.onreadystatechange = function () {
                 if (request.readyState === 4) {
                     request.onreadystatechange = doNothing;
                     callback(request, request.status);
@@ -287,7 +248,6 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         }
         function doNothing() {
         }
-
 
 
     </script>
