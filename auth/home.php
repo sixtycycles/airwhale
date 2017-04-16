@@ -93,9 +93,9 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                             <label for="type">What type of Problem?</label>
                             <select class="form-control" id='type' name='type'> +
                                 <option value='pothole' SELECTED>pothole</option>
-                                <option value='noise complaint'>noise complaint</option>
-                                <option value='garbage loose'>garbage loose!</option>
-                                <option value='dog poop'>dog poop</option>
+                                <option value='noise'>noise complaint</option>
+                                <option value='garbage'>garbage loose!</option>
+                                <option value='poop'>dog poop</option>
                             </select>
 
                             <h4>How should we contact you? </h4>
@@ -155,7 +155,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 preserveViewport: true
             });
 
-            //this grabs all the problems to display!
+
             downloadUrl('dump.php', function(data) {
                 var xml = data.responseXML;
                 var markers = xml.documentElement.getElementsByTagName('marker');
@@ -175,13 +175,21 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var text = document.createElement('text');
-                    text.textContent = address;
+                    text.textContent = type + "-" + id;
                     infowincontent.appendChild(text);
+                    infowincontent.appendChild(document.createElement('br'));
+
+                    var addr = document.createElement('addr');
+                    addr.textContent = address;
+                    infowincontent.appendChild(addr);
+                    infowincontent.appendChild(document.createElement('br'));
+
                     var icon = customLabel[type] || {};
                     var marker = new google.maps.Marker({
                         map: map,
                         position: point,
                         label: icon.label
+
                     });
                     marker.addListener('click', function() {
                         infowindow.setContent(infowincontent);
@@ -191,7 +199,6 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 });
             });
-
             google.maps.event.addListener(map, 'click', function(event) {
 
                 grabCoords(event);

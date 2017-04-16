@@ -103,20 +103,20 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                         die('Invalid query: ' . mysqli_error($connection));
                     }
 
-
                     echo "<div class='form-group'>";
                     while($row=@mysqli_fetch_assoc($result)){
-                       echo '<button class=\'btn btn-default\' onclick=\'btnSelect(' .'"'.$row['id']. '"'.  ')\' id=\'' . $row['id']. '\'> ' . $row['type'] . ' </button> <br />';
+                       echo '<button class=\'btn btn-default\' onclick=\'btnSelect(' .'"'.$row['type'].'"'.   ')\' id=\'' . $row['type']. '\'> ' . $row['type'] . ' </button> <br />';
                     };
                     echo "</div>";
-
                     ?>
-
 
                 </div>
             </div>
         </div>
-
+<div style="visibility: hidden;" >
+    <input type="text" name="lat" id="lat" placeholder="lattitude">
+    <input type="text" name="lng" id="lng" placeholder="longitude">
+</div>
 
     </div>
 
@@ -144,10 +144,12 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             }
             else{
                 document.getElementById(str).setAttribute("class", "btn btn-default")
+                initMap(str)
             }
         }
 
-        function initMap() {
+        function initMap(filter) {
+            console.log(filter);
             var oronoMaine = {lat: 44.88798544802555, lng: -68.70643615722656};
             //this thing holds labels fro markers by problem type.
             var customLabel = {
@@ -192,15 +194,27 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var text = document.createElement('text');
-                    text.textContent = address;
+                    text.textContent = type + "-" + id;
                     infowincontent.appendChild(text);
+                    infowincontent.appendChild(document.createElement('br'));
+
+                    var addr = document.createElement('addr');
+                    addr.textContent = address;
+                    infowincontent.appendChild(addr);
+                    infowincontent.appendChild(document.createElement('br'));
+
                     var icon = customLabel[type] || {};
+
                     var marker = new google.maps.Marker({
                         map: map,
                         position: point,
                         label: icon.label
+                        //icon:"img/hazard.png"
+
+
                     });
                     marker.addListener('click', function() {
+                        //console.log(marker.label);
                         infowindow.setContent(infowincontent);
                         infowindow.open(map, marker);
                     });
@@ -214,6 +228,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 addMarker(event.latLng);
                 google.maps.event.addListener(marker, 'click', function() {
                     infowindow.open(map, marker);
+
                 });
 
             });
