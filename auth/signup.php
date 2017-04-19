@@ -71,8 +71,8 @@ if(isset($_POST['btn-signup']))
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Signup | Coding Cage</title>
-    <!-- Bootstrap -->
+    <title>Sign Up | Orono Problem Reporter</title>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -140,7 +140,7 @@ if(isset($_POST['btn-signup']))
         <label for="txtpass">pick a password:</label>
         <input type="password" class="form-control" placeholder="Password" name="txtpass" required id='pw1'/><br />
         <label for="txtpass2">enter it again:</label>
-        <input type="password" class="form-control" placeholder="re-enter password" name="txtpass2" required id= 'pw2' onblur="check()"/><br />
+        <input type="password" class="form-control" placeholder="re-enter password" name="txtpass2" required id='pw2' onblur="check()"/><br />
 
         <hr />
         <button class="btn btn-large btn-primary" type="submit" name="btn-signup">Sign Up</button>
