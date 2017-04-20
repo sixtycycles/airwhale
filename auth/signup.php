@@ -38,15 +38,25 @@ if(isset($_POST['btn-signup']))
             //$key = base64_encode($id);
             //$id = $key;
 
-            $message = "     
-                Hello $uname,
-                <br /><br />
-                Welcome to the Citizen Problem Reporter!<br/>
-                To complete your registration, please click the following link<br/>
-                <br /><br />
-                <a href='localhost:8888/airwhale/auth/verify.php?id=$id&code=$code'>Click HERE to Activate :)</a>
-                <br /><br />
-                Thanks,";
+            $url = "localhost:8888/airwhale/auth/airwhale/auth/verify.php?id=${id}&code=${code}";
+
+            $message = "
+                <p>
+                    Hello ${uname},
+                    <br /><br />
+                    Welcome to the Citizen Problem Reporter!<br/>
+                    To complete your registration, please click the following link:<br/>
+                    <br /><br />
+                    <a href='${url}'>Click HERE to Activate :)</a> <br />
+                    <br />
+
+                    Direct activation link:
+
+                    <a href='${url}'>${url}</a><br />
+                    <br />
+                    Thanks!
+                </p>
+                ";
 
             $subject = "Confirm Registration";
 
