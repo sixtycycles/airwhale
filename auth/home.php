@@ -124,12 +124,22 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         var infowindow;
         var messagewindow;
         var ctaLayer;
-        //var markers = [];
-        //populate field with coords from the marker.
+        var markers = [];
+        //populate field with coords from the marker and place it on the map.
 
         function grabCoords(e) {
             document.getElementById('lat').value = e.latLng.lat();
             document.getElementById('lng').value = e.latLng.lng();
+            clearMarkers();
+            var marker = new google.maps.Marker({
+                position: e.latLng,
+                map: map
+            });
+            markers.push(marker);
+        }
+        //handle markers added by user, while keeping existing problems. (use array)
+        function addMarker(location) {
+
         }
 
         function initMap() {
@@ -201,11 +211,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 });
             });
             google.maps.event.addListener(map, 'click', function (event) {
-
                 grabCoords(event);
-                addMarker(event.latLng);
-
-
                 google.maps.event.addListener(marker, 'click', function () {
                     infowindow.open(map, marker);
                 });
@@ -213,16 +219,6 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             });
         } //END OF INIT MAP DUMMY
 
-
-        //handle markers added by user, while keeping existing problems. (use array)
-        function addMarker(location) {
-            clearMarkers();
-            var marker = new google.maps.Marker({
-                position: location,
-                map: map
-            });
-            markers.push(marker);
-        }
         function setMapOnAll(map) {
             for (var i = 0; i < markers.length; i++) {
                 markers[i].setMap(map);

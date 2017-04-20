@@ -93,18 +93,24 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     if (!$db_selected) {
                         die ('Can\'t use db : ' . mysqli_error($connection));
                     }
-                    $query = "SELECT id,type FROM Problems GROUP BY type ASC;";
-                    $result = mysqli_query($connection, $query);
+                    //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
+                    $query = "SELECT id,type, COUNT(type) FROM Problems GROUP BY type ASC;";
+
+                    $result = mysqli_query($connection,$query);
+
                     if (!$result) {
                         die('Invalid query: ' . mysqli_error($connection));
                     }
 
                     echo "<div class='form-group'>";
-                    while ($row = @mysqli_fetch_assoc($result)) {
-                        echo '<button name=\'filters_params\'class=\'btn btn-default\' onclick=\'btnSelect(' . '"' . $row['type'] . '"' . ')\' id=\'' . $row['type'] . '\'> ' . $row['type'] . ' </button> <br />';
+                    while ($row = @mysqli_fetch_assoc($result) ) {
+
+                        echo '<button name=\'filters_params\'class=\'btn btn-default\' onclick=\'btnSelect(' . '"' . $row['type'] . '"' . ')\' id=\'' . $row['type'] . '\'> ' . $row['type'] . " <span class='badge'> ".$row['COUNT(type)']." </span>". ' </button> <br />';
+
                     };
                     echo "</div>";
-                    ?>
+
+                  ?>
 
                 </div>
             </div>
