@@ -96,8 +96,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                                 <option value='other'>Other</option>
                             </select>
 
-                            <label for="address">Description of problem</label>
-                            <input class="form-control" type='text' id='address' name='address'/>
+                            <label for="description">Description of problem</label>
+                            <input class="form-control" type='text' id='description' name='description'/>
 
                             <h4>How should we contact you? </h4>
                             <label for="phone">Phone Number</label>
@@ -182,17 +182,20 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 preserveViewport: true
             });
 
-            boundary = new google.maps.KmlLayer({
-                url: 'http://sixtycycles.github.io/CPR_KML/OronoBoundary.kml',
-                map: map,
-                preserveViewport: true
-            });
+//            boundary = new google.maps.KmlLayer({
+//                url: 'http://sixtycycles.github.io/CPR_KML/OronoBoundary.kml',
+//                map: map,
+//                preserveViewport: true,
+//                suppressInfoWindows: true,
+//
+//
+//            });
 
-            parcels = new google.maps.KmlLayer({
-                url: 'http://sixtycycles.github.io/CPR_KML/Orono_Parcels.kml',
-                map: map,
-                preserveViewport: true
-            });
+//            parcels = new google.maps.KmlLayer({
+//                url: 'http://sixtycycles.github.io/CPR_KML/Orono_Parcels.kml',
+//                map: map,
+//                preserveViewport: true
+//            });
 
             downloadUrl('dump.php', function (data) {
                 var xml = data.responseXML;
@@ -203,25 +206,37 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     var name = markerElem.getAttribute('name');
                     var description = markerElem.getAttribute('description');
                     var type = markerElem.getAttribute('type');
-
+                    var timestamp = markerElem.getAttribute('timestamp');
+                    var status = markerElem.getAttribute('problemStatus');
                     var point = new google.maps.LatLng(
                         parseFloat(markerElem.getAttribute('lat')),
                         parseFloat(markerElem.getAttribute('lng')));
 
                     var infowincontent = document.createElement('div');
+
                     var strong = document.createElement('strong');
-                    strong.textContent = name;
+                    strong.textContent = "User: "+ name;
                     infowincontent.appendChild(strong);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var text = document.createElement('text');
-                    text.textContent = type + "-" + id;
+                    text.textContent = "Problem Type: "+ type + "-" + id;
                     infowincontent.appendChild(text);
                     infowincontent.appendChild(document.createElement('br'));
 
-                    var desc = document.createElement('desc');
-                    desc.textContent = description;
+                    var desc = document.createElement('text');
+                    desc.textContent = "Problem Description: "+description;
                     infowincontent.appendChild(desc);
+                    infowincontent.appendChild(document.createElement('br'));
+
+                    var time = document.createElement('text');
+                    time.textContent = "Timestamp: "+timestamp;
+                    infowincontent.appendChild(time);
+                    infowincontent.appendChild(document.createElement('br'));
+
+                    var problemStatus = document.createElement('p');
+                    problemStatus.textContent = "Status: "+ status;
+                    infowincontent.appendChild(problemStatus);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var icon = customLabel[type] || {};

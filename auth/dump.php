@@ -47,6 +47,8 @@ while ($row = @mysqli_fetch_assoc($result)) {
     echo 'lat="' . $row['lat'] . '" ';
     echo 'lng="' . $row['lon'] . '" ';
     echo 'type="' . $row['type'] . '" ';
+    echo 'timestamp="' . parseToXML($row['timestamp']) . '" ';
+    echo 'problemStatus="' . $row['problem_status'] . '" ';
     echo '/>';
 }
 

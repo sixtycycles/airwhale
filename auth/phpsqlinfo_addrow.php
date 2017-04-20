@@ -18,7 +18,7 @@ if (!empty($_POST)) {
     }
 
 // Inserts new row with place data.
-    $query = "INSERT INTO Problems ( name,  lat, lon, address, type ) VALUES ( '$name','$lat', '$lon','$description', '$type');";
+    $query = "INSERT INTO Problems ( name,  lat, lon, description, type ) VALUES ( '$name','$lat', '$lon','$description', '$type');";
 
     $result = mysqli_query($connection, $query);
 
