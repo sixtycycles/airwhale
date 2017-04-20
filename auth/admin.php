@@ -137,7 +137,10 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         var marker;
         var infowindow;
         var messagewindow;
-        var ctaLayer;
+        var roads;
+        var boundary;
+        var parcels;
+        var markers = [];
         var filters = {};
 
         //populate field with coords from the marker.
@@ -175,10 +178,12 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             var oronoMaine = {lat: 44.88798544802555, lng: -68.70643615722656};
             //this thing holds labels fro markers by problem type.
             var customLabel = {
-                'pothole': {label: 'pothole'},
-                'noise': {label: 'noise'},
-                'garbage': {label: 'garbage'},
-                'poop': {label: 'poop'}
+                'pothole': {label: 'Pothole'},
+                'streetlight': {label: 'Street Light'},
+                'fireHydrant': {label: 'Fire Hydrant'},
+                'grafitti': {label: 'Grafitti'},
+                'other': {label: 'other'}
+
             };
             //the map where we draw things and interact.
             map = new google.maps.Map(document.getElementById('map'), {
@@ -202,6 +207,11 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 preserveViewport: true
             });
 
+            parcels = new google.maps.KmlLayer({
+                url: 'http://sixtycycles.github.io/CPR_KML/Orono_Parcels.kml',
+                map: map,
+                preserveViewport: true
+            });
             //this grabs all the problems to display!
             downloadUrl('dump.php', function (data) {
                 var xml = data.responseXML;
@@ -210,7 +220,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
                     var id = markerElem.getAttribute('id');
                     var name = markerElem.getAttribute('name');
-                    var address = markerElem.getAttribute('address');
+                    var address = markerElem.getAttribute('description');
                     var type = markerElem.getAttribute('type');
 
                     var point = new google.maps.LatLng(

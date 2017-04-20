@@ -87,16 +87,17 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                             <input type="email" id="email" name='email' class="form-control"
                                    value="<?php echo $row['userEmail']; ?>"/>
 
-                            <label for="address">Address of problem!</label>
-                            <input class="form-control" type='text' id='address' name='address'/>
-
                             <label for="type">What type of Problem?</label>
                             <select class="form-control" id='type' name='type'> +
-                                <option value='pothole' SELECTED>pothole</option>
-                                <option value='noise'>noise complaint</option>
-                                <option value='garbage'>garbage loose!</option>
-                                <option value='poop'>dog poop</option>
+                                <option value='pothole' SELECTED>Pothole in Road</option>
+                                <option value='streetlight'>Streetlight Out</option>
+                                <option value='fireHydrant'>Fire Hydrant Issues</option>
+                                <option value='grafitti'>Grafitti/Vandalism</option>
+                                <option value='other'>Other</option>
                             </select>
+
+                            <label for="address">Description of problem</label>
+                            <input class="form-control" type='text' id='address' name='address'/>
 
                             <h4>How should we contact you? </h4>
                             <label for="phone">Phone Number</label>
@@ -123,7 +124,9 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         var marker;
         var infowindow;
         var messagewindow;
-        var ctaLayer;
+        var roads;
+        var boundary;
+        var parcels;
         var markers = [];
         //populate field with coords from the marker and place it on the map.
 
@@ -179,6 +182,12 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             boundary = new google.maps.KmlLayer({
                 url: 'http://sixtycycles.github.io/CPR_KML/OronoBoundary.kml',
+                map: map,
+                preserveViewport: true
+            });
+
+            parcels = new google.maps.KmlLayer({
+                url: 'http://sixtycycles.github.io/CPR_KML/Orono_Parcels.kml',
                 map: map,
                 preserveViewport: true
             });

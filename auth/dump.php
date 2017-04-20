@@ -43,7 +43,7 @@ while ($row = @mysqli_fetch_assoc($result)) {
     echo '<marker ';
     echo 'id="' . parseToXML($row['id']) . '" ';
     echo 'name="' . parseToXML($row['name']) . '" ';
-    echo 'address="' . parseToXML($row['address']) . '" ';
+    echo 'description="' . parseToXML($row['description']) . '" ';
     echo 'lat="' . $row['lat'] . '" ';
     echo 'lng="' . $row['lon'] . '" ';
     echo 'type="' . $row['type'] . '" ';

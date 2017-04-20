@@ -5,7 +5,7 @@ require_once('phpsqlinfo_dbinfo.php');
 if (!empty($_POST)) {
 // Gets data from URL parameters.
     $name = htmlspecialchars($_POST['name']);
-    $address = htmlspecialchars($_POST['address']);
+    $description = htmlspecialchars($_POST['description']);
     $lat = htmlspecialchars($_POST['lat']);
     $lon = htmlspecialchars($_POST['lng']);
     $type = htmlspecialchars($_POST['type']);
@@ -18,7 +18,7 @@ if (!empty($_POST)) {
     }
 
 // Inserts new row with place data.
-    $query = "INSERT INTO Problems ( name,  lat, lon, address, type ) VALUES ( '$name','$lat', '$lon','$address', '$type');";
+    $query = "INSERT INTO Problems ( name,  lat, lon, address, type ) VALUES ( '$name','$lat', '$lon','$description', '$type');";
 
     $result = mysqli_query($connection, $query);
 
