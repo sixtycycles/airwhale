@@ -9,7 +9,7 @@ if(empty($_GET['id']) && empty($_GET['code']))
 
 if(isset($_GET['id']) && isset($_GET['code']))
 {
-    $id = base64_decode($_GET['id']);
+    $id = $_GET['id'];//base64_decode($_GET['id']);
     $code = $_GET['code'];
 
     $statusY = "Y";
@@ -28,30 +28,30 @@ if(isset($_GET['id']) && isset($_GET['code']))
             $stmt->execute();
 
             $msg = "
-             <div class='alert alert-success'>
-       <button class='close' data-dismiss='alert'>&time</button>
-       <strong>Hooray!</strong>  Your account is now activated: <a href='index.php'>Login here</a>
-          </div>
-          ";
+                <div class='alert alert-success'>
+                <button class='close' data-dismiss='alert'>&time</button>
+                <strong>Hooray!</strong>  Your account is now activated: <a href='index.php'>Login here</a>
+                </div>
+                ";
         }
         else
         {
             $msg = "
-             <div class='alert alert-error'>
-       <button class='close' data-dismiss='alert'>&times;</button>
-       <strong>Oh snap!</strong>  Your account is allready activated : <a href='index.php'>Login here</a>
-          </div>
-          ";
+                <div class='alert alert-error'>
+                <button class='close' data-dismiss='alert'>&times;</button>
+                <strong>Oh snap!</strong>  Your account is allready activated : <a href='index.php'>Login here</a>
+                </div>
+                ";
         }
     }
     else
     {
         $msg = "
-         <div class='alert alert-error'>
-      <button class='close' data-dismiss='alert'>&times;</button>
-      <strong>New server, who dis?</strong>  No account found: <a href='signup.php'>Signup here</a>
-      </div>
-      ";
+            <div class='alert alert-error'>
+            <button class='close' data-dismiss='alert'>&times;</button>
+            <strong>New server, who dis?</strong>  No account found: <a href='signup.php'>Signup here</a>
+            </div>
+            ";
     }
 }
 

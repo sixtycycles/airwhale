@@ -24,44 +24,45 @@ if(isset($_POST['btn-signup']))
     if($stmt->rowCount() > 0)
     {
         $msg = "
-        <div class='alert alert-error'>
-    <button class='close' data-dismiss='alert'>&times;</button>
-     <strong>Sorry!</strong>  email allready exists , Please Try another one
-     </div>
-     ";
+            <div class='alert alert-error'>
+            <button class='close' data-dismiss='alert'>&times;</button>
+            <strong>Sorry!</strong>  This email is already registered; please try another one.
+            </div>
+            ";
     }
     else
     {
         if($reg_user->register($uname,$email,$upass,$code))
         {
             $id = $reg_user->lasdID();
-            $key = base64_encode($id);
-            $id = $key;
+            //$key = base64_encode($id);
+            //$id = $key;
 
             $message = "     
-      Hello $uname,
-      <br /><br />
-      Welcome to the Citizen Problem Reporter!<br/>
-      To complete your registration  please , just click following link<br/>
-      <br /><br />
-      <a href='localhost/auth/verify.php?id=$id&code=$code'>Click HERE to Activate :)</a>
-      <br /><br />
-      Thanks,";
+                Hello $uname,
+                <br /><br />
+                Welcome to the Citizen Problem Reporter!<br/>
+                To complete your registration, please click the following link<br/>
+                <br /><br />
+                <a href='localhost:8888/airwhale/auth/verify.php?id=$id&code=$code'>Click HERE to Activate :)</a>
+                <br /><br />
+                Thanks,";
 
             $subject = "Confirm Registration";
 
             $reg_user->send_mail($email,$message,$subject);
             $msg = "
-     <div class='alert alert-success'>
-      <button class='close' data-dismiss='alert'>&times;</button>
-      <strong>Success!</strong>  We've sent an email to $email.
+                <div class='alert alert-success'>
+                <button class='close' data-dismiss='alert'>&times;</button>
+                <strong>Success!</strong>  
+                    We've sent an email to $email.
                     Please click on the confirmation link in the email to create your account. 
-       </div>
-     ";
+                </div>
+                ";
         }
         else
         {
-            echo "sorry , Query could no execute...";
+            echo "Sorry, query could not execute...";
         }
     }
 }
@@ -80,15 +81,18 @@ if(isset($_POST['btn-signup']))
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
 
-    <script>function check(){
+    <script>
+    function check(){
         if (document.getElementById('pw1').value !== document.getElementById('pw2').value){
-            window.alert('passwords do not match!');
+            window.alert('Passwords do not match!');
             document.getElementById('pw1').value="";
             document.getElementById('pw2').value="";
         }
 
-        }</script>
+    }
+    </script>
 </head>
+
 <body id="login">
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -125,7 +129,7 @@ if(isset($_POST['btn-signup']))
     </div><!-- /.container-fluid -->
 </nav>
 
-    <?php if(isset($msg)) echo $msg;  ?>
+<?php if(isset($msg)) echo $msg;  ?>
 <div class="container">
     <div class="row">
         <div class="col-lg-6 col-md-6">
