@@ -72,14 +72,17 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8 col-lg-8">
+            <div class="panel panel-default">
             <div id="map" style="height:500px; width:100%"></div>
-        </div>
+                </div>
+            </div>
 
         <div class="col-md-4 col=lg-4">
             <div id="form" class="panel panel-default">
                 <div class="panel-heading">Administer Problems</div>
                 <div class="panel-body">
                     <h3>Hide Types of Problem:</h3>
+                    <hr>
 
                     <?php
                     require_once("phpsqlinfo_dbinfo.php");
@@ -105,7 +108,14 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     echo "<div class='form-group'>";
                     while ($row = @mysqli_fetch_assoc($result) ) {
 
-                        echo '<button name=\'filters_params\'class=\'btn btn-default\' onclick=\'btnSelect(' . '"' . $row['type'] . '"' . ')\' id=\'' . $row['type'] . '\'> ' . $row['type'] . " <span class='badge'> ".$row['COUNT(type)']." </span>". ' </button> <br />';
+                        echo '<button 
+                        name=\'filters_params\' 
+                        class=\'btn btn-primary\' 
+                        onclick=\'btnSelect(' . '"' . $row['type'] . '"' . ')\' 
+                        id=\'' . $row['type'] . '\'> '
+                            . $row['type'] .
+                            " <span class='badge'> " .$row['COUNT(type)']." </span>". ' 
+                        </button> ';
 
                     };
                     echo "</div>";
@@ -121,7 +131,6 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         </div>
 
     </div>
-
 
     <script>
         var map;
@@ -141,14 +150,14 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         //this might be a weird way to do this
         function btnSelect(str) {
 
-            if (document.getElementById(str).getAttribute("class") === "btn btn-default") {
+            if (document.getElementById(str).getAttribute("class") === "btn btn-primary") {
                 if (!filters[str]){filters[str] = str}
-                document.getElementById(str).setAttribute("class", "btn btn-primary");
+                document.getElementById(str).setAttribute("class", "btn btn-default");
                 initMap(str);
 
             }
             else {
-                document.getElementById(str).setAttribute("class", "btn btn-default");
+                document.getElementById(str).setAttribute("class", "btn btn-primary");
                 delete filters[str];
                 initMap(str);
             }

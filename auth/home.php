@@ -117,7 +117,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
     </div>
-
+19
     <script>
         var map;
         var marker;
