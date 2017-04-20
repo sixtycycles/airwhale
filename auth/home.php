@@ -128,6 +128,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         var boundary;
         var parcels;
         var markers = [];
+        var filters={};
         //populate field with coords from the marker and place it on the map.
 
         function grabCoords(e) {
@@ -161,10 +162,11 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             var oronoMaine = {lat: 44.88798544802555, lng: -68.70643615722656};
             //this thing holds labels fro markers by problem type.
             var customLabel = {
-                'pothole': {label: 'POTHOLE'},
-                'noise': {label: 'NOISE'},
-                'garbage': {label: 'TRASH'},
-                'poop': {label: 'POOP'}
+                'pothole': {label: 'Pothole'},
+                'streetLight': {label: 'Street Light'},
+                'fireHydrant': {label: 'Fire Hydrant'},
+                'grafitti': {label: 'Grafitti'},
+                'other': {label: 'other'}
             };
             //the map where we draw things and interact.
             map = new google.maps.Map(document.getElementById('map'), {
@@ -196,10 +198,12 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 var xml = data.responseXML;
                 var markers = xml.documentElement.getElementsByTagName('marker');
                 Array.prototype.forEach.call(markers, function (markerElem) {
+
                     var id = markerElem.getAttribute('id');
                     var name = markerElem.getAttribute('name');
-                    var address = markerElem.getAttribute('address');
+                    var description = markerElem.getAttribute('description');
                     var type = markerElem.getAttribute('type');
+
                     var point = new google.maps.LatLng(
                         parseFloat(markerElem.getAttribute('lat')),
                         parseFloat(markerElem.getAttribute('lng')));
@@ -215,24 +219,26 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     infowincontent.appendChild(text);
                     infowincontent.appendChild(document.createElement('br'));
 
-                    var addr = document.createElement('addr');
-                    addr.textContent = address;
-                    infowincontent.appendChild(addr);
+                    var desc = document.createElement('desc');
+                    desc.textContent = description;
+                    infowincontent.appendChild(desc);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var icon = customLabel[type] || {};
+                    if(!filters[type]) {
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            position: point,
+                            label: icon.label
+                        });
 
-                    var marker = new google.maps.Marker({
-                        map: map,
-                        position: point,
-                        label: icon.label
 
-                    });
-                    marker.addListener('click', function () {
-                        infowindow.setContent(infowincontent);
-                        infowindow.open(map, marker);
-                    });
+                        marker.addListener('click', function () {
 
+                            infowindow.setContent(infowincontent);
+                            infowindow.open(map, marker);
+                        });
+                    }
 
                 });
             });
@@ -253,7 +259,6 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         function clearMarkers() {
             setMapOnAll(null);
         }
-
         function downloadUrl(url, callback) {
             var request = window.ActiveXObject ?
                 new ActiveXObject('Microsoft.XMLHTTP') :

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Apr 20, 2017 at 06:27 PM
+-- Generation Time: Apr 20, 2017 at 10:40 PM
 -- Server version: 5.6.28
 -- PHP Version: 7.0.10
 
@@ -27,8 +27,10 @@ CREATE TABLE IF NOT EXISTS `Problems` (
   `name` varchar(60) NOT NULL,
   `lat` double DEFAULT NULL,
   `lon` double DEFAULT NULL,
-  `address` varchar(100) NOT NULL,
+  `description` varchar(100) NOT NULL,
   `type` varchar(30) NOT NULL,
+  `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `problem_status` varchar(15) DEFAULT 'Reported',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
@@ -36,16 +38,16 @@ CREATE TABLE IF NOT EXISTS `Problems` (
 -- Dumping data for table `Problems`
 --
 
-INSERT INTO `Problems` (`id`, `name`, `lat`, `lon`, `address`, `type`) VALUES
-  (3, 'bobob', 44.888715163384624, -68.67450714111328, 'some prog', 'noise'),
-  (4, 'bobob', 44.908049247210855, -68.6810302734375, 'another', 'poop'),
-  (5, 'bobob', 44.89795742331478, -68.76720428466797, 'oh noe!', 'noise'),
-  (6, 'RodOconnor1985', 44.884397546192474, -68.67429256439209, 'somewhere over there', 'pothole'),
-  (7, 'admin', 44.889688102796235, -68.71055603027344, 'WHAT ABOUT THIS ONE', 'garbage'),
-  (8, 'GEORGIE', 44.897106224633916, -68.72308731079102, 'MY HOISE', 'garbage'),
-  (9, 'admin', 44.85635555684337, -68.70025634765625, 'some other people house', 'poop'),
-  (10, 'UERS', 44.893458087568014, -68.75432968139648, 'WHO MADE THIS', 'noise'),
-  (11, 'RodOconnor1985', 44.887841024096666, -68.70635032653809, '', 'pothole');
+INSERT INTO `Problems` (`id`, `name`, `lat`, `lon`, `description`, `type`, `timestamp`, `problem_status`) VALUES
+  (3, 'bobob', 44.888715163384624, -68.67450714111328, 'some prog', 'streetLight', '2017-04-20 16:15:01', 'Reported'),
+  (4, 'bobob', 44.908049247210855, -68.6810302734375, 'another', 'fireHydrant', '2017-04-20 16:15:01', 'Reported'),
+  (5, 'bobob', 44.89795742331478, -68.76720428466797, 'oh noe!', 'other', '2017-04-20 16:15:01', 'Reported'),
+  (6, 'RodOconnor1985', 44.884397546192474, -68.67429256439209, 'somewhere over there', 'grafitti', '2017-04-20 16:15:01', 'Reported'),
+  (7, 'admin', 44.889688102796235, -68.71055603027344, 'WHAT ABOUT THIS ONE', 'pothole', '2017-04-20 16:15:01', 'Reported'),
+  (8, 'GEORGIE', 44.897106224633916, -68.72308731079102, 'MY HOISE', 'pothole', '2017-04-20 16:15:01', 'Reported'),
+  (9, 'admin', 44.85635555684337, -68.70025634765625, 'some other people house', 'grafitti', '2017-04-20 16:15:01', 'Reported'),
+  (10, 'UERS', 44.893458087568014, -68.75432968139648, 'WHO MADE THIS', 'streetLight', '2017-04-20 16:15:01', 'Reported'),
+  (11, 'RodOconnor1985', 44.887841024096666, -68.70635032653809, '', 'fireHydrant', '2017-04-20 16:15:01', 'Reported');
 
 -- --------------------------------------------------------
 

@@ -179,11 +179,10 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             //this thing holds labels fro markers by problem type.
             var customLabel = {
                 'pothole': {label: 'Pothole'},
-                'streetlight': {label: 'Street Light'},
+                'streetLight': {label: 'Street Light'},
                 'fireHydrant': {label: 'Fire Hydrant'},
                 'grafitti': {label: 'Grafitti'},
                 'other': {label: 'other'}
-
             };
             //the map where we draw things and interact.
             map = new google.maps.Map(document.getElementById('map'), {
@@ -220,7 +219,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
                     var id = markerElem.getAttribute('id');
                     var name = markerElem.getAttribute('name');
-                    var address = markerElem.getAttribute('description');
+                    var description = markerElem.getAttribute('description');
                     var type = markerElem.getAttribute('type');
 
                     var point = new google.maps.LatLng(
@@ -238,9 +237,9 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     infowincontent.appendChild(text);
                     infowincontent.appendChild(document.createElement('br'));
 
-                    var addr = document.createElement('addr');
-                    addr.textContent = address;
-                    infowincontent.appendChild(addr);
+                    var desc = document.createElement('desc');
+                    desc.textContent = description;
+                    infowincontent.appendChild(desc);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var icon = customLabel[type] || {};
@@ -265,7 +264,14 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         } //END OF INIT MAP DUMMY
 
-
+        function setMapOnAll(map) {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(map);
+            }
+        }
+        function clearMarkers() {
+            setMapOnAll(null);
+        }
         //handle markers added by user, while keeping existing problems. (use array)
 
         function downloadUrl(url, callback) {
