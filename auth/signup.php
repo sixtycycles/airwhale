@@ -38,7 +38,7 @@ if(isset($_POST['btn-signup']))
             //$key = base64_encode($id);
             //$id = $key;
 
-            $url = "localhost:8888/airwhale/auth/airwhale/auth/verify.php?id=${id}&code=${code}";
+            $url = "localhost:8888/airwhale/auth/verify.php?id=${id}&code=${code}";
 
             $message = "
                 <p>
