@@ -184,8 +184,14 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             messagewindow = new google.maps.InfoWindow({content: "YAY"});
 
             //outline of town boundary for reference.
-            ctaLayer = new google.maps.KmlLayer({
-                url: 'http://sixtycycles.github.io/orono.kml',
+            roads = new google.maps.KmlLayer({
+                url: 'http://sixtycycles.github.io/CPR_KML/Orono_Roads.kml',
+                map: map,
+                preserveViewport: true
+            });
+
+            boundary = new google.maps.KmlLayer({
+                url: 'http://sixtycycles.github.io/CPR_KML/OronoBoundary.kml',
                 map: map,
                 preserveViewport: true
             });
