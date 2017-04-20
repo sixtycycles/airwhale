@@ -137,8 +137,20 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             });
             markers.push(marker);
         }
-        //handle markers added by user, while keeping existing problems. (use array)
-        function addMarker(location) {
+        function btnSelect(str) {
+
+            if (document.getElementById(str).getAttribute("class") === "btn btn-primary") {
+                if (!filters[str]){filters[str] = str}
+                document.getElementById(str).setAttribute("class", "btn btn-default");
+                initMap(str);
+
+            }
+            else {
+                document.getElementById(str).setAttribute("class", "btn btn-primary");
+                delete filters[str];
+                initMap(str);
+            }
+            console.log(filters);
 
         }
 
@@ -154,7 +166,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             //the map where we draw things and interact.
             map = new google.maps.Map(document.getElementById('map'), {
                 center: oronoMaine,
-                zoom: 13
+                zoom: 12
             });
             infowindow = new google.maps.InfoWindow({content: "yay"});
             messagewindow = new google.maps.InfoWindow({content: "YAY"});

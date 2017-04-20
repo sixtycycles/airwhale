@@ -145,6 +145,12 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         function grabCoords(e) {
             document.getElementById('lat').value = e.latLng.lat();
             document.getElementById('lng').value = e.latLng.lng();
+            clearMarkers();
+            var marker = new google.maps.Marker({
+                position: e.latLng,
+                map: map
+            });
+            markers.push(marker);
         }
 
         //this might be a weird way to do this
@@ -177,7 +183,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             //the map where we draw things and interact.
             map = new google.maps.Map(document.getElementById('map'), {
                 center: oronoMaine,
-                zoom: 13
+                zoom: 12
             });
             //huh?
             infowindow = new google.maps.InfoWindow({content: "yay"});
