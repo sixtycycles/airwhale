@@ -50,11 +50,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                        aria-expanded="false">Menu <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="home.php">Report Problems</a></li>
-                        <?php
-                        if ($_SESSION['isAdmin']) {
-                            echo "<li> <a href='admin.php'>Admin Portal</a></li>";
-                        }
-                        ?>
+
                         <li role="separator" class="divider"></li>
                         <li><a href="logout.php">logout</a></li>
                     </ul>
@@ -69,12 +65,58 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8 col-lg-8">
+            <div class="panel panel-default">
             <div id="map" style="height:500px; width:100%"></div>
+
+            </div>
+            <div class="well">
+            <?php
+            if ($_SESSION['userSession']) {
+                require_once("phpsqlinfo_dbinfo.php");
+
+                $connection = mysqli_connect('localhost', $username, $password, $database, $port);
+                if (!$connection) {
+                    die('Not connected : ' . mysqli_error($connection));
+                }
+
+                $db_selected = mysqli_select_db($connection, $database);
+                if (!$db_selected) {
+                    die ('Can\'t use db : ' . mysqli_error($connection));
+                }
+                //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
+                $query = "SELECT id,type, COUNT(type) FROM Problems GROUP BY type ASC;";
+
+                $result = mysqli_query($connection,$query);
+
+                if (!$result) {
+                    die('Invalid query: ' . mysqli_error($connection));
+                }
+
+                echo "<div class='form-group'>";
+                while ($row = @mysqli_fetch_assoc($result) ) {
+
+                    echo '<button 
+                        name=\'filters_params\' 
+                        class=\'btn btn-primary\' 
+                        onclick=\'btnSelect(' . '"' . $row['type'] . '"' . ')\' 
+                        id=\'' . $row['type'] . '\'> '
+                        . $row['type'] .
+                        " <span class='badge'> " .$row['COUNT(type)']." </span>". ' 
+                        </button> ';
+
+                };
+                echo "</div>";
+
+            }
+            ?>
+            </div>
         </div>
 
         <div class="col-md-4 col=lg-4">
+
             <div id="form" class="panel panel-default">
-                <div class="panel-heading">Report a problem</div>
+                <div class="panel-heading"><h4>Report a problem</h4></div>
+
                 <div class="panel-body">
                     <form method="post" action="phpsqlinfo_addrow.php" enctype="multipart/form-data">
                         <div class="form-group">
