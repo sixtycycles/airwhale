@@ -9,7 +9,7 @@ if (!$user_home->is_logged_in()) {
 
 $stmt = $user_home->runQuery("SELECT * FROM tbl_users WHERE userID=:uid");
 $stmt->execute(array(":uid" => $_SESSION['userSession']));
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
+$row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -110,7 +110,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 };
                 echo "</div>";
-                $connection->close();
+               // $connection->close();
 
             }
             ?>
@@ -128,11 +128,14 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
                             <label for="name">Your Name</label>
                             <input class="form-control" type='text' id='name' name='name'
-                                   value="<?php echo $row['userName']; ?>"/>
+                                   value="<?php
+                                   //echo $_SESSION['userSession'];
+                                   echo $row1['userName'];
+                                    ?>"/>
                             <label for="email">Email address</label>
 
                             <input type="email" id="email" name='email' class="form-control"
-                                   value="<?php echo $row['userEmail']; ?>"/>
+                                   value="<?php echo $row1['userEmail']; ?>"/>
 
                             <label for="type">What type of Problem?</label>
                             <select class="form-control" id='type' name='type'> +
