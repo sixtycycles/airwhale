@@ -110,6 +110,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 };
                 echo "</div>";
+                $connection->close();
 
             }
             ?>
@@ -150,6 +151,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                             <input type="tel" class="form-control" name='phone' id="phone" placeholder="123.456.7890">
                             <h4>Upload a picture of the issue</h4>
                             <input type="file" class="form-control-file " aria-describedby="fileHelp" name="file"/>
+
                             <h4>Coordinates</h4>
                             (click the map where the problem is)<br>
                             <input type="text" name="lat" id="lat" placeholder="lattitude">

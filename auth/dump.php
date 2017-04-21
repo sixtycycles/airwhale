@@ -56,5 +56,5 @@ while ($row = @mysqli_fetch_assoc($result)) {
 // End XML file
 echo '</markers>';
 
-
+$connection->close();
 ?>

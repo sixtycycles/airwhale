@@ -9,9 +9,7 @@ if (!empty($_POST)) {
     $lat = htmlspecialchars($_POST['lat']);
     $lon = htmlspecialchars($_POST['lng']);
     $type = htmlspecialchars($_POST['type']);
-//    if($_POST['file']) {$problemImage = ($_POST['file']);}
-//    else{$problemImage = null;};
-
+//file handling
     $file = rand(1000,100000)."-".$_FILES['file']['name'];
     $file_loc = $_FILES['file']['tmp_name'];
     $file_size = $_FILES['file']['size'];
