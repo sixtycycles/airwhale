@@ -76,7 +76,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             <div id="form" class="panel panel-default">
                 <div class="panel-heading">Report a problem</div>
                 <div class="panel-body">
-                    <form method="post" action="phpsqlinfo_addrow.php">
+                    <form method="post" action="phpsqlinfo_addrow.php" enctype="multipart/form-data">
                         <div class="form-group">
 
                             <label for="name">Your Name</label>
@@ -103,7 +103,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                             <label for="phone">Phone Number</label>
                             <input type="tel" class="form-control" name='phone' id="phone" placeholder="123.456.7890">
                             <h4>Upload a picture of the issue</h4>
-                            <input type="file" class="form-control-file " aria-describedby="fileHelp"/>
+                            <input type="file" class="form-control-file " aria-describedby="fileHelp" name="file"/>
                             <h4>Coordinates</h4>
                             (click the map where the problem is)<br>
                             <input type="text" name="lat" id="lat" placeholder="lattitude">
@@ -208,6 +208,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     var type = markerElem.getAttribute('type');
                     var timestamp = markerElem.getAttribute('timestamp');
                     var status = markerElem.getAttribute('problemStatus');
+                    var imageFile = markerElem.getAttribute('img');
+
                     var point = new google.maps.LatLng(
                         parseFloat(markerElem.getAttribute('lat')),
                         parseFloat(markerElem.getAttribute('lng')));
@@ -237,6 +239,11 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     var problemStatus = document.createElement('p');
                     problemStatus.textContent = "Status: "+ status;
                     infowincontent.appendChild(problemStatus);
+                    infowincontent.appendChild(document.createElement('br'));
+
+                    var problemImage = document.createElement('p');
+                    problemImage.innerHTML= '<img src="uploads/'+imageFile+'" /> ';
+                    infowincontent.appendChild(problemImage);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var icon = customLabel[type] || {};

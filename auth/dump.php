@@ -49,6 +49,7 @@ while ($row = @mysqli_fetch_assoc($result)) {
     echo 'type="' . $row['type'] . '" ';
     echo 'timestamp="' . parseToXML($row['timestamp']) . '" ';
     echo 'problemStatus="' . $row['problem_status'] . '" ';
+    echo 'img="' . $row['file'] . '" ';
     echo '/>';
 }
 
