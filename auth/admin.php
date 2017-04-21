@@ -1,21 +1,15 @@
 <?php
 session_start();
 require_once 'class.user.php';
-
 $user_home = new USER();
-
 if (!$user_home->is_admin()) {
     $user_home->redirect('index.php');
 }
-
 $stmt = $user_home->runQuery("SELECT * FROM tbl_users WHERE userID=:uid");
 $stmt->execute(array(":uid" => $_SESSION['userSession']));
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-
-//this bit grabs all the problems to display;
-
 ?>
+
 <!DOCTYPE html>
 <html>
 
@@ -97,7 +91,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                         die ('Can\'t use db : ' . mysqli_error($connection));
                     }
                     //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
-                    $query = "SELECT id,type, COUNT(type) FROM Problems GROUP BY type ASC;";
+                    $query = "SELECT * FROM Problems GROUP BY type ASC;";
 
                     $result = mysqli_query($connection,$query);
 
@@ -107,15 +101,9 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
                     echo "<div class='form-group'>";
                     while ($row = @mysqli_fetch_assoc($result) ) {
-
-                        echo '<button 
-                        name=\'filters_params\' 
-                        class=\'btn btn-primary\' 
-                        onclick=\'btnSelect(' . '"' . $row['type'] . '"' . ')\' 
-                        id=\'' . $row['type'] . '\'> '
-                            . $row['type'] .
-                            " <span class='badge'> " .$row['COUNT(type)']." </span>". ' 
-                        </button> ';
+                        echo "<p>";
+                        echo $row['id'].$row['name'].$row['description']."<br>";
+                        echo "</p><br />";
 
                     };
                     echo "</div>";
@@ -132,171 +120,171 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     </div>
 
-    <script>
-        var map;
-        var marker;
-        var infowindow;
-        var messagewindow;
-        var roads;
-        var boundary;
-        var parcels;
-        var markers = [];
-        var filters = {};
-
-        //populate field with coords from the marker.
-
-        function grabCoords(e) {
-            document.getElementById('lat').value = e.latLng.lat();
-            document.getElementById('lng').value = e.latLng.lng();
-            clearMarkers();
-            var marker = new google.maps.Marker({
-                position: e.latLng,
-                map: map
-            });
-            markers.push(marker);
-        }
-
-        //this might be a weird way to do this
-        function btnSelect(str) {
-
-            if (document.getElementById(str).getAttribute("class") === "btn btn-primary") {
-                if (!filters[str]){filters[str] = str}
-                document.getElementById(str).setAttribute("class", "btn btn-default");
-                initMap(str);
-
-            }
-            else {
-                document.getElementById(str).setAttribute("class", "btn btn-primary");
-                delete filters[str];
-                initMap(str);
-            }
-            console.log(filters);
-
-        }
-
-        function initMap(str) {
-            var oronoMaine = {lat: 44.88798544802555, lng: -68.70643615722656};
-            //this thing holds labels fro markers by problem type.
-            var customLabel = {
-                'pothole': {label: 'Pothole'},
-                'streetLight': {label: 'Street Light'},
-                'fireHydrant': {label: 'Fire Hydrant'},
-                'grafitti': {label: 'Grafitti'},
-                'other': {label: 'other'}
-            };
-            //the map where we draw things and interact.
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: oronoMaine,
-                zoom: 12
-            });
-            //huh?
-            infowindow = new google.maps.InfoWindow({content: "yay"});
-            messagewindow = new google.maps.InfoWindow({content: "YAY"});
-
-            //outline of town boundary for reference.
-            roads = new google.maps.KmlLayer({
-                url: 'http://sixtycycles.github.io/CPR_KML/Orono_Roads.kml',
-                map: map,
-                preserveViewport: true
-            });
-
-            boundary = new google.maps.KmlLayer({
-                url: 'http://sixtycycles.github.io/CPR_KML/OronoBoundary.kml',
-                map: map,
-                preserveViewport: true
-            });
-
-            parcels = new google.maps.KmlLayer({
-                url: 'http://sixtycycles.github.io/CPR_KML/Orono_Parcels.kml',
-                map: map,
-                preserveViewport: true
-            });
-            //this grabs all the problems to display!
-            downloadUrl('dump.php', function (data) {
-                var xml = data.responseXML;
-                var markers = xml.documentElement.getElementsByTagName('marker');
-                Array.prototype.forEach.call(markers, function (markerElem) {
-
-                    var id = markerElem.getAttribute('id');
-                    var name = markerElem.getAttribute('name');
-                    var description = markerElem.getAttribute('description');
-                    var type = markerElem.getAttribute('type');
-
-                    var point = new google.maps.LatLng(
-                        parseFloat(markerElem.getAttribute('lat')),
-                        parseFloat(markerElem.getAttribute('lng')));
-
-                    var infowincontent = document.createElement('div');
-                    var strong = document.createElement('strong');
-                    strong.textContent = name;
-                    infowincontent.appendChild(strong);
-                    infowincontent.appendChild(document.createElement('br'));
-
-                    var text = document.createElement('text');
-                    text.textContent = type + "-" + id;
-                    infowincontent.appendChild(text);
-                    infowincontent.appendChild(document.createElement('br'));
-
-                    var desc = document.createElement('desc');
-                    desc.textContent = description;
-                    infowincontent.appendChild(desc);
-                    infowincontent.appendChild(document.createElement('br'));
-
-                    var icon = customLabel[type] || {};
-                    if(!filters[type]) {
-                        var marker = new google.maps.Marker({
-                            map: map,
-                            position: point,
-                            label: icon.label
-                        });
-
-
-                        marker.addListener('click', function () {
-
-                            infowindow.setContent(infowincontent);
-                            infowindow.open(map, marker);
-                        });
-                    }
-
-                });
-            });
-
-
-        } //END OF INIT MAP DUMMY
-
-        function setMapOnAll(map) {
-            for (var i = 0; i < markers.length; i++) {
-                markers[i].setMap(map);
-            }
-        }
-        function clearMarkers() {
-            setMapOnAll(null);
-        }
-        //handle markers added by user, while keeping existing problems. (use array)
-
-        function downloadUrl(url, callback) {
-            var request = window.ActiveXObject ?
-                new ActiveXObject('Microsoft.XMLHTTP') :
-                new XMLHttpRequest;
-
-            request.onreadystatechange = function () {
-                if (request.readyState === 4) {
-                    request.onreadystatechange = doNothing;
-                    callback(request, request.status);
-                }
-            };
-
-            request.open('GET', url, true);
-            request.send(null);
-        }
-        function doNothing() {
-        }
-
-
-    </script>
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLpwvDNIXNMVz7GRsggZOfRMDGQE-pdPE&callback=initMap">
-    </script>
+<!--    <script>-->
+<!--        var map;-->
+<!--        var marker;-->
+<!--        var infowindow;-->
+<!--        var messagewindow;-->
+<!--        var roads;-->
+<!--        var boundary;-->
+<!--        var parcels;-->
+<!--        var markers = [];-->
+<!--        var filters = {};-->
+<!---->
+<!--        //populate field with coords from the marker.-->
+<!---->
+<!--        function grabCoords(e) {-->
+<!--            document.getElementById('lat').value = e.latLng.lat();-->
+<!--            document.getElementById('lng').value = e.latLng.lng();-->
+<!--            clearMarkers();-->
+<!--            var marker = new google.maps.Marker({-->
+<!--                position: e.latLng,-->
+<!--                map: map-->
+<!--            });-->
+<!--            markers.push(marker);-->
+<!--        }-->
+<!---->
+<!--        //this might be a weird way to do this-->
+<!--        function btnSelect(str) {-->
+<!---->
+<!--            if (document.getElementById(str).getAttribute("class") === "btn btn-primary") {-->
+<!--                if (!filters[str]){filters[str] = str}-->
+<!--                document.getElementById(str).setAttribute("class", "btn btn-default");-->
+<!--                initMap(str);-->
+<!---->
+<!--            }-->
+<!--            else {-->
+<!--                document.getElementById(str).setAttribute("class", "btn btn-primary");-->
+<!--                delete filters[str];-->
+<!--                initMap(str);-->
+<!--            }-->
+<!--            console.log(filters);-->
+<!---->
+<!--        }-->
+<!---->
+<!--        function initMap(str) {-->
+<!--            var oronoMaine = {lat: 44.88798544802555, lng: -68.70643615722656};-->
+<!--            //this thing holds labels fro markers by problem type.-->
+<!--            var customLabel = {-->
+<!--                'pothole': {label: 'Pothole'},-->
+<!--                'streetLight': {label: 'Street Light'},-->
+<!--                'fireHydrant': {label: 'Fire Hydrant'},-->
+<!--                'grafitti': {label: 'Grafitti'},-->
+<!--                'other': {label: 'other'}-->
+<!--            };-->
+<!--            //the map where we draw things and interact.-->
+<!--            map = new google.maps.Map(document.getElementById('map'), {-->
+<!--                center: oronoMaine,-->
+<!--                zoom: 12-->
+<!--            });-->
+<!--            //huh?-->
+<!--            infowindow = new google.maps.InfoWindow({content: "yay"});-->
+<!--            messagewindow = new google.maps.InfoWindow({content: "YAY"});-->
+<!---->
+<!--            //outline of town boundary for reference.-->
+<!--            roads = new google.maps.KmlLayer({-->
+<!--                url: 'http://sixtycycles.github.io/CPR_KML/Orono_Roads.kml',-->
+<!--                map: map,-->
+<!--                preserveViewport: true-->
+<!--            });-->
+<!---->
+<!--            boundary = new google.maps.KmlLayer({-->
+<!--                url: 'http://sixtycycles.github.io/CPR_KML/OronoBoundary.kml',-->
+<!--                map: map,-->
+<!--                preserveViewport: true-->
+<!--            });-->
+<!---->
+<!--            parcels = new google.maps.KmlLayer({-->
+<!--                url: 'http://sixtycycles.github.io/CPR_KML/Orono_Parcels.kml',-->
+<!--                map: map,-->
+<!--                preserveViewport: true-->
+<!--            });-->
+<!--            //this grabs all the problems to display!-->
+<!--            downloadUrl('dump.php', function (data) {-->
+<!--                var xml = data.responseXML;-->
+<!--                var markers = xml.documentElement.getElementsByTagName('marker');-->
+<!--                Array.prototype.forEach.call(markers, function (markerElem) {-->
+<!---->
+<!--                    var id = markerElem.getAttribute('id');-->
+<!--                    var name = markerElem.getAttribute('name');-->
+<!--                    var description = markerElem.getAttribute('description');-->
+<!--                    var type = markerElem.getAttribute('type');-->
+<!---->
+<!--                    var point = new google.maps.LatLng(-->
+<!--                        parseFloat(markerElem.getAttribute('lat')),-->
+<!--                        parseFloat(markerElem.getAttribute('lng')));-->
+<!---->
+<!--                    var infowincontent = document.createElement('div');-->
+<!--                    var strong = document.createElement('strong');-->
+<!--                    strong.textContent = name;-->
+<!--                    infowincontent.appendChild(strong);-->
+<!--                    infowincontent.appendChild(document.createElement('br'));-->
+<!---->
+<!--                    var text = document.createElement('text');-->
+<!--                    text.textContent = type + "-" + id;-->
+<!--                    infowincontent.appendChild(text);-->
+<!--                    infowincontent.appendChild(document.createElement('br'));-->
+<!---->
+<!--                    var desc = document.createElement('desc');-->
+<!--                    desc.textContent = description;-->
+<!--                    infowincontent.appendChild(desc);-->
+<!--                    infowincontent.appendChild(document.createElement('br'));-->
+<!---->
+<!--                    var icon = customLabel[type] || {};-->
+<!--                    if(!filters[type]) {-->
+<!--                        var marker = new google.maps.Marker({-->
+<!--                            map: map,-->
+<!--                            position: point,-->
+<!--                            label: icon.label-->
+<!--                        });-->
+<!---->
+<!---->
+<!--                        marker.addListener('click', function () {-->
+<!---->
+<!--                            infowindow.setContent(infowincontent);-->
+<!--                            infowindow.open(map, marker);-->
+<!--                        });-->
+<!--                    }-->
+<!---->
+<!--                });-->
+<!--            });-->
+<!---->
+<!---->
+<!--        } //END OF INIT MAP DUMMY-->
+<!---->
+<!--        function setMapOnAll(map) {-->
+<!--            for (var i = 0; i < markers.length; i++) {-->
+<!--                markers[i].setMap(map);-->
+<!--            }-->
+<!--        }-->
+<!--        function clearMarkers() {-->
+<!--            setMapOnAll(null);-->
+<!--        }-->
+<!--        //handle markers added by user, while keeping existing problems. (use array)-->
+<!---->
+<!--        function downloadUrl(url, callback) {-->
+<!--            var request = window.ActiveXObject ?-->
+<!--                new ActiveXObject('Microsoft.XMLHTTP') :-->
+<!--                new XMLHttpRequest;-->
+<!---->
+<!--            request.onreadystatechange = function () {-->
+<!--                if (request.readyState === 4) {-->
+<!--                    request.onreadystatechange = doNothing;-->
+<!--                    callback(request, request.status);-->
+<!--                }-->
+<!--            };-->
+<!---->
+<!--            request.open('GET', url, true);-->
+<!--            request.send(null);-->
+<!--        }-->
+<!--        function doNothing() {-->
+<!--        }-->
+<!---->
+<!---->
+<!--    </script>-->
+<!--    <script async defer-->
+<!--            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLpwvDNIXNMVz7GRsggZOfRMDGQE-pdPE&callback=initMap">-->
+<!--    </script>-->
 
 
 </div>
