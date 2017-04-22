@@ -67,7 +67,9 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
     <div class="row">
 
         <div class="col-md-8 col=lg-8">
-            <div id="form" class="panel panel-default">
+            <div id="problemList" class="panel panel-default ">
+                <form method="POST" action="deleteProblem.php">
+                <input type="submit" class="btn" id="saveChanges" value="save" formaction="deleteProblem.php" >
                 <div class="panel-heading">Administer Problems</div>
                 <div class="panel-body">
 
@@ -84,42 +86,66 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                         die ('Can\'t use db : ' . mysqli_error($connection));
                     }
                     //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
-                    $query = "SELECT * FROM Problems GROUP BY type ASC;";
+                    $query = "SELECT * FROM Problems ORDER BY id ASC;";
 
-                    $result = mysqli_query($connection,$query);
+                    $result = mysqli_query($connection, $query);
 
                     if (!$result) {
                         die('Invalid query: ' . mysqli_error($connection));
                     }
 
-                    echo "<div class='form-group'>";
+                    echo "<div class=''>";
                     //loops over all problems sort by type
-                    while ($row = @mysqli_fetch_assoc($result) ) {
-                        echo "<p>";
-                        echo $row['id'].$row['name'].$row['description']."<br>";
-                        echo "</p><br />";
+                    while ($row = @mysqli_fetch_assoc($result)) {
+                        echo "<div class='panel panel-default' id='" . $row['id'] . "'>";
+                        echo
+                            "<div class='panel-heading'>" .
+                            "ID: " . $row['id'] . "<br />" .
+                            "Type: " . $row['type'] . "<br />" .
+                            "</div>" .
+
+                            "<div class='panel-body'> " .
+                            "Name: " . $row['name'] . "<br />" .
+                            "Description: " . $row['description'] . "<br />" .
+                            "Status: " . $row['problem_status'] . "<br />" .
+                            "Time " . $row['timestamp'] . "<br />" .
+                            "Photo of Problem: <img src='uploads/" . $row['file'] . "'>" .
+                            "</div>";
+                        echo '<button class=\'btn btn-danger\' onclick=\'deleteProblem("' . $row['id'] . '")\'> Delete Problem </button>';
+                        echo "</div> <br />";
 
                     };
                     echo "</div>";
 
-                  ?>
+                    ?>
 
                 </div>
+                <div class='form' style="visibility: hidden" ><input name="deleteList" id="deleteList" value=""> </div>
+                </form>
             </div>
         </div>
-        <div class="col-md-4 col-lg-4">
-            <div class="panel panel-default">
-                <div id="map" style="height:500px; width:100%"></div>
-            </div>
-        </div>
-        <div style="visibility: hidden;">
-            <input type="text" name="lat" id="lat" placeholder="lattitude">
-            <input type="text" name="lng" id="lng" placeholder="longitude">
-        </div>
+
+<!--        <div class="col-md-4 col-lg-4">-->
+<!--            <div class="panel panel-default">-->
+<!--                <div id="map" style="height:500px; width:100%"></div>-->
+<!--            </div>-->
+<!--        </div>-->
+
 
     </div>
 
+    <script type="text/javascript">
+        var dlist = [];
 
+        function deleteProblem(id) {
+           dlist.push(id);
+           document.getElementById(id).innerHTML = "Problem #" + id +" Deleted!";
+           document.getElementById('deleteList').setAttribute('value',dlist);
+        }
+
+
+
+    </script>
 
 </div>
 

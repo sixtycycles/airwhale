@@ -260,7 +260,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         roads = new google.maps.KmlLayer({
             url: 'http://sixtycycles.github.io/CPR_KML/Orono_Roads.kml',
             map: map,
-            //preserveViewport: true
+            preserveViewport: true
+
         });
 
         //this guy grabs the xml file from the db, and adds all the problems to the markers array
@@ -345,15 +346,17 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     type: 'myproblem'
 
                 });
+
                 markers.push(marker);
+                document.getElementById('lat').value = position.coords.latitude;
+                document.getElementById('lng').value = position.coords.longitude;
 
             })
         }
 
-        locateMe();
+
         //add listener to have user place problem marker. .
         google.maps.event.addListener(map, 'click', function (event) {
-
             grabCoords(event);
             //this one opens the info when you clikc a marker
             google.maps.event.addListener(marker, 'click', function () {
@@ -361,6 +364,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             });
 
         });
+        locateMe();
     } //END OF INIT MAP DUMMY
     //for grabbing xml
     function downloadUrl(url, callback) {

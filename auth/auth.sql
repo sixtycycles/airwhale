@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Apr 22, 2017 at 04:08 PM
+-- Generation Time: Apr 22, 2017 at 10:13 PM
 -- Server version: 5.6.28
 -- PHP Version: 7.0.10
 
@@ -37,17 +37,7 @@ CREATE TABLE `Problems` (
 --
 
 INSERT INTO `Problems` (`id`, `name`, `lat`, `lon`, `description`, `type`, `timestamp`, `problem_status`, `file`) VALUES
-  (3, 'bobob', 44.888715163384624, -68.67450714111328, 0x54686973206c616d7020646f65736e7420776f726b, 'streetLight', '2017-04-20 16:15:01', 'Reported', NULL),
-  (4, 'bobob', 44.908049247210855, -68.6810302734375, 0x4974732067657474696e6720776574206f766572206865726521, 'fireHydrant', '2017-04-20 16:15:01', 'Reported', NULL),
-  (5, 'bobob', 44.89795742331478, -68.76720428466797, 0x4920666f756e64206120646f6e7574, 'other', '2017-04-20 16:15:01', 'Reported', NULL),
-  (6, 'RodOconnor1985', 44.884397546192474, -68.67429256439209, 0x736f6d656f6e65207061696e7465642061206469636b, 'grafitti', '2017-04-20 16:15:01', 'Reported', NULL),
-  (7, 'admin', 44.889688102796235, -68.71055603027344, 0x676f6f6462796520746972657321, 'pothole', '2017-04-20 16:15:01', 'Reported', NULL),
-  (8, 'GEORGIE', 44.897106224633916, -68.72308731079102, 0x6d6964646c65206f662074686520726f61642c203266742064656570, 'pothole', '2017-04-20 16:15:01', 'Reported', NULL),
-  (9, 'admin', 44.85635555684337, -68.70025634765625, 0x736f6d65206869707069657320617265207061696e74696e6720666c6f77657273, 'grafitti', '2017-04-20 16:15:01', 'FUNKY', NULL),
-  (10, 'UERS', 44.893458087568014, -68.75432968139648, 0x74686973206c616d702066656c6c206f76657221, 'streetLight', '2017-04-20 16:15:01', 'Reported', NULL),
-  (11, 'RodOconnor1985', 44.887841024096666, -68.70635032653809, 0x736f6d656f6e652068697420746869732077697468207468656972206361722c206e6f77206974732073697820666c616773, 'fireHydrant', '2017-04-20 16:15:01', 'Reported', NULL),
-  (13, 'admin', 44.937585003910904, -68.73733520507812, 0x594f4f4f4f4f4f, 'pothole', '2017-04-20 18:02:24', 'Reported', ''),
-  (15, 'admin', 44.86341296203542, -68.74042510986328, 0x464f5245535420494d472054455354, 'other', '2017-04-20 19:26:56', 'Reported', '9103-CaptureLAB8.PNG');
+  (11, 'admin', 44.87630874326679, -68.73046875, 0x6c616d707921, 'streetlight', '2017-04-22 15:45:45', 'Reported', '14269-Diagram.jpg');
 
 -- --------------------------------------------------------
 
@@ -56,7 +46,7 @@ INSERT INTO `Problems` (`id`, `name`, `lat`, `lon`, `description`, `type`, `time
 --
 
 CREATE TABLE `tbl_uploads` (
-  `id` int(10) NOT NULL,
+  `id` int(11) NOT NULL,
   `file` varchar(100) NOT NULL,
   `type` varchar(10) NOT NULL,
   `size` int(11) NOT NULL
@@ -67,28 +57,7 @@ CREATE TABLE `tbl_uploads` (
 --
 
 INSERT INTO `tbl_uploads` (`id`, `file`, `type`, `size`) VALUES
-  (1, '9103-CaptureLAB8.PNG', 'image/png', 16334),
-  (2, '55866-hazard.png', 'image/png', 3681),
-  (3, '62953-', '', 0),
-  (4, '51166-', '', 0),
-  (5, '60740-', '', 0),
-  (6, '82370-', '', 0),
-  (7, '75203-', '', 0),
-  (8, '17906-', '', 0),
-  (9, '61276-', '', 0),
-  (10, '91427-', '', 0),
-  (11, '72425-', '', 0),
-  (12, '4389-', '', 0),
-  (13, '72464-', '', 0),
-  (14, '94470-', '', 0),
-  (15, '76877-', '', 0),
-  (16, '37823-', '', 0),
-  (17, '6061-', '', 0),
-  (18, '43707-', '', 0),
-  (19, '86333-', '', 0),
-  (20, '99951-', '', 0),
-  (21, '39188-', '', 0),
-  (22, '28954-', '', 0);
+  (4, '14269-Diagram.jpg', 'image/jpeg', 7926);
 
 -- --------------------------------------------------------
 
@@ -122,13 +91,15 @@ INSERT INTO `tbl_users` (`userID`, `userName`, `userEmail`, `userPass`, `userSta
 -- Indexes for table `Problems`
 --
 ALTER TABLE `Problems`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `Problems_file_uindex` (`file`);
 
 --
 -- Indexes for table `tbl_uploads`
 --
 ALTER TABLE `tbl_uploads`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `tbl_uploads_file_uindex` (`file`);
 
 --
 -- Indexes for table `tbl_users`
@@ -145,14 +116,23 @@ ALTER TABLE `tbl_users`
 -- AUTO_INCREMENT for table `Problems`
 --
 ALTER TABLE `Problems`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `tbl_uploads`
 --
 ALTER TABLE `tbl_uploads`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
   MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `tbl_uploads`
+--
+ALTER TABLE `tbl_uploads`
+  ADD CONSTRAINT `tbl_uploads_Problems_file_fk` FOREIGN KEY (`file`) REFERENCES `Problems` (`file`) ON DELETE CASCADE;
