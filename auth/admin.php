@@ -70,7 +70,6 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             <div id="form" class="panel panel-default">
                 <div class="panel-heading">Administer Problems</div>
                 <div class="panel-body">
-                   
 
                     <?php
                     require_once("phpsqlinfo_dbinfo.php");
