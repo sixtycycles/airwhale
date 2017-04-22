@@ -49,7 +49,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Menu <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="home.php">Report Problems</a></li>
+                        <li><a href="homeOLD.php">Report Problems</a></li>
                         <?php
                         if ($_SESSION['isAdmin']) {
                             echo "<li> <a href='admin.php'>Admin Portal</a></li>";
@@ -70,50 +70,49 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
     <div class="row">
         <div class="col-md-8 col-lg-8">
             <div class="panel panel-default">
-            <div id="map" style="height:500px; width:100%"></div>
+                <div id="map" style="height:500px; width:100%"></div>
 
             </div>
             <div class="well">
-            <?php
-            if ($_SESSION['userSession']) {
-                require_once("phpsqlinfo_dbinfo.php");
+                <?php
+                if ($_SESSION['userSession']) {
+                    require_once("phpsqlinfo_dbinfo.php");
 
-                $connection = mysqli_connect('localhost', $username, $password, $database, $port);
-                if (!$connection) {
-                    die('Not connected : ' . mysqli_error($connection));
-                }
+                    $connection = mysqli_connect('localhost', $username, $password, $database, $port);
+                    if (!$connection) {
+                        die('Not connected : ' . mysqli_error($connection));
+                    }
 
-                $db_selected = mysqli_select_db($connection, $database);
-                if (!$db_selected) {
-                    die ('Can\'t use db : ' . mysqli_error($connection));
-                }
-                //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
-                $query = "SELECT id,type, COUNT(type) FROM Problems GROUP BY type ASC;";
+                    $db_selected = mysqli_select_db($connection, $database);
+                    if (!$db_selected) {
+                        die ('Can\'t use db : ' . mysqli_error($connection));
+                    }
+                    //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
+                    $query = "SELECT id,type, COUNT(type) FROM Problems GROUP BY type ASC;";
 
-                $result = mysqli_query($connection,$query);
+                    $result = mysqli_query($connection, $query);
 
-                if (!$result) {
-                    die('Invalid query: ' . mysqli_error($connection));
-                }
+                    if (!$result) {
+                        die('Invalid query: ' . mysqli_error($connection));
+                    }
 
-                echo "<div class='form-group'>";
-                while ($row = @mysqli_fetch_assoc($result) ) {
+                    echo "<div class='form-group'>";
+                    while ($row = @mysqli_fetch_assoc($result)) {
 
-                    echo '<button 
+                        echo '<button 
                         name=\'filters_params\' 
                         class=\'btn btn-primary\' 
-                        onclick=\'btnSelect(' . '"' . $row['type'] . '"' . ')\' 
+                        onclick=\'hide(' . '"' . $row['type'] . '"' . ')\' 
                         id=\'' . $row['type'] . '\'> '
-                        . $row['type'] .
-                        " <span class='badge'> " .$row['COUNT(type)']." </span>". ' 
+                            . $row['type'] .
+                            " <span class='badge'> " . $row['COUNT(type)'] . " </span>" . ' 
                         </button> ';
 
-                };
-                echo "</div>";
-               // $connection->close();
-
-            }
-            ?>
+                    };
+                    echo "</div>";
+                    // $connection->close();
+                }
+                ?>
             </div>
         </div>
 
@@ -131,7 +130,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                                    value="<?php
                                    //echo $_SESSION['userSession'];
                                    echo $row1['userName'];
-                                    ?>"/>
+                                   ?>"/>
                             <label for="email">Email address</label>
 
                             <input type="email" id="email" name='email' class="form-control"
@@ -156,9 +155,12 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                             <input type="file" class="form-control-file " aria-describedby="fileHelp" name="file"/>
 
                             <h4>Coordinates</h4>
-                            (click the map where the problem is)<br>
+<!--                            <button class="btn btn-warn" id="problem" onmousedown="locateMe()">Use My Location</button>-->
+<!--                            <br/>-->
+                            (or click the map where the problem is)<br>
                             <input type="text" name="lat" id="lat" placeholder="lattitude">
                             <input type="text" name="lng" id="lng" placeholder="longitude">
+
                             <hr>
                             <input class="btn btn-success form-control" type='submit' value='Save'/>
                         </div>
@@ -176,39 +178,59 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         var infowindow;
         var messagewindow;
         var roads;
-        var boundary;
-        var parcels;
         var markers = [];
-        var filters={};
-        //populate field with coords from the marker and place it on the map.
 
-        function grabCoords(e) {
-            document.getElementById('lat').value = e.latLng.lat();
-            document.getElementById('lng').value = e.latLng.lng();
-            clearMarkers();
+//grab  lat lng data form click on map, also replace "you are here" with this location. (prevents stacking of user markers.
+        function grabCoords(event) {
+
+            document.getElementById('lat').value = event.latLng.lat();
+            document.getElementById('lng').value = event.latLng.lng();
+            function moveMe(){
+                for (var i=0; i<markers.length; i++) {
+                    if (markers[i].type === 'myproblem') {
+                        markers[i].setMap(null);
+
+                    }
+                }
+            }
+            moveMe();
             var marker = new google.maps.Marker({
-                position: e.latLng,
-                map: map
+                position: event.latLng,
+                map: map,
+                type:"myproblem"
             });
             markers.push(marker);
         }
-        function btnSelect(str) {
-
-            if (document.getElementById(str).getAttribute("class") === "btn btn-primary") {
-                if (!filters[str]){filters[str] = str}
-                document.getElementById(str).setAttribute("class", "btn btn-default");
-                initMap(str);
+        //  show all markers of a particular category, styles buttons
+        function show(category) {
+            for (var i=0; i<markers.length; i++) {
+                if (markers[i].type === category) {
+                    markers[i].setMap(map);
+                    console.log(category)
+                }
 
             }
-            else {
-                document.getElementById(str).setAttribute("class", "btn btn-primary");
-                delete filters[str];
-                initMap(str);
-            }
-            console.log(filters);
+            //change buttons and onclick functions to the right one after click.
+            document.getElementById(category).setAttribute('class','btn btn-primary');
+            document.getElementById(category).setAttribute('onclick',"hide('"+ category+"')");
 
         }
 
+        //  hides all markers of a particular category, styles buttons
+        function hide(category) {
+            for (var i=0; i<markers.length; i++) {
+                if (markers[i].type === category) {
+                    markers[i].setMap(null);
+                    console.log(category)
+                }
+            }
+            //change buttons and onclick functions to the right one after click.
+            document.getElementById(category).setAttribute('class','btn btn-default');
+            document.getElementById(category).setAttribute('onclick',"show('"+ category+"')");
+
+        }
+
+//draw map, import xml data of problems and add markers and info to infoindows.
         function initMap() {
             var oronoMaine = {lat: 44.88798544802555, lng: -68.70643615722656};
             //this thing holds labels fro markers by problem type.
@@ -232,26 +254,11 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 map: map,
                 preserveViewport: true
             });
-
-//            boundary = new google.maps.KmlLayer({
-//                url: 'http://sixtycycles.github.io/CPR_KML/OronoBoundary.kml',
-//                map: map,
-//                preserveViewport: true,
-//                suppressInfoWindows: true,
-//
-//
-//            });
-
-//            parcels = new google.maps.KmlLayer({
-//                url: 'http://sixtycycles.github.io/CPR_KML/Orono_Parcels.kml',
-//                map: map,
-//                preserveViewport: true
-//            });
-
+            //this guy grabs the xml file from the db, and adds all the problems to the markers array
             downloadUrl('dump.php', function (data) {
                 var xml = data.responseXML;
-                var markers = xml.documentElement.getElementsByTagName('marker');
-                Array.prototype.forEach.call(markers, function (markerElem) {
+                var downloadedMarkers = xml.documentElement.getElementsByTagName('marker');
+                Array.prototype.forEach.call(downloadedMarkers, function (markerElem) {
 
                     var id = markerElem.getAttribute('id');
                     var name = markerElem.getAttribute('name');
@@ -268,70 +275,86 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     var infowincontent = document.createElement('div');
 
                     var strong = document.createElement('strong');
-                    strong.textContent = "User: "+ name;
+                    strong.textContent = "User: " + name;
                     infowincontent.appendChild(strong);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var text = document.createElement('text');
-                    text.textContent = "Problem Type: "+ type + "-" + id;
+                    text.textContent = "Problem Type: " + type + "-" + id;
                     infowincontent.appendChild(text);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var desc = document.createElement('text');
-                    desc.textContent = "Problem Description: "+description;
+                    desc.textContent = "Problem Description: " + description;
                     infowincontent.appendChild(desc);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var time = document.createElement('text');
-                    time.textContent = "Timestamp: "+timestamp;
+                    time.textContent = "Timestamp: " + timestamp;
                     infowincontent.appendChild(time);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var problemStatus = document.createElement('p');
-                    problemStatus.textContent = "Status: "+ status;
+                    problemStatus.textContent = "Status: " + status;
                     infowincontent.appendChild(problemStatus);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var problemImage = document.createElement('p');
-                    problemImage.innerHTML= '<img src="uploads/'+imageFile+'" /> ';
+                    problemImage.innerHTML = '<img src="uploads/' + imageFile + '" /> ';
                     infowincontent.appendChild(problemImage);
                     infowincontent.appendChild(document.createElement('br'));
 
                     var icon = customLabel[type] || {};
-                    if(!filters[type]) {
-                        var marker = new google.maps.Marker({
-                            map: map,
-                            position: point,
-                            label: icon.label
-                        });
+                    //we add the property type to the marker object to filter by problem type later
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: point,
+                        label: icon.label,
+                        type:type
+                    });
+                    markers.push(marker);
+                    //opens infowin when clicking marker.
+                    marker.addListener('click', function () {
+                        infowindow.setContent(infowincontent);
+                        infowindow.open(map, marker);
+                    });
 
-
-                        marker.addListener('click', function () {
-
-                            infowindow.setContent(infowincontent);
-                            infowindow.open(map, marker);
-                        });
-                    }
 
                 });
             });
+            //this uses the browser to locate you.
+            function locateMe() {
+                navigator.geolocation.getCurrentPosition(function (position) {
+
+                    var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+                    marker = new google.maps.Marker({
+                        position: pos,
+                        draggable: true,
+                        animation: google.maps.Animation.DROP,
+                        map: map,
+                        label: "YOU ARE HERE",
+                        type:'myproblem'
+
+                    });
+                    markers.push(marker);
+
+                })
+            }
+
+            locateMe();
+            //add listener to have user place problem marker. .
             google.maps.event.addListener(map, 'click', function (event) {
+
                 grabCoords(event);
+                //this one opens the info when you clikc a marker
                 google.maps.event.addListener(marker, 'click', function () {
                     infowindow.open(map, marker);
                 });
 
             });
         } //END OF INIT MAP DUMMY
-
-        function setMapOnAll(map) {
-            for (var i = 0; i < markers.length; i++) {
-                markers[i].setMap(map);
-            }
-        }
-        function clearMarkers() {
-            setMapOnAll(null);
-        }
+        //for grabbing xml
         function downloadUrl(url, callback) {
             var request = window.ActiveXObject ?
                 new ActiveXObject('Microsoft.XMLHTTP') :
@@ -347,6 +370,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             request.open('GET', url, true);
             request.send(null);
         }
+        //why not?
         function doNothing() {
         }
 
