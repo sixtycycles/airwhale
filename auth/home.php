@@ -179,6 +179,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
     var infowindow;
     var messagewindow;
     var roads;
+    var surroundingTowns;
     var markers = [];
 
     //grab  lat lng data form click on map, also replace "you are here" with this location. (prevents stacking of user markers.
@@ -259,6 +260,12 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         //outline of town boundary for reference.
         roads = new google.maps.KmlLayer({
             url: 'http://sixtycycles.github.io/CPR_KML/Orono_Roads.kml',
+            map: map,
+            preserveViewport: true
+
+        });
+        surroundingTowns = new google.maps.KmlLayer({
+            url: 'http://sixtycycles.github.io/CPR_KML/TownswithoutOrono.kmz',
             map: map,
             preserveViewport: true
 
