@@ -17,6 +17,8 @@ The adminstrative user can also access a list of the problems that have been sub
 
 We are using [MAMP](https://www.mamp.info/en/) for our database (MySql) and webserver. In order to make the solution portable and easily installable by a lay person. [PhpMailer](https://github.com/PHPMailer/PHPMailer) is is used for sending email validation of users along with a gmail account to serve as the messenger. We use the google maps javasctipt API to serve the map, display problems, and to display our KML layers for styling the map. 
 
-## To use this: 
+### To Use The Application: 
   You will need to download and install MAMP (or a smimmilar package, MySql, Apache, Php 7.0). You can use the `auth.sql` file to create the database. Create a user for the database called testUser (or create your own user, and update `phpmsqlinfo.php` and `dbinfo.php` with the new information.)
 * Make sure that MAMP's webserver tab is pointed to the folder auth inside the project folder. (or move those files to the `~htdocs` directory. 
+* you may need to change the default ports in MAMP also depending on what your configuraton is. 
+
