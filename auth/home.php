@@ -16,6 +16,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>Orono Problem Reporter</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -48,7 +49,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Menu <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="homeOLD.php">Report Problems</a></li>
+                        <li><a href="home.php">Report Problems</a></li>
                         <?php
                         if ($_SESSION['isAdmin']) {
                             echo "<li> <a href='admin.php'>Admin Portal</a></li>";
@@ -180,6 +181,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
     var messagewindow;
     var roads;
     var surroundingTowns;
+    var boundary;
     var markers = [];
 
     //grab  lat lng data form click on map, also replace "you are here" with this location. (prevents stacking of user markers.
@@ -241,14 +243,14 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
     //draw map, import xml data of problems and add markers and info to infoindows.
     function initMap() {
-        var oronoMaine = {lat: 44.88798544802555, lng: -68.70643615722656};
+        var oronoMaine = {lat: 44.7944916, lng: -68.7880535};
         //this thing holds labels fro markers by problem type.
         var customLabel = {
             'pothole': {label: 'Pothole'},
-            'streetLight': {label: 'Street Light'},
+            'streetlight': {label: 'Street Light'},
             'fireHydrant': {label: 'Fire Hydrant'},
             'grafitti': {label: 'Grafitti'},
-            'other': {label: 'other'}
+            'other': {label: 'Other'}
         };
         //the map where we draw things and interact.
         map = new google.maps.Map(document.getElementById('map'), {
@@ -261,13 +263,24 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         roads = new google.maps.KmlLayer({
             url: 'http://sixtycycles.github.io/CPR_KML/Orono_Roads.kml',
             map: map,
-            preserveViewport: true
+            preserveViewport: true,
+            clickable: false
 
         });
         surroundingTowns = new google.maps.KmlLayer({
             url: 'http://sixtycycles.github.io/CPR_KML/TownswithoutOrono.kmz',
             map: map,
-            preserveViewport: true
+            preserveViewport: true,
+            info:this.getMetadata
+
+            //clickable: false
+
+        });
+        boundary = new google.maps.KmlLayer({
+            url: 'http://sixtycycles.github.io/CPR_KML/OronoBoundary.kmz',
+            map: map,
+            preserveViewport: true,
+            clickable: false
 
         });
 
@@ -334,7 +347,9 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 marker.addListener('click', function () {
                     infowindow.setContent(infowincontent);
                     infowindow.open(map, marker);
+
                 });
+
 
             });
         });
