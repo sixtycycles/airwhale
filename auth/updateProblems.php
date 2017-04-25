@@ -1,5 +1,5 @@
 <?php
-header('Location: index.php');
+header('Location: admin.php');
 require_once('phpsqlinfo_dbinfo.php');
 
 if (!empty($_POST)) {
