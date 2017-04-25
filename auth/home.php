@@ -156,9 +156,9 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                             <label for="description">Description of problem</label>
                             <input class="form-control" type='text' id='description' name='description'/>
 
-<!--                            <h4>How should we contact you? </h4>-->
-<!--                            <label for="phone">Phone Number</label>-->
-<!--                            <input type="tel" class="form-control" name='phone' id="phone" placeholder="123.456.7890">-->
+                            <!--                            <h4>How should we contact you? </h4>-->
+                            <!--                            <label for="phone">Phone Number</label>-->
+                            <!--                            <input type="tel" class="form-control" name='phone' id="phone" placeholder="123.456.7890">-->
                             <h4>Upload a picture of the issue</h4>
                             <input type="file" class="form-control-file " aria-describedby="fileHelp" name="file"/>
 
@@ -200,6 +200,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 }
             }
         }
+
         moveMe();
 
         var marker = new google.maps.Marker({
@@ -228,7 +229,6 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         //change buttons and onclick functions to the right one after click.
         document.getElementById(category).setAttribute('class', 'btn btn-primary');
         document.getElementById(category).setAttribute('onclick', "hide('" + category + "')");
-
     }
 
     //  hides all markers of a particular category, styles buttons
@@ -276,7 +276,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             url: 'http://sixtycycles.github.io/CPR_KML/TownswithoutOrono.kmz',
             map: map,
             preserveViewport: true,
-            info:"<h4>Please Select an Area In Orono</h4>"
+            info: "<h4>Please Select an Area In Orono</h4>"
         });
         boundary = new google.maps.KmlLayer({
             url: 'http://sixtycycles.github.io/CPR_KML/OronoBoundary.kmz',
@@ -304,8 +304,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     parseFloat(markerElem.getAttribute('lng')));
 
                 var infowincontent = document.createElement('div');
-                infowincontent.setAttribute('class','well');
-                infowincontent.setAttribute('style','width:200px; height:auto');
+                infowincontent.setAttribute('class', 'well');
+                infowincontent.setAttribute('style', 'width:200px; height:auto');
 
                 var strong = document.createElement('strong');
                 strong.textContent = "User: " + name;
@@ -380,6 +380,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
             })
         }
+
         locateMe();
         //add listener to have user place problem marker. .
         google.maps.event.addListener(map, 'click', function (event) {
