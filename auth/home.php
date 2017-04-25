@@ -16,7 +16,6 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html>
 <head>
-
     <title>Orono Problem Reporter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -26,6 +25,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
 </head>
+
 <body>
 <!-- NAV-->
 <nav class="navbar navbar-default">
@@ -68,6 +68,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
     </div><!-- /.container-fluid -->
 </nav>
 <!-- END NAV-->
+
 <!--Main area -->
 <div class="container-fluid">
     <div class="row">
@@ -78,7 +79,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 <!-- END MAP area-->
             </div>
             <!-- problem Filter area-->
-            <div class="well">
+            <div class="well" id="filterArea">
                 <!--This renders the filter buttons from problem types in DB -->
                 <?php
                 if ($_SESSION['userSession']) {
@@ -117,7 +118,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
                     };
                     echo "</div>";
-                    // $connection->close();
+
+                    //
                 }
                 ?>
             </div>
@@ -154,9 +156,9 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                             <label for="description">Description of problem</label>
                             <input class="form-control" type='text' id='description' name='description'/>
 
-                            <h4>How should we contact you? </h4>
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" class="form-control" name='phone' id="phone" placeholder="123.456.7890">
+<!--                            <h4>How should we contact you? </h4>-->
+<!--                            <label for="phone">Phone Number</label>-->
+<!--                            <input type="tel" class="form-control" name='phone' id="phone" placeholder="123.456.7890">-->
                             <h4>Upload a picture of the issue</h4>
                             <input type="file" class="form-control-file " aria-describedby="fileHelp" name="file"/>
 
@@ -190,7 +192,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
         document.getElementById('lat').value = event.latLng.lat();
         document.getElementById('lng').value = event.latLng.lng();
-        //this removes the last click marker from  the user, or if no clicks yet, the geolocated marker.
+        //this removes the last click marker from  the user, or if no clicks yet, the auto geolocated marker is moved.
         function moveMe() {
             for (var i = 0; i < markers.length; i++) {
                 if (markers[i].type === 'myproblem') {
@@ -198,13 +200,14 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 }
             }
         }
-
         moveMe();
+
         var marker = new google.maps.Marker({
             position: event.latLng,
             map: map,
             animation: google.maps.Animation.DROP,
-            type: "myproblem"
+            type: "myproblem",
+            draggable: true
 
         });
         marker.addListener('click', function () {
@@ -260,7 +263,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         });
         infowindow = new google.maps.InfoWindow({content: "yay"});
         messagewindow = new google.maps.InfoWindow({content: "YAY"});
-        //outline of town boundary for reference.
+
+        // KML LAYERS
         roads = new google.maps.KmlLayer({
             url: 'http://sixtycycles.github.io/CPR_KML/Orono_Roads.kml',
             map: map,
@@ -273,16 +277,12 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             map: map,
             preserveViewport: true,
             info:"<h4>Please Select an Area In Orono</h4>"
-
-            //clickable: false
-
         });
         boundary = new google.maps.KmlLayer({
             url: 'http://sixtycycles.github.io/CPR_KML/OronoBoundary.kmz',
             map: map,
             preserveViewport: true,
             clickable: false
-
         });
 
         //this guy grabs the xml file from the db, and adds all the problems to the markers array
@@ -357,7 +357,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
             });
         });
-        //this uses the browser to locate you.
+
+        //locate the user form the browser
         function locateMe() {
             navigator.geolocation.getCurrentPosition(function (position) {
 
@@ -379,12 +380,11 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
             })
         }
-
         locateMe();
         //add listener to have user place problem marker. .
         google.maps.event.addListener(map, 'click', function (event) {
             grabCoords(event);
-            //this one opens the info when you clikc a marker
+            //this one opens the info when you click a marker
             google.maps.event.addListener(marker, 'click', function () {
                 infowindow.open(map, marker);
             });
