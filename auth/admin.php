@@ -14,6 +14,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin Portal | Orono Problem Reporter</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -64,7 +65,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 </nav>
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="">
 
         <div class="col-md-8 col=lg-8">
             <div id="problemList" class="panel panel-default ">
@@ -95,33 +96,45 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                         die('Invalid query: ' . mysqli_error($connection));
                     }
 
-                    echo "<div class=''>";
+
                     //loops over all problems sort by type
                     while ($row = @mysqli_fetch_assoc($result)) {
-                        echo "<div class='panel panel-default' id='" . $row['id'] . "'>";
+                        echo "<div class='panel panel-default' id='" . $row['id'] . "'> ";
                         echo
-                            "<div class='panel-heading'>" .
+                            "<div class='navbar' >" .
+                            " <div class='navbar-brand' >" .
                             "ID: " . $row['id'] . "<br />" .
-                            "Type: " . $row['type'] . "<br />" .
-                            "</div>" .
+                            " Type: " . $row['type'] . "</div></div>" .
+
+                            "<ul class='nav nav-pills' >" .
+                            "<li role=\"presentation\"><button  onclick='deleteProblem(\"" . $row['id'] . "\")'> Delete Problem </button></li>" .
+                            "<li role=\"presentation\"><button onclick='beginProblem(\"" . $row['id'] . "\")'> Started Problem </button></li>" .
+                            "<li role=\"presentation\"><button  onclick='resolveProblem(\"" . $row['id'] . "\")'> Completed Problem </button></li>" .
+                            "</ul><hr /> " .
+
+
 
                             "<div class='panel-body'> " .
-                            "Name: " . $row['name'] . "<br />" .
-                            "Description: " . $row['description'] . "<br />" .
-                            "Status: " . $row['problem_status'] . "<br />" .
-                            "Time " . $row['timestamp'] . "<br />" .
-                            "Photo of Problem: <img src='uploads/" . $row['file'] . "'>" .
-                            "</div>";
-                        echo '<button class=\'btn btn-danger\' onclick=\'deleteProblem("' . $row['id'] . '")\'> Delete Problem </button>';
-                        echo "</div> <br />";
-
+                            //"<div class='col-sm-8 col-md-6 col-lg-4'> " .
+                            "<strong>Name:</strong> <p>" . $row['name'] . "</p>" .
+                            "<strong>Status:</strong><p> " . $row['problem_status'] . "</p>" .
+                            "<strong>Time</strong> <p>" . $row['timestamp'] . "</p>" .
+                            //"</div>".
+                            //"<div  class='col-sm-8 col-md-6 col-lg-4' >" .
+                            "<strong>Photo of Problem:</strong><br /> <img class='img-fluid img-thumbnail' src='uploads/" . $row['file'] . "'>" .
+                            //"</div>" .
+                            "</div> ";
+                        echo "</div>";
                     };
-                    echo "</div>";
+
 
                     ?>
 
                 </div>
-                <div class='form' style="visibility: hidden" ><input name="deleteList" id="deleteList" value=""> </div>
+                <div class='form' style="visibility: hidden" >
+                    <input name="deleteList" id="deleteList" value="">
+                    <input name="startList" id="startList" value="">
+                    <input name="completeList" id="completeList" value=""></div>
                 </form>
             </div>
         </div>
@@ -137,11 +150,22 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     <script type="text/javascript">
         var dlist = [];
-
+        var startList=[];
+        var completeList = [];
         function deleteProblem(id) {
            dlist.push(id);
            document.getElementById(id).innerHTML = "Problem #" + id +" Deleted!";
            document.getElementById('deleteList').setAttribute('value',dlist);
+        }
+        function beginProblem(id) {
+            startList.push(id);
+            document.getElementById(id).innerHTML = "Problem #" + id +" started!";
+            document.getElementById('startList').setAttribute('value',startList);
+        }
+        function resolveProblem(id) {
+            completeList.push(id);
+            document.getElementById(id).innerHTML = "Problem #" + id +" completed!";
+            document.getElementById('completeList').setAttribute('value',completeList);
         }
 
 

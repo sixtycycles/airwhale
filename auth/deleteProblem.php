@@ -2,7 +2,7 @@
 header('Location: index.php');
 require_once('phpsqlinfo_dbinfo.php');
 
-if (!empty($_POST)) {
+if (!empty($_POST&& $_POST['deleteList'])) {
     $deleteList = explode(',',htmlspecialchars($_POST['deleteList']));
 
     $connection = mysqli_connect("localhost", $username, $password, $database, 8889);

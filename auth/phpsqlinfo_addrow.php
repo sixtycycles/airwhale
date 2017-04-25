@@ -4,11 +4,11 @@ require_once('phpsqlinfo_dbinfo.php');
 
 if (!empty($_POST)) {
 // Gets data from URL parameters.
-    $name = htmlspecialchars($_POST['name']);
-    $description = htmlspecialchars($_POST['description']);
-    $lat = htmlspecialchars($_POST['lat']);
-    $lon = htmlspecialchars($_POST['lng']);
-    $type = htmlspecialchars($_POST['type']);
+    $name = trim(htmlspecialchars($_POST['name']));
+    $description = trim(htmlspecialchars($_POST['description']));
+    $lat = trim(htmlspecialchars($_POST['lat']));
+    $lon = trim(htmlspecialchars($_POST['lng']));
+    $type = trim(htmlspecialchars($_POST['type']));
 //file handling
     $file = rand(1000, 100000) . "-" . $_FILES['file']['name'];
     $file = rand(1000, 100000) . "-" . $_FILES['file']['name'];

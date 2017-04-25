@@ -18,6 +18,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 <head>
 
     <title>Orono Problem Reporter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -243,7 +244,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
     //draw map, import xml data of problems and add markers and info to infoindows.
     function initMap() {
-        var oronoMaine = {lat: 44.7944916, lng: -68.7880535};
+        var oronoMaine = {lat: 44.882390656052756, lng: -68.71810913085938};
         //this thing holds labels fro markers by problem type.
         var customLabel = {
             'pothole': {label: 'Pothole'},
@@ -255,7 +256,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         //the map where we draw things and interact.
         map = new google.maps.Map(document.getElementById('map'), {
             center: oronoMaine,
-            zoom: 12
+            zoom: 13
         });
         infowindow = new google.maps.InfoWindow({content: "yay"});
         messagewindow = new google.maps.InfoWindow({content: "YAY"});
@@ -271,7 +272,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             url: 'http://sixtycycles.github.io/CPR_KML/TownswithoutOrono.kmz',
             map: map,
             preserveViewport: true,
-            info:this.getMetadata
+            info:"<h4>Please Select an Area In Orono</h4>"
 
             //clickable: false
 
@@ -303,6 +304,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     parseFloat(markerElem.getAttribute('lng')));
 
                 var infowincontent = document.createElement('div');
+                infowincontent.setAttribute('class','well');
+                infowincontent.setAttribute('style','width:200px; height:auto');
 
                 var strong = document.createElement('strong');
                 strong.textContent = "User: " + name;
@@ -311,6 +314,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 var text = document.createElement('text');
                 text.textContent = "Problem Type: " + type + "-" + id;
+
                 infowincontent.appendChild(text);
                 infowincontent.appendChild(document.createElement('br'));
 
@@ -324,13 +328,13 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 infowincontent.appendChild(time);
                 infowincontent.appendChild(document.createElement('br'));
 
-                var problemStatus = document.createElement('p');
+                var problemStatus = document.createElement('text');
                 problemStatus.textContent = "Status: " + status;
                 infowincontent.appendChild(problemStatus);
                 infowincontent.appendChild(document.createElement('br'));
 
-                var problemImage = document.createElement('p');
-                problemImage.innerHTML = '<img src="uploads/' + imageFile + '" /> ';
+                var problemImage = document.createElement('image');
+                problemImage.innerHTML = '<img class=\'img-fluid img-thumbnail\' style="width: 100%; " src="uploads/' + imageFile + '" /> ';
                 infowincontent.appendChild(problemImage);
                 infowincontent.appendChild(document.createElement('br'));
 
@@ -365,8 +369,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     animation: google.maps.Animation.DROP,
                     map: map,
                     label: "YOU ARE HERE",
-                    type: 'myproblem'
-
+                    type: 'myproblem',
+                    preserveViewport: true
                 });
 
                 markers.push(marker);
@@ -376,7 +380,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             })
         }
 
-
+        locateMe();
         //add listener to have user place problem marker. .
         google.maps.event.addListener(map, 'click', function (event) {
             grabCoords(event);
@@ -386,7 +390,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             });
 
         });
-        locateMe();
+
     } //END OF INIT MAP DUMMY
     //for grabbing xml
     function downloadUrl(url, callback) {
