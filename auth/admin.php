@@ -71,7 +71,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             <div id="problemList" class="panel panel-default ">
                 <form method="POST" action="updateProblems.php">
                     <input type="submit" class="btn btn-default" id="saveChanges" value="save"
-                           formaction="deleteProblem.php">
+                           formaction="updateProblems.php">
                     <a href="download.php"><input type="button" class="btn btn-default" id="download"
                                                   value="Download Problems"></a>
                     <div class="panel-heading">Administer Problems</div>
