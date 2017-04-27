@@ -26,6 +26,8 @@
                             echo "<li> <a href='admin.php'>Admin Portal</a></li>";
                         }
                         ?>
+
+                        <!-- Add login / logout button -->
                         <?php
                         echo "<li role='separator' class='divider'></li>";
                         if (isset($_SESSION['userSession'])) {
