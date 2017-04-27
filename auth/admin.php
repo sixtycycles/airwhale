@@ -30,48 +30,57 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         <div class="col-md-8 col=lg-8">
         
             <h1>Administer Problems</h1>
+
+            <form method="POST" action="updateProblems.php">
                         
-            <input type="submit" class="btn btn-primary" id="saveChanges" value="save"
-                formaction="updateProblems.php">
-            <a href="download.php"><input type="button" class="btn btn-primary" id="download"
-                value="Download Problems"></a>
 
-            <div id="problemList" class="">
-                <form method="POST" action="updateProblems.php">
+                <p>
+                    <button type="submit" class="btn btn-primary" id="saveChanges" formaction="updateProblems.php">
+                        Save
+                    </button>
 
-                    <?php
-                    require_once("phpsqlinfo_dbinfo.php");
+                    <a href="download.php">
+                        <button type="button" class="btn btn-primary" id="download">
+                            Download Problems
+                            <span class="glyphicon glyphicon-download"></span>
+                        </button>
+                    </a>
+                </p>
 
-                    $connection = mysqli_connect('localhost', $username, $password, $database, $port);
-                    if (!$connection) {
-                        die('Not connected : ' . mysqli_error($connection));
-                    }
+                <div id="problemList" class="">
 
-                    $db_selected = mysqli_select_db($connection, $database);
-                    if (!$db_selected) {
-                        die ('Can\'t use db : ' . mysqli_error($connection));
-                    }
-                    //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
-                    $query = "SELECT * FROM Problems ORDER BY id ASC;";
+                        <?php
+                        require_once("phpsqlinfo_dbinfo.php");
 
-                    $result = mysqli_query($connection, $query);
+                        $connection = mysqli_connect('localhost', $username, $password, $database, $port);
+                        if (!$connection) {
+                            die('Not connected : ' . mysqli_error($connection));
+                        }
 
-                    if (!$result) {
-                        die('Invalid query: ' . mysqli_error($connection));
-                    }
+                        $db_selected = mysqli_select_db($connection, $database);
+                        if (!$db_selected) {
+                            die ('Can\'t use db : ' . mysqli_error($connection));
+                        }
+                        //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
+                        $query = "SELECT * FROM Problems ORDER BY id ASC;";
+
+                        $result = mysqli_query($connection, $query);
+
+                        if (!$result) {
+                            die('Invalid query: ' . mysqli_error($connection));
+                        }
 
 
-                    //loops over all problems sort by type
-                    while ($row = @mysqli_fetch_assoc($result)) {
-                        // Make a new panel for each problem
-                        echo "<div class='panel panel-default' id='" . $row['id'] . "'> " .
+                        //loops over all problems sort by type
+                        while ($row = @mysqli_fetch_assoc($result)) {
+                            // Make a new panel for each problem
+                            echo "<div class='panel panel-default' id='" . $row['id'] . "'> " .
 
-                            
                                 "<div class='panel-heading clearfix'>" .
-                                    "<div class = 'pull-left'>" .
+                                    "<div class='pull-left'>" .
                                         // "<h3 class='panel-title pull-left'>Panel title</h3>" . "<br />" .
-                                        "<b>ID</b>: " . $row['id'] . "<br />" .
-                                        "<b>Type</b>: " . $row['type'] . "" .
+                                        "<strong>ID</strong>: " . $row['id'] . "<br />" .
+                                        "<strong>Type</strong>: " . $row['type'] . "" .
                                     "</div>" .
 
                                     "<div class='btn-group pull-right'>" .
@@ -81,7 +90,6 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                                     "</div>" .
                                 
                                 "</div>" .
-
 
                                 "<div class='panel-body'> " .
                                     //"<div class='col-sm-8 col-md-6 col-lg-4'> " .
@@ -94,20 +102,20 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                                 
                                 "</div>" .
 
-                        "</div>";
-                    };
+                            "</div>";
+                        };
 
 
-                    ?>
+                        ?>
 
-                    <div class='form' style="visibility: hidden">
-                        <input name="deleteList" id="deleteList" value="">
-                        <input name="startList" id="startList" value="">
-                        <input name="completeList" id="completeList" value="">
-                    </div>
-                </form>
+                        <div class='form' style="visibility: hidden">
+                            <input name="deleteList" id="deleteList" value="">
+                            <input name="startList" id="startList" value="">
+                            <input name="completeList" id="completeList" value="">
+                        </div>
 
-            </div> <!-- End problemList -->
+                </div> <!-- End problemList -->
+            </form>
 
         </div>
     </div>
