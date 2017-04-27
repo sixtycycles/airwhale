@@ -8,4 +8,4 @@
         crossorigin="anonymous"></script>
 
 <!-- Our custom styling -->
-<link rel="stylesheet" href="./styles/airwhale.css" type="text/css">
+<link rel="stylesheet" href="../styles/airwhale.css" type="text/css">
