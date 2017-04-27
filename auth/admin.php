@@ -28,91 +28,100 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
     <div class="">
 
         <div class="col-md-8 col=lg-8">
-            <div id="problemList" class="panel panel-default ">
-                <form method="POST" action="updateProblems.php">
-                    <div class="panel-heading">
-                        <h1>Administer Problems</h1>
+        
+            <h1>Administer Problems</h1>
                         
-                        <input type="submit" class="btn btn-default" id="saveChanges" value="save"
-                           formaction="updateProblems.php">
-                        <a href="download.php"><input type="button" class="btn btn-default" id="download"
-                                                    value="Download Problems"></a>
-                    </div>
-                    <div class="panel-body">
+            <input type="submit" class="btn btn-primary" id="saveChanges" value="save"
+                formaction="updateProblems.php">
+            <a href="download.php"><input type="button" class="btn btn-primary" id="download"
+                value="Download Problems"></a>
 
-                        <?php
-                        require_once("phpsqlinfo_dbinfo.php");
+            <div id="problemList" class="">
+                <form method="POST" action="updateProblems.php">
 
-                        $connection = mysqli_connect('localhost', $username, $password, $database, $port);
-                        if (!$connection) {
-                            die('Not connected : ' . mysqli_error($connection));
-                        }
+                    <?php
+                    require_once("phpsqlinfo_dbinfo.php");
 
-                        $db_selected = mysqli_select_db($connection, $database);
-                        if (!$db_selected) {
-                            die ('Can\'t use db : ' . mysqli_error($connection));
-                        }
-                        //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
-                        $query = "SELECT * FROM Problems ORDER BY id ASC;";
+                    $connection = mysqli_connect('localhost', $username, $password, $database, $port);
+                    if (!$connection) {
+                        die('Not connected : ' . mysqli_error($connection));
+                    }
 
-                        $result = mysqli_query($connection, $query);
+                    $db_selected = mysqli_select_db($connection, $database);
+                    if (!$db_selected) {
+                        die ('Can\'t use db : ' . mysqli_error($connection));
+                    }
+                    //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
+                    $query = "SELECT * FROM Problems ORDER BY id ASC;";
 
-                        if (!$result) {
-                            die('Invalid query: ' . mysqli_error($connection));
-                        }
+                    $result = mysqli_query($connection, $query);
+
+                    if (!$result) {
+                        die('Invalid query: ' . mysqli_error($connection));
+                    }
 
 
-                        //loops over all problems sort by type
-                        while ($row = @mysqli_fetch_assoc($result)) {
-                            echo "<div class='panel panel-default' id='" . $row['id'] . "'> ";
-                            echo
-                                "<div class='navbar' >" .
-                                " <div class='navbar-brand' >" .
-                                "ID: " . $row['id'] . "<br />" .
-                                " Type: " . $row['type'] . "</div></div>" .
+                    //loops over all problems sort by type
+                    while ($row = @mysqli_fetch_assoc($result)) {
+                        // Make a new panel for each problem
+                        echo "<div class='panel panel-default' id='" . $row['id'] . "'> " .
 
-                                "<ul class='nav nav-pills' >" .
-                                "<li role=\"presentation\"><button  onclick='deleteProblem(\"" . $row['id'] . "\")'> Delete Problem </button></li>" .
-                                "<li role=\"presentation\"><button onclick='beginProblem(\"" . $row['id'] . "\")'> Started Problem </button></li>" .
-                                "<li role=\"presentation\"><button  onclick='resolveProblem(\"" . $row['id'] . "\")'> Completed Problem </button></li>" .
-                                "</ul><hr /> " .
+                            
+                                "<div class='panel-heading clearfix'>" .
+                                    "<div class = 'pull-left'>" .
+                                        // "<h3 class='panel-title pull-left'>Panel title</h3>" . "<br />" .
+                                        "<b>ID</b>: " . $row['id'] . "<br />" .
+                                        "<b>Type</b>: " . $row['type'] . "" .
+                                    "</div>" .
+
+                                    "<div class='btn-group pull-right'>" .
+                                        "<button class='btn btn-sm btn-primary' onclick='beginProblem(\"" . $row['id'] . "\")'>Start Problem</button>" .
+                                        "<button class='btn btn-sm btn-success' onclick='resolveProblem(\"" . $row['id'] . "\")'>Complete Problem</button>" .
+                                        "<button class='btn btn-sm btn-danger' onclick='deleteProblem(\"" . $row['id'] . "\")'>Delete Problem</button>" .
+                                    "</div>" .
+                                
+                                "</div>" .
 
 
                                 "<div class='panel-body'> " .
-                                //"<div class='col-sm-8 col-md-6 col-lg-4'> " .
-                                "<strong>Name:</strong> <p>" . $row['name'] . "</p>" .
-                                "<strong>Status:</strong><p> " . $row['problem_status'] . "</p>" .
-                                "<strong>Time</strong> <p>" . $row['timestamp'] . "</p>" .
-                                //"</div>".
-                                //"<div  class='col-sm-8 col-md-6 col-lg-4' >" .
-                                "<strong>Photo of Problem:</strong><br /> <img class='img-fluid img-thumbnail' src='uploads/" . $row['file'] . "'>" .
-                                //"</div>" .
-                                "</div> ";
-                            echo "</div>";
-                        };
+                                    //"<div class='col-sm-8 col-md-6 col-lg-4'> " .
+                                    "<strong>Name:</strong> <p>" . $row['name'] . "</p>" .
+                                    "<strong>Status:</strong><p> " . $row['problem_status'] . "</p>" .
+                                    "<strong>Time</strong> <p>" . $row['timestamp'] . "</p>" .
+                                    //"</div>".
+                                    //"<div  class='col-sm-8 col-md-6 col-lg-4' >" .
+                                    "<strong>Photo of Problem:</strong><br /> <img class='img-fluid img-thumbnail' src='uploads/" . $row['file'] . "'>" .
+                                
+                                "</div>" .
+
+                        "</div>";
+                    };
 
 
-                        ?>
+                    ?>
 
-                    </div>
                     <div class='form' style="visibility: hidden">
                         <input name="deleteList" id="deleteList" value="">
                         <input name="startList" id="startList" value="">
-                        <input name="completeList" id="completeList" value=""></div>
+                        <input name="completeList" id="completeList" value="">
+                    </div>
                 </form>
-            </div>
+
+            </div> <!-- End problemList -->
+
         </div>
     </div>
-<!-- Scripts -->
+
+    <!-- Scripts -->
     <script type="text/javascript">
-        var dlist = [];
+        var deleteList = [];
         var startList = [];
         var completeList = [];
 
         function deleteProblem(id) {
-            dlist.push(id);
+            deleteList.push(id);
             document.getElementById(id).innerHTML = "Problem #" + id + " Deleted!";
-            document.getElementById('deleteList').setAttribute('value', dlist);
+            document.getElementById('deleteList').setAttribute('value', deleteList);
         }
 
         function beginProblem(id) {
