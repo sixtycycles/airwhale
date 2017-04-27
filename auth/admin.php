@@ -14,14 +14,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 <html>
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?php require_once "../partials/head.php"; ?>
     <title>Admin Portal | Orono Problem Reporter</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -70,11 +64,14 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         <div class="col-md-8 col=lg-8">
             <div id="problemList" class="panel panel-default ">
                 <form method="POST" action="updateProblems.php">
-                    <input type="submit" class="btn btn-default" id="saveChanges" value="save"
+                    <div class="panel-heading">
+                        <h1>Administer Problems</h1>
+                        
+                        <input type="submit" class="btn btn-default" id="saveChanges" value="save"
                            formaction="updateProblems.php">
-                    <a href="download.php"><input type="button" class="btn btn-default" id="download"
-                                                  value="Download Problems"></a>
-                    <div class="panel-heading">Administer Problems</div>
+                        <a href="download.php"><input type="button" class="btn btn-default" id="download"
+                                                    value="Download Problems"></a>
+                    </div>
                     <div class="panel-body">
 
                         <?php

@@ -289,54 +289,11 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         downloadUrl('dump.php', function (data) {
             var xml = data.responseXML;
             var downloadedMarkers = xml.documentElement.getElementsByTagName('marker');
+
             Array.prototype.forEach.call(downloadedMarkers, function (markerElem) {
-
-                var id = markerElem.getAttribute('id');
-                var name = markerElem.getAttribute('name');
-                var description = markerElem.getAttribute('description');
-                var type = markerElem.getAttribute('type');
-                var timestamp = markerElem.getAttribute('timestamp');
-                var status = markerElem.getAttribute('problemStatus');
-                var imageFile = markerElem.getAttribute('img');
-
                 var point = new google.maps.LatLng(
                     parseFloat(markerElem.getAttribute('lat')),
                     parseFloat(markerElem.getAttribute('lng')));
-
-                var infowincontent = document.createElement('div');
-                infowincontent.setAttribute('class', 'well');
-                infowincontent.setAttribute('style', 'width:200px; height:auto');
-
-                var strong = document.createElement('strong');
-                strong.textContent = "User: " + name;
-                infowincontent.appendChild(strong);
-                infowincontent.appendChild(document.createElement('br'));
-
-                var text = document.createElement('text');
-                text.textContent = "Problem Type: " + type + "-" + id;
-
-                infowincontent.appendChild(text);
-                infowincontent.appendChild(document.createElement('br'));
-
-                var desc = document.createElement('text');
-                desc.textContent = "Problem Description: " + description;
-                infowincontent.appendChild(desc);
-                infowincontent.appendChild(document.createElement('br'));
-
-                var time = document.createElement('text');
-                time.textContent = "Timestamp: " + timestamp;
-                infowincontent.appendChild(time);
-                infowincontent.appendChild(document.createElement('br'));
-
-                var problemStatus = document.createElement('text');
-                problemStatus.textContent = "Status: " + status;
-                infowincontent.appendChild(problemStatus);
-                infowincontent.appendChild(document.createElement('br'));
-
-                var problemImage = document.createElement('image');
-                problemImage.innerHTML = '<img class=\'img-fluid img-thumbnail\' style="width: 100%; " src="uploads/' + imageFile + '" /> ';
-                infowincontent.appendChild(problemImage);
-                infowincontent.appendChild(document.createElement('br'));
 
                 var icon = customLabel[type] || {};
                 //we add the property type to the marker object to filter by problem type later
@@ -349,14 +306,69 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 markers.push(marker);
                 //opens infowin when clicking marker.
                 marker.addListener('click', function () {
-                    infowindow.setContent(infowincontent);
                     infowindow.open(map, marker);
+                    infowindow.setContent(MakeMarkerWindow(markerElem));
 
                 });
 
 
             });
         });
+
+        /**
+         * Makes an HTML div containing the information used for the popup
+         * when you click on a marker.
+         */
+        function MakeMarkerWindow(markerElem){
+            var id = markerElem.getAttribute('id');
+            var name = markerElem.getAttribute('name');
+            var description = markerElem.getAttribute('description');
+            var type = markerElem.getAttribute('type');
+            var timestamp = markerElem.getAttribute('timestamp');
+            var status = markerElem.getAttribute('problemStatus');
+            var imageFile = markerElem.getAttribute('img');
+
+            var point = new google.maps.LatLng(
+                parseFloat(markerElem.getAttribute('lat')),
+                parseFloat(markerElem.getAttribute('lng')));
+
+            var infowincontent = document.createElement('div');
+            infowincontent.setAttribute('class', 'well');
+            infowincontent.setAttribute('style', 'width:200px; height:auto');
+
+            var strong = document.createElement('strong');
+            strong.textContent = "User: " + name;
+            infowincontent.appendChild(strong);
+            infowincontent.appendChild(document.createElement('br'));
+
+            var text = document.createElement('text');
+            text.textContent = "Problem Type: " + type + "-" + id;
+
+            infowincontent.appendChild(text);
+            infowincontent.appendChild(document.createElement('br'));
+
+            var desc = document.createElement('text');
+            desc.textContent = "Problem Description: " + description;
+            infowincontent.appendChild(desc);
+            infowincontent.appendChild(document.createElement('br'));
+
+            var time = document.createElement('text');
+            time.textContent = "Timestamp: " + timestamp;
+            infowincontent.appendChild(time);
+            infowincontent.appendChild(document.createElement('br'));
+
+            var problemStatus = document.createElement('text');
+            problemStatus.textContent = "Status: " + status;
+            infowincontent.appendChild(problemStatus);
+            infowincontent.appendChild(document.createElement('br'));
+
+            var problemImage = document.createElement('image');
+            problemImage.innerHTML = '<img class=\'img-fluid img-thumbnail\' style="width: 100%; " src="uploads/' + imageFile + '" /> ';
+            infowincontent.appendChild(problemImage);
+            infowincontent.appendChild(document.createElement('br'));
+
+            return infowincontent;
+        }
 
         //locate the user form the browser
         function locateMe() {
