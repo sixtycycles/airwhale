@@ -26,8 +26,14 @@
                             echo "<li> <a href='admin.php'>Admin Portal</a></li>";
                         }
                         ?>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="logout.php">Log Out</a></li>
+                        <?php
+                        echo "<li role='separator' class='divider'></li>";
+                        if (isset($_SESSION['userSession'])) {
+                            echo "<li><a href='logout.php'>Log Out</a></li>";
+                        } else {
+                            echo "<li><a href='index.php'>Log In</a></li>";
+                        }
+                        ?>
                     </ul>
                 </li>
 
