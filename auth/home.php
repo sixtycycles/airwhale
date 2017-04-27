@@ -184,7 +184,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         for (var i = 0; i < markers.length; i++) {
             if (markers[i].type === category) {
                 markers[i].setMap(map);
-                console.log(category)
+                //console.log(category)
             }
 
         }
@@ -198,7 +198,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         for (var i = 0; i < markers.length; i++) {
             if (markers[i].type === category) {
                 markers[i].setMap(null);
-                console.log(category)
+                //console.log(category)
             }
         }
         //change buttons and onclick functions to the right one after click.
@@ -256,6 +256,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 var point = new google.maps.LatLng(
                     parseFloat(markerElem.getAttribute('lat')),
                     parseFloat(markerElem.getAttribute('lng')));
+                var type = markerElem.getAttribute('type');
 
                 var icon = customLabel[type] || {};
                 //we add the property type to the marker object to filter by problem type later
