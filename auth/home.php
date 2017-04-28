@@ -299,7 +299,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 var iconBase = '../assets/icons/png/';
 
                 var icon = {
-                    url: iconBase + markerElem.getAttribute('markerImage'), // url
+                    url: iconBase + (markerElem.getAttribute('markerImage') || 'alert.png'), // url
                     scaledSize: new google.maps.Size(25, 25), // scaled size
                     // origin: new google.maps.Point(0, 0), // origin
                     // anchor: new google.maps.Point(0, 0) // anchor
