@@ -54,7 +54,14 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                         die ('Can\'t use db : ' . mysqli_error($connection));
                     }
                     //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
-                    $query = "SELECT id, type_id, COUNT(type_id) FROM Problems GROUP BY type_id ASC;";
+                    
+                    //$query = "SELECT id, type_id, COUNT(type_id) FROM Problems GROUP BY type_id ASC;";
+                    $query = "SELECT id, Problems.type_id, COUNT(Problems.type_id), tbl_problem_types.name AS type_name
+                            FROM Problems, tbl_problem_types
+                            WHERE (Problems.type_id=tbl_problem_types.type_id)
+                            GROUP BY Problems.type_id ASC
+                            ;";
+
 
                     $result = mysqli_query($connection, $query);
 
@@ -71,8 +78,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                         class=\'btn btn-primary\' 
                         onclick=\'hide(' . '"' . $row['type_id'] . '"' . ')\' 
                         id=\'' . $row['type_id'] . '\'> '
-                            . $row['type_id'] .
-                            " <span class='badge'> " . $row['COUNT(type_id)'] . " </span>" . ' 
+                            . $row['type_name'] .
+                            " <span class='badge'> " . $row['COUNT(Problems.type_id)'] . " </span>" . ' 
                         </button> ';
 
                     };
