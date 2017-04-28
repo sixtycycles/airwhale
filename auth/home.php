@@ -95,14 +95,14 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                         <div class="form-group">
 
                             <label for="name">Your Name</label>
-                            <input class="form-control" type='text' id='name' name='name'
+                            <input class="form-control" type='text' id='name' name='name' placeholder="Your Name"
                                    value="<?php
                                    echo $row1['userName'];
                                    ?>"/>
 
                             <label for="email">Email address</label>
                             <input type="email" id="email" name='email' class="form-control"
-                                   value="<?php echo $row1['userEmail']; ?>"/>
+                                   placeholder="Email" value="<?php echo $row1['userEmail']; ?>"/>
 
                             <label for="type">What type of Problem?</label>
                             <select class="form-control" id='type' name='type'> +
@@ -124,8 +124,10 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
                             <h4>Coordinates</h4>
                             (or click the map where the problem is)<br>
-                            <input type="text" name="lat" id="lat" placeholder="lattitude">
-                            <input type="text" name="lng" id="lng" placeholder="longitude">
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="lat" id="lat" placeholder="Latitude">
+                                <input class="form-control" type="text" name="lng" id="lng" placeholder="Longitude">
+                            </div>
                             <hr>
                             <input class="btn btn-success form-control" type='submit' value='Save'/>
                         </div>
@@ -226,7 +228,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         infowindow = new google.maps.InfoWindow({content: "yay"});
         messagewindow = new google.maps.InfoWindow({content: "YAY"});
 
-        map.data.loadGeoJson('img/OronoBoundary.geojson');
+        map.data.loadGeoJson('../assets/GIS/OronoBoundary.geojson');
 
         // KML LAYERS
         roads = new google.maps.KmlLayer({
