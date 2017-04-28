@@ -27,7 +27,10 @@ if (!$db_selected) {
 }
 
 // Select all the rows in the markers table
-$query = "SELECT * FROM Problems";
+$query = "SELECT *, tbl_problem_types.name AS type_name
+    FROM Problems
+    INNER JOIN tbl_problem_types ON (Problems.type_id=tbl_problem_types.type_id)
+    ;";
 $result = mysqli_query($connection, $query);
 if (!$result) {
     die('Invalid query: ' . mysqli_error($connection));
@@ -46,7 +49,9 @@ while ($row = @mysqli_fetch_assoc($result)) {
     echo 'description="' . parseToXML($row['description']) . '" ';
     echo 'lat="' . $row['lat'] . '" ';
     echo 'lng="' . $row['lon'] . '" ';
-    echo 'type="' . $row['type_id'] . '" ';
+    echo 'type_id="' . $row['type_id'] . '" ';
+    echo 'type_name="' . $row['type_name'] . '" ';
+    echo 'markerImage="' . $row['markerImage'] . '" ';
     echo 'timestamp="' . parseToXML($row['timestamp']) . '" ';
     echo 'problemStatus="' . $row['problem_status'] . '" ';
     echo 'img="' . $row['file'] . '" ';

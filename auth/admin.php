@@ -62,7 +62,11 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                             die ('Can\'t use db : ' . mysqli_error($connection));
                         }
                         //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
-                        $query = "SELECT * FROM Problems ORDER BY id ASC;";
+                        $query = "SELECT *, tbl_problem_types.name AS type_name
+                            FROM Problems
+                            INNER JOIN tbl_problem_types ON (Problems.type_id=tbl_problem_types.type_id)
+                            ORDER BY id ASC 
+                            ;";
 
                         $result = mysqli_query($connection, $query);
 
@@ -80,13 +84,13 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                                     "<div class='pull-left'>" .
                                         // "<h3 class='panel-title pull-left'>Panel title</h3>" . "<br />" .
                                         "<strong>ID</strong>: " . $row['id'] . "<br />" .
-                                        "<strong>Type</strong>: " . $row['type_id'] . "" .
+                                        "<strong>Type</strong>: " . $row['type_name'] . "" .
                                     "</div>" .
 
                                     "<div class='btn-group pull-right'>" .
-                                        "<button class='btn btn-sm btn-primary' onclick='beginProblem(\"" . $row['id'] . "\")'>Start Problem</button>" .
-                                        "<button class='btn btn-sm btn-success' onclick='resolveProblem(\"" . $row['id'] . "\")'>Complete Problem</button>" .
-                                        "<button class='btn btn-sm btn-danger' onclick='deleteProblem(\"" . $row['id'] . "\")'>Delete Problem</button>" .
+                                        "<button class='btn btn-sm btn-primary' onclick='beginProblem(\"" . $row['id'] . "\")'>Start</button>" .
+                                        "<button class='btn btn-sm btn-success' onclick='resolveProblem(\"" . $row['id'] . "\")'>Complete</button>" .
+                                        "<button class='btn btn-sm btn-danger' onclick='deleteProblem(\"" . $row['id'] . "\")'>Delete</button>" .
                                     "</div>" .
                                 
                                 "</div>" .
@@ -96,6 +100,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                                     "<strong>Name:</strong> <p>" . $row['name'] . "</p>" .
                                     "<strong>Status:</strong><p> " . $row['problem_status'] . "</p>" .
                                     "<strong>Time</strong> <p>" . $row['timestamp'] . "</p>" .
+                                    "<strong>Description:</strong><p> " . $row['description'] . "</p>" .
 
                                     // Add photo row if photo is uploaded
                                     ($row['file'] ? "<strong>Photo of Problem:</strong><br /> <img class='img-fluid img-thumbnail' src='uploads/" . $row['file'] . "'>" : "" ) .

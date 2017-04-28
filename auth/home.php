@@ -262,17 +262,17 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 var point = new google.maps.LatLng(
                     parseFloat(markerElem.getAttribute('lat')),
                     parseFloat(markerElem.getAttribute('lng')));
-                var type = markerElem.getAttribute('type');
+                var type = markerElem.getAttribute('type_id');
 
                 var label = customLabel[type] || {};
 
                 var iconBase = '../assets/icons/png/';
 
                 var icon = {
-                    url: iconBase + "trash.png", // url
+                    url: iconBase + markerElem.getAttribute('markerImage'), // url
                     scaledSize: new google.maps.Size(25, 25), // scaled size
-                    origin: new google.maps.Point(0, 0), // origin
-                    anchor: new google.maps.Point(0, 0) // anchor
+                    // origin: new google.maps.Point(0, 0), // origin
+                    // anchor: new google.maps.Point(0, 0) // anchor
                 };
                 
                 //we add the property type to the marker object to filter by problem type later
