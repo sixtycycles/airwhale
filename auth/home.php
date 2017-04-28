@@ -226,6 +226,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         infowindow = new google.maps.InfoWindow({content: "yay"});
         messagewindow = new google.maps.InfoWindow({content: "YAY"});
 
+        map.data.loadGeoJson('img/OronoBoundary.geojson');
+
         // KML LAYERS
         roads = new google.maps.KmlLayer({
             url: 'http://sixtycycles.github.io/CPR_KML/Orono_Roads.kml',
@@ -234,18 +236,18 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             clickable: false
 
         });
-        surroundingTowns = new google.maps.KmlLayer({
-            url: 'http://sixtycycles.github.io/CPR_KML/TownswithoutOrono.kmz',
-            map: map,
-            preserveViewport: true,
-            info: "<h4>Please Select an Area In Orono</h4>"
-        });
-        boundary = new google.maps.KmlLayer({
-            url: 'http://sixtycycles.github.io/CPR_KML/OronoBoundary.kmz',
-            map: map,
-            preserveViewport: true,
-            clickable: false
-        });
+        // surroundingTowns = new google.maps.KmlLayer({
+        //     url: 'http://sixtycycles.github.io/CPR_KML/TownswithoutOrono.kmz',
+        //     map: map,
+        //     preserveViewport: true,
+        //     info: "<h4>Please Select an Area In Orono</h4>"
+        // });
+        // boundary = new google.maps.KmlLayer({
+        //     url: 'http://sixtycycles.github.io/CPR_KML/OronoBoundary.kmz',
+        //     map: map,
+        //     preserveViewport: true,
+        //     clickable: false
+        // });
 
         //this guy grabs the xml file from the db, and adds all the problems to the markers array
         downloadUrl('dump.php', function (data) {
@@ -259,11 +261,13 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 var type = markerElem.getAttribute('type');
 
                 var icon = customLabel[type] || {};
+                
                 //we add the property type to the marker object to filter by problem type later
                 var marker = new google.maps.Marker({
                     map: map,
                     position: point,
                     label: icon.label,
+                    icon: "",
                     type: type
                 });
                 markers.push(marker);
