@@ -30,9 +30,9 @@ if (!empty($_POST)) {
         $imgQuery = "INSERT INTO tbl_uploads (file,type,size) VALUES('$file','$file_type','$file_size')";
         $result2 = mysqli_query($connection, $imgQuery);
 
-        $query = "INSERT INTO Problems ( name, lat, lon, description, type, file ) VALUES ( '$name','$lat', '$lon','$description', '$type','$file');";
+        $query = "INSERT INTO Problems ( name, lat, lon, description, type_id, file ) VALUES ( '$name','$lat', '$lon','$description', '$type','$file');";
     }else{
-        $query = "INSERT INTO Problems ( name, lat, lon, description, type) VALUES ( '$name','$lat', '$lon','$description', '$type');";
+        $query = "INSERT INTO Problems ( name, lat, lon, description, type_id) VALUES ( '$name','$lat', '$lon','$description', '$type');";
     }
 
 

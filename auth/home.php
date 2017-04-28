@@ -54,7 +54,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                         die ('Can\'t use db : ' . mysqli_error($connection));
                     }
                     //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
-                    $query = "SELECT id,type, COUNT(type) FROM Problems GROUP BY type ASC;";
+                    $query = "SELECT id, type_id, COUNT(type_id) FROM Problems GROUP BY type_id ASC;";
 
                     $result = mysqli_query($connection, $query);
 
@@ -69,10 +69,10 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                         echo '<button 
                         name=\'filters_params\' 
                         class=\'btn btn-primary\' 
-                        onclick=\'hide(' . '"' . $row['type'] . '"' . ')\' 
-                        id=\'' . $row['type'] . '\'> '
-                            . $row['type'] .
-                            " <span class='badge'> " . $row['COUNT(type)'] . " </span>" . ' 
+                        onclick=\'hide(' . '"' . $row['type_id'] . '"' . ')\' 
+                        id=\'' . $row['type_id'] . '\'> '
+                            . $row['type_id'] .
+                            " <span class='badge'> " . $row['COUNT(type_id)'] . " </span>" . ' 
                         </button> ';
 
                     };
@@ -106,11 +106,13 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
                             <label for="type">What type of Problem?</label>
                             <select class="form-control" id='type' name='type'> +
-                                <option value='pothole' SELECTED>Pothole in Road</option>
-                                <option value='streetlight'>Streetlight Out</option>
-                                <option value='fireHydrant'>Fire Hydrant Issues</option>
-                                <option value='grafitti'>Grafitti/Vandalism</option>
-                                <option value='other'>Other</option>
+                                <option value='2'>Grafitti/Vandalism</option>
+                                <option value='3'>Streetlight Out</option>
+                                <option value='4'>Noise Complaint</option>
+                                <option value='5' SELECTED>Pothole in Road</option>
+                                <option value='6'>Trash</option>
+                                <option value='7'>Fire Hydrant Issues</option>
+                                <option value='1'>Other</option>
                             </select>
 
                             <label for="description">Description of problem</label>
@@ -262,14 +264,23 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     parseFloat(markerElem.getAttribute('lng')));
                 var type = markerElem.getAttribute('type');
 
-                var icon = customLabel[type] || {};
+                var label = customLabel[type] || {};
+
+                var iconBase = '../assets/icons/png/';
+
+                var icon = {
+                    url: iconBase + "trash.png", // url
+                    scaledSize: new google.maps.Size(25, 25), // scaled size
+                    origin: new google.maps.Point(0, 0), // origin
+                    anchor: new google.maps.Point(0, 0) // anchor
+                };
                 
                 //we add the property type to the marker object to filter by problem type later
                 var marker = new google.maps.Marker({
                     map: map,
                     position: point,
-                    label: icon.label,
-                    icon: "",
+                    //label: label.label,
+                    icon: icon,
                     type: type
                 });
                 markers.push(marker);

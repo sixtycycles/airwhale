@@ -80,7 +80,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                                     "<div class='pull-left'>" .
                                         // "<h3 class='panel-title pull-left'>Panel title</h3>" . "<br />" .
                                         "<strong>ID</strong>: " . $row['id'] . "<br />" .
-                                        "<strong>Type</strong>: " . $row['type'] . "" .
+                                        "<strong>Type</strong>: " . $row['type_id'] . "" .
                                     "</div>" .
 
                                     "<div class='btn-group pull-right'>" .
@@ -96,9 +96,9 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                                     "<strong>Name:</strong> <p>" . $row['name'] . "</p>" .
                                     "<strong>Status:</strong><p> " . $row['problem_status'] . "</p>" .
                                     "<strong>Time</strong> <p>" . $row['timestamp'] . "</p>" .
-                                    //"</div>".
-                                    //"<div  class='col-sm-8 col-md-6 col-lg-4' >" .
-                                    "<strong>Photo of Problem:</strong><br /> <img class='img-fluid img-thumbnail' src='uploads/" . $row['file'] . "'>" .
+
+                                    // Add photo row if photo is uploaded
+                                    ($row['file'] ? "<strong>Photo of Problem:</strong><br /> <img class='img-fluid img-thumbnail' src='uploads/" . $row['file'] . "'>" : "" ) .
                                 
                                 "</div>" .
 
