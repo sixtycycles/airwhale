@@ -112,14 +112,37 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                                    placeholder="Email" value="<?php echo $row1['userEmail']; ?>"/>
 
                             <label for="type">What type of Problem?</label>
-                            <select class="form-control" id='type' name='type'> +
-                                <option value='2'>Grafitti/Vandalism</option>
-                                <option value='3'>Streetlight Out</option>
-                                <option value='4'>Noise Complaint</option>
-                                <option value='5' SELECTED>Pothole in Road</option>
-                                <option value='6'>Trash</option>
-                                <option value='7'>Fire Hydrant Issues</option>
-                                <option value='1'>Other</option>
+                            <select class="form-control" id='type' name='type'>
+                                <?php
+                                    if ($_SESSION['userSession']) {
+                                        require_once("phpsqlinfo_dbinfo.php");
+                                        $connection = mysqli_connect('localhost', $username, $password, $database, $port);
+                                        if (!$connection) {
+                                            die('Not connected : ' . mysqli_error($connection));
+                                        }
+                                        $db_selected = mysqli_select_db($connection, $database);
+                                        if (!$db_selected) {
+                                            die ('Can\'t use db : ' . mysqli_error($connection));
+                                        }
+                                        $query = "SELECT * FROM tbl_problem_types;";
+                                        $result = mysqli_query($connection, $query);
+
+                                        if (!$result) {
+                                            die('Invalid query: ' . mysqli_error($connection));
+                                        }
+
+                                        // Make each row in the "problem type" dropdown
+                                        $index = 0;
+                                        while ($row = @mysqli_fetch_assoc($result)) {
+                                            $id = $row['type_id'];
+                                            $name = $row['name'];
+                                            $selected = $index == 0 ? "SELECTED" : ""; // Select the first row
+                                            echo "<option ${selected} value='${id}'>${name}</option>";
+                                            $index = $index + 1;
+                                        }
+                                    }
+
+                                ?>
                             </select>
 
                             <label for="description">Description of problem</label>
