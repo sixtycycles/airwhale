@@ -1,3 +1,6 @@
+DROP DATABASE ORONOISSUE;
+CREATE DATABASE if NOT EXISTS ORONOISSUE ;
+USE ORONOISSUE;
 -- phpMyAdmin SQL Dump
 -- version 4.6.4
 -- https://www.phpmyadmin.net/
@@ -38,7 +41,7 @@ CREATE TABLE `Problems` (
 --
 
 INSERT INTO `Problems` (`id`, `name`, `lat`, `lon`, `description`, `timestamp`, `problem_status`, `file`, `type_id`) VALUES
-(35, 'admin', 44.884093476429, -68.70162963867188, 0x4772616666697469206f6e2074726565, '2017-04-28 15:25:45', 'Completed', NULL, 2);
+  (35, 'admin', 44.884093476429, -68.70162963867188, 0x4772616666697469206f6e2074726565, '2017-04-28 15:25:45', 'Completed', NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -49,7 +52,7 @@ INSERT INTO `Problems` (`id`, `name`, `lat`, `lon`, `description`, `timestamp`, 
 DROP TABLE IF EXISTS `tbl_problem_types`;
 CREATE TABLE `tbl_problem_types` (
   `type_id` int(11) NOT NULL,
-  `name` text NOT NULL,
+  `type_name` text NOT NULL,
   `markerImage` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -57,14 +60,14 @@ CREATE TABLE `tbl_problem_types` (
 -- Dumping data for table `tbl_problem_types`
 --
 
-INSERT INTO `tbl_problem_types` (`type_id`, `name`, `markerImage`) VALUES
-(1, 'Other', 'alert.png'),
-(2, 'Graffiti', 'graffiti.png'),
-(3, 'Streetlight Out', 'light.png'),
-(4, 'Noise Complaint', 'noise.png'),
-(5, 'Pothole', 'pothole.png'),
-(6, 'Trash', 'trash.png'),
-(7, 'Fire Hydrant Issue', NULL);
+INSERT INTO `tbl_problem_types` (`type_id`, `type_name`, `markerImage`) VALUES
+  (1, 'Other', 'alert.png'),
+  (2, 'Graffiti', 'graffiti.png'),
+  (3, 'Streetlight Out', 'light.png'),
+  (4, 'Noise Complaint', 'noise.png'),
+  (5, 'Pothole', 'pothole.png'),
+  (6, 'Trash', 'trash.png'),
+  (7, 'Fire Hydrant Issue', NULL);
 
 -- --------------------------------------------------------
 
@@ -101,8 +104,8 @@ CREATE TABLE `tbl_users` (
 --
 
 INSERT INTO `tbl_users` (`userID`, `userName`, `userEmail`, `userPass`, `userStatus`, `tokenCode`) VALUES
-(2, 'admin', 'test@test.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'A', ''),
-(4, 'Rod', 'sixtycycles@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Y', '02f0cc0a7dc2c0e8ed94b2a41248717d');
+  (2, 'admin', 'test@test.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'A', ''),
+  (4, 'Rod', 'sixtycycles@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Y', '02f0cc0a7dc2c0e8ed94b2a41248717d');
 
 --
 -- Indexes for dumped tables
@@ -176,3 +179,5 @@ ALTER TABLE `Problems`
 --
 ALTER TABLE `tbl_uploads`
   ADD CONSTRAINT `tbl_uploads_Problems_file_fk` FOREIGN KEY (`file`) REFERENCES `Problems` (`file`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+

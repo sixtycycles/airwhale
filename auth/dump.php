@@ -27,7 +27,7 @@ if (!$db_selected) {
 }
 
 // Select all the rows in the markers table
-$query = "SELECT *, tbl_problem_types.name AS type_name
+$query = "SELECT *
     FROM Problems
     INNER JOIN tbl_problem_types ON (Problems.type_id=tbl_problem_types.type_id)
     ;";

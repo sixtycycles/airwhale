@@ -56,7 +56,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
                     
                     //$query = "SELECT id, type_id, COUNT(type_id) FROM Problems GROUP BY type_id ASC;";
-                    $query = "SELECT id, Problems.type_id, COUNT(Problems.type_id), tbl_problem_types.name AS type_name
+                    $query = "SELECT id, Problems.type_id, type_name, COUNT(Problems.type_id)
                             FROM Problems, tbl_problem_types
                             WHERE (Problems.type_id=tbl_problem_types.type_id)
                             GROUP BY Problems.type_id ASC
@@ -135,7 +135,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                                         $index = 0;
                                         while ($row = @mysqli_fetch_assoc($result)) {
                                             $id = $row['type_id'];
-                                            $name = $row['name'];
+                                            $name = $row['type_name'];
                                             $selected = $index == 0 ? "SELECTED" : ""; // Select the first row
                                             echo "<option ${selected} value='${id}'>${name}</option>";
                                             $index = $index + 1;
@@ -333,7 +333,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             var id = markerElem.getAttribute('id');
             var name = markerElem.getAttribute('name');
             var description = markerElem.getAttribute('description');
-            var type = markerElem.getAttribute('type');
+            var type = markerElem.getAttribute('type_name');
             var timestamp = markerElem.getAttribute('timestamp');
             var status = markerElem.getAttribute('problemStatus');
             var imageFile = markerElem.getAttribute('img');
@@ -373,7 +373,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             infowincontent.appendChild(document.createElement('br'));
 
             var problemImage = document.createElement('image');
-            problemImage.innerHTML = '<img class=\'img-fluid img-thumbnail\' style="width: 100%; " src="uploads/' + imageFile + '" /> ';
+            problemImage.innerHTML = '<img alt="' + imageFile + '" class="img-fluid img-thumbnail" style="width: 100%; " src="uploads/' + imageFile + '" /> ';
             infowincontent.appendChild(problemImage);
             infowincontent.appendChild(document.createElement('br'));
 
