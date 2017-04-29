@@ -62,7 +62,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                             die ('Can\'t use db : ' . mysqli_error($connection));
                         }
                         //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
-                        $query = "SELECT *, tbl_problem_types.name AS type_name
+                        $query = "SELECT *
                             FROM Problems
                             INNER JOIN tbl_problem_types ON (Problems.type_id=tbl_problem_types.type_id)
                             ORDER BY id ASC 
