@@ -179,8 +179,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
     var infowindow;
     var messagewindow;
     var roads;
-    var surroundingTowns;
-    var boundary;
+    //var surroundingTowns;
+    //var boundary;
     var markers = [];
 
     //grab  lat lng data form click on map, also replace "you are here" with this location. (prevents stacking of user markers.
@@ -245,13 +245,14 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
     function initMap() {
         var oronoMaine = {lat: 44.882390656052756, lng: -68.71810913085938};
         //this thing holds labels fro markers by problem type.
-        var customLabel = {
-            'pothole': {label: 'Pothole'},
-            'streetlight': {label: 'Street Light'},
-            'fireHydrant': {label: 'Fire Hydrant'},
-            'grafitti': {label: 'Grafitti'},
-            'other': {label: 'Other'}
-        };
+//        var customLabel = {
+//            'pothole': {label: 'Pothole'},
+//            'streetlight': {label: 'Street Light'},
+//            'fireHydrant': {label: 'Fire Hydrant'},
+//            'grafitti': {label: 'Grafitti'},
+//            'other': {label: 'Other'}
+//        };
+
         //the map where we draw things and interact.
         map = new google.maps.Map(document.getElementById('map'), {
             center: oronoMaine,
@@ -294,7 +295,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     parseFloat(markerElem.getAttribute('lng')));
                 var type = markerElem.getAttribute('type_id');
 
-                var label = customLabel[type] || {};
+               // var label = customLabel[type] || {};
 
                 var iconBase = '../assets/icons/png/';
 
@@ -321,7 +322,6 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 });
 
-
             });
         });
 
@@ -338,9 +338,9 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             var status = markerElem.getAttribute('problemStatus');
             var imageFile = markerElem.getAttribute('img');
 
-            var point = new google.maps.LatLng(
-                parseFloat(markerElem.getAttribute('lat')),
-                parseFloat(markerElem.getAttribute('lng')));
+//            var point = new google.maps.LatLng(
+//                parseFloat(markerElem.getAttribute('lat')),
+//                parseFloat(markerElem.getAttribute('lng')));
 
             var infowincontent = document.createElement('div');
             infowincontent.setAttribute('class', 'well');
@@ -376,6 +376,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             problemImage.innerHTML = '<img alt="' + imageFile + '" class="img-fluid img-thumbnail" style="width: 100%; " src="uploads/' + imageFile + '" /> ';
             infowincontent.appendChild(problemImage);
             infowincontent.appendChild(document.createElement('br'));
+
+
 
             return infowincontent;
         }
@@ -414,7 +416,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
         });
 
-    } //END OF INIT MAP DUMMY
+    }
+
     //for grabbing xml
     function downloadUrl(url, callback) {
         var request = window.ActiveXObject ?
@@ -431,7 +434,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         request.open('GET', url, true);
         request.send(null);
     }
-    //why not?
+
     function doNothing() {
     }
 
