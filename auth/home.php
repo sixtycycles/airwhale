@@ -107,11 +107,11 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                                    echo $row1['userName'];
                                    ?>"/>
 
-                            <label for="email">Email address</label>
+                            <label for="email">Email Address</label>
                             <input type="email" id="email" name='email' class="form-control"
                                    placeholder="Email" value="<?php echo $row1['userEmail']; ?>"/>
 
-                            <label for="type">What type of Problem?</label>
+                            <label for="type">What type of problem?</label>
                             <select class="form-control" id='type' name='type'>
                                 <?php
                                     if ($_SESSION['userSession']) {
