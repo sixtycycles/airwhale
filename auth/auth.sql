@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Apr 30, 2017 at 03:27 AM
+-- Generation Time: Apr 30, 2017 at 02:59 PM
 -- Server version: 5.6.28
 -- PHP Version: 7.0.10
 
@@ -13,6 +13,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `ORONOISSUE`
 --
+CREATE DATABASE IF NOT EXISTS `ORONOISSUE` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `ORONOISSUE`;
 
 -- --------------------------------------------------------
 
@@ -38,8 +40,26 @@ CREATE TABLE `Problems` (
 --
 
 INSERT INTO `Problems` (`id`, `name`, `lat`, `lon`, `description`, `timestamp`, `problem_status`, `file`, `type_id`, `likes`) VALUES
-  (35, 'admin', 44.884093476429, -68.70162963867188, 0x4772616666697469206f6e2074726565, '2017-04-28 15:25:45', 'Started', NULL, 2, 4),
-  (36, 'Test User', 44.890174566330415, -68.77750396728516, 0x4974732076206461726b21, '2017-04-29 12:16:44', 'Reported', '61745-streetlight.JPG', 3, 3);
+  (1, 'admin', 44.884093476429, -68.70162963867188, 0x4772616666697469206f6e2074726565, '2017-04-28 15:25:45', 'Started', NULL, 2, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `likes`
+--
+
+CREATE TABLE `likes` (
+  `user` int(11) NOT NULL,
+  `problem_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `likes`
+--
+
+INSERT INTO `likes` (`user`, `problem_id`) VALUES
+  (1, 1),
+  (2, 1);
 
 -- --------------------------------------------------------
 
@@ -99,8 +119,8 @@ CREATE TABLE `tbl_users` (
 --
 
 INSERT INTO `tbl_users` (`userID`, `userName`, `userEmail`, `userPass`, `userStatus`, `tokenCode`) VALUES
-  (2, 'admin', 'test@test.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'A', ''),
-  (4, 'Rod', 'sixtycycles@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Y', '02f0cc0a7dc2c0e8ed94b2a41248717d');
+  (1, 'admin', 'test@test.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'A', ''),
+  (2, 'Rod', 'sixtycycles@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Y', '02f0cc0a7dc2c0e8ed94b2a41248717d');
 
 --
 -- Indexes for dumped tables
@@ -113,6 +133,13 @@ ALTER TABLE `Problems`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `Problems_file_uindex` (`file`),
   ADD KEY `Problems_tbl_problem_types_type_id_fk` (`type_id`);
+
+--
+-- Indexes for table `likes`
+--
+ALTER TABLE `likes`
+  ADD PRIMARY KEY (`user`,`problem_id`),
+  ADD KEY `likes_tbl_users_userID_fk` (`problem_id`);
 
 --
 -- Indexes for table `tbl_problem_types`
@@ -168,6 +195,13 @@ ALTER TABLE `tbl_users`
 --
 ALTER TABLE `Problems`
   ADD CONSTRAINT `Problems_tbl_problem_types_type_id_fk` FOREIGN KEY (`type_id`) REFERENCES `tbl_problem_types` (`type_id`);
+
+--
+-- Constraints for table `likes`
+--
+ALTER TABLE `likes`
+  ADD CONSTRAINT `likes_Problems_id_fk` FOREIGN KEY (`user`) REFERENCES `tbl_users` (`userID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `likes_tbl_users_userID_fk` FOREIGN KEY (`problem_id`) REFERENCES `Problems` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `tbl_uploads`
