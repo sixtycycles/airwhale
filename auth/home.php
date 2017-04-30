@@ -54,7 +54,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                         die ('Can\'t use db : ' . mysqli_error($connection));
                     }
                     //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
-                    
+
                     //$query = "SELECT id, type_id, COUNT(type_id) FROM Problems GROUP BY type_id ASC;";
                     $query = "SELECT id, Problems.type_id, type_name, COUNT(Problems.type_id)
                             FROM Problems, tbl_problem_types
@@ -114,33 +114,33 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                             <label for="type">What type of problem?</label>
                             <select class="form-control" id='type' name='type'>
                                 <?php
-                                    if ($_SESSION['userSession']) {
-                                        require_once("phpsqlinfo_dbinfo.php");
-                                        $connection = mysqli_connect('localhost', $username, $password, $database, $port);
-                                        if (!$connection) {
-                                            die('Not connected : ' . mysqli_error($connection));
-                                        }
-                                        $db_selected = mysqli_select_db($connection, $database);
-                                        if (!$db_selected) {
-                                            die ('Can\'t use db : ' . mysqli_error($connection));
-                                        }
-                                        $query = "SELECT * FROM tbl_problem_types;";
-                                        $result = mysqli_query($connection, $query);
-
-                                        if (!$result) {
-                                            die('Invalid query: ' . mysqli_error($connection));
-                                        }
-
-                                        // Make each row in the "problem type" dropdown
-                                        $index = 0;
-                                        while ($row = @mysqli_fetch_assoc($result)) {
-                                            $id = $row['type_id'];
-                                            $name = $row['type_name'];
-                                            $selected = $index == 0 ? "SELECTED" : ""; // Select the first row
-                                            echo "<option ${selected} value='${id}'>${name}</option>";
-                                            $index = $index + 1;
-                                        }
+                                if ($_SESSION['userSession']) {
+                                    require_once("phpsqlinfo_dbinfo.php");
+                                    $connection = mysqli_connect('localhost', $username, $password, $database, $port);
+                                    if (!$connection) {
+                                        die('Not connected : ' . mysqli_error($connection));
                                     }
+                                    $db_selected = mysqli_select_db($connection, $database);
+                                    if (!$db_selected) {
+                                        die ('Can\'t use db : ' . mysqli_error($connection));
+                                    }
+                                    $query = "SELECT * FROM tbl_problem_types;";
+                                    $result = mysqli_query($connection, $query);
+
+                                    if (!$result) {
+                                        die('Invalid query: ' . mysqli_error($connection));
+                                    }
+
+                                    // Make each row in the "problem type" dropdown
+                                    $index = 0;
+                                    while ($row = @mysqli_fetch_assoc($result)) {
+                                        $id = $row['type_id'];
+                                        $name = $row['type_name'];
+                                        $selected = $index == 0 ? "SELECTED" : ""; // Select the first row
+                                        echo "<option ${selected} value='${id}'>${name}</option>";
+                                        $index = $index + 1;
+                                    }
+                                }
 
                                 ?>
                             </select>
@@ -241,6 +241,28 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
     }
 
+    function updateLikes(id)
+    {
+
+        $(function()
+        {
+            $.ajax({
+                type:"GET",
+                url: 'second.php',
+                data: {
+                    id:id
+                },
+                success:function(response){
+                    // process on data
+                    document.getElementById('likeArea').textContent = "Likes: " + response;
+
+                }
+
+            })
+            ;
+
+        });
+    }
     //draw map, import xml data of problems and add markers and info to infoindows.
     function initMap() {
         var oronoMaine = {lat: 44.882390656052756, lng: -68.71810913085938};
@@ -258,8 +280,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             center: oronoMaine,
             zoom: 13
         });
-        infowindow = new google.maps.InfoWindow({content: "yay"});
-        messagewindow = new google.maps.InfoWindow({content: "YAY"});
+        infowindow = new google.maps.InfoWindow({content: ""});
+        messagewindow = new google.maps.InfoWindow({content: ""});
 
         map.data.loadGeoJson('../assets/GIS/OronoBoundary.geojson');
 
@@ -295,7 +317,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     parseFloat(markerElem.getAttribute('lng')));
                 var type = markerElem.getAttribute('type_id');
 
-               // var label = customLabel[type] || {};
+                // var label = customLabel[type] || {};
 
                 var iconBase = '../assets/icons/png/';
 
@@ -305,7 +327,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     // origin: new google.maps.Point(0, 0), // origin
                     // anchor: new google.maps.Point(0, 0) // anchor
                 };
-                
+
                 //we add the property type to the marker object to filter by problem type later
                 var marker = new google.maps.Marker({
                     map: map,
@@ -329,7 +351,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
          * Makes an HTML div containing the information used for the popup
          * when you click on a marker.
          */
-        function MakeMarkerWindow(markerElem){
+        function MakeMarkerWindow(markerElem) {
             var id = markerElem.getAttribute('id');
             var name = markerElem.getAttribute('name');
             var description = markerElem.getAttribute('description');
@@ -337,23 +359,58 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             var timestamp = markerElem.getAttribute('timestamp');
             var status = markerElem.getAttribute('problemStatus');
             var imageFile = markerElem.getAttribute('img');
-
+            var likes = markerElem.getAttribute('likes');
 //            var point = new google.maps.LatLng(
 //                parseFloat(markerElem.getAttribute('lat')),
 //                parseFloat(markerElem.getAttribute('lng')));
-
             var infowincontent = document.createElement('div');
             infowincontent.setAttribute('class', 'well');
             infowincontent.setAttribute('style', 'width:200px; height:auto');
+
+            var likeButton = document.createElement('button');
+            likeButton.setAttribute('class', 'btn btn-default');
+            likeButton.setAttribute('id', id);
+            likeButton.setAttribute('name','like_button');
+            likeButton.setAttribute('type', 'submit');
+            likeButton.innerHTML = "second this problem";
+            likeButton.setAttribute('onclick','updateLikes('+id+')');
+
+            infowincontent.appendChild(likeButton);
+            infowincontent.appendChild(document.createElement('br'));
+
+            var likeArea = document.createElement('text');
+            likeArea.textContent = "Likes: " + likes;
+            likeArea.setAttribute('id',"likeArea");
+            infowincontent.appendChild((likeArea));
+            infowincontent.appendChild(document.createElement('br'));
 
             var strong = document.createElement('strong');
             strong.textContent = "User: " + name;
             infowincontent.appendChild(strong);
             infowincontent.appendChild(document.createElement('br'));
-
+            //make a lil form for the second function.
+//            var likeForm = document.createElement('form');
+//            likeForm.setAttribute('method','GET');
+//            likeForm.setAttribute('action','second.php');
+//
+//                var hiddenValue = document.createElement('input');
+//                hiddenValue.setAttribute('type', 'hidden');
+//                hiddenValue.setAttribute('value',id);
+//                hiddenValue.setAttribute('name','secondProblem');
+//
+//
+//                var submit = document.createElement('button');
+//                submit.setAttribute('class', 'btn btn-default');
+//                submit.setAttribute('type', 'submit');
+//                submit.innerHTML = "Second This Problem";
+//
+//            likeForm.appendChild(hiddenValue);
+//            likeForm.appendChild(submit);
+//
+//            infowincontent.appendChild(likeForm);
+//            infowincontent.appendChild(document.createElement('br'));
             var text = document.createElement('text');
             text.textContent = "Problem Type: " + type + "-" + id;
-
             infowincontent.appendChild(text);
             infowincontent.appendChild(document.createElement('br'));
 
@@ -376,8 +433,6 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             problemImage.innerHTML = '<img alt="' + imageFile + '" class="img-fluid img-thumbnail" style="width: 100%; " src="uploads/' + imageFile + '" /> ';
             infowincontent.appendChild(problemImage);
             infowincontent.appendChild(document.createElement('br'));
-
-
 
             return infowincontent;
         }
