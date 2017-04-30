@@ -14,6 +14,7 @@ if (!empty($_GET)) {
     if ($connection->connect_error) {
         die("Connection failed: " . $connection->connect_error);
     }
+
     $selectQuery = "SELECT likes from Problems where id = $problems_id";
     $result = mysqli_query($connection, $selectQuery);
 
@@ -33,7 +34,9 @@ if (!empty($_GET)) {
 
         $likeRow = mysqli_fetch_assoc($resultLikes);
 
-        if (empty($likeRow)) {
+        echo $likeRow['user'];
+
+        if (empty($likeRow['user'])) {
             $updateQuery = "UPDATE Problems SET likes = $likes WHERE id = $problems_id";
             $result2 = mysqli_query($connection, $updateQuery);
 
@@ -41,7 +44,7 @@ if (!empty($_GET)) {
             $res = mysqli_query($connection, $updateLikes);
             echo $likes;
         } else {
-            echo "already liked";
+            //echo $uID;
         }
     }
 
