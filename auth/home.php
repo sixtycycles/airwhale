@@ -369,17 +369,6 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             infowincontent.setAttribute('class', 'well');
             infowincontent.setAttribute('style', 'width:200px; height:auto');
 
-            var likeButton = document.createElement('button');
-            likeButton.setAttribute('class', 'btn btn-default');
-            likeButton.setAttribute('id', id);
-            likeButton.setAttribute('name','like_button');
-            likeButton.setAttribute('type', 'submit');
-            likeButton.innerHTML = "second this problem";
-            likeButton.setAttribute('onclick','updateLikes('+id+')');
-
-            infowincontent.appendChild(likeButton);
-            infowincontent.appendChild(document.createElement('br'));
-
             var likeArea = document.createElement('text');
             likeArea.textContent = "Likes: " + likes;
             likeArea.setAttribute('id',"likeArea");
@@ -429,6 +418,17 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             var problemStatus = document.createElement('text');
             problemStatus.textContent = "Status: " + status;
             infowincontent.appendChild(problemStatus);
+            infowincontent.appendChild(document.createElement('br'));
+
+            var likeButton = document.createElement('button');
+            likeButton.setAttribute('class', 'btn btn-default');
+            likeButton.setAttribute('id', id);
+            likeButton.setAttribute('name','like_button');
+            likeButton.setAttribute('type', 'submit');
+            likeButton.innerHTML = "second this problem";
+            likeButton.setAttribute('onclick','updateLikes('+id+')');
+
+            infowincontent.appendChild(likeButton);
             infowincontent.appendChild(document.createElement('br'));
 
             var problemImage = document.createElement('image');
