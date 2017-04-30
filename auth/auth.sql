@@ -1,12 +1,9 @@
-DROP DATABASE ORONOISSUE;
-CREATE DATABASE if NOT EXISTS ORONOISSUE ;
-USE ORONOISSUE;
 -- phpMyAdmin SQL Dump
 -- version 4.6.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Apr 28, 2017 at 09:53 PM
+-- Generation Time: Apr 30, 2017 at 03:27 AM
 -- Server version: 5.6.28
 -- PHP Version: 7.0.10
 
@@ -23,7 +20,6 @@ SET time_zone = "+00:00";
 -- Table structure for table `Problems`
 --
 
-DROP TABLE IF EXISTS `Problems`;
 CREATE TABLE `Problems` (
   `id` int(11) NOT NULL,
   `name` varchar(60) NOT NULL,
@@ -33,15 +29,17 @@ CREATE TABLE `Problems` (
   `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `problem_status` varchar(15) DEFAULT 'Reported',
   `file` varchar(100) DEFAULT NULL,
-  `type_id` int(11) NOT NULL DEFAULT '0'
+  `type_id` int(11) NOT NULL DEFAULT '0',
+  `likes` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `Problems`
 --
 
-INSERT INTO `Problems` (`id`, `name`, `lat`, `lon`, `description`, `timestamp`, `problem_status`, `file`, `type_id`) VALUES
-  (35, 'admin', 44.884093476429, -68.70162963867188, 0x4772616666697469206f6e2074726565, '2017-04-28 15:25:45', 'Completed', NULL, 2);
+INSERT INTO `Problems` (`id`, `name`, `lat`, `lon`, `description`, `timestamp`, `problem_status`, `file`, `type_id`, `likes`) VALUES
+  (35, 'admin', 44.884093476429, -68.70162963867188, 0x4772616666697469206f6e2074726565, '2017-04-28 15:25:45', 'Started', NULL, 2, 4),
+  (36, 'Test User', 44.890174566330415, -68.77750396728516, 0x4974732076206461726b21, '2017-04-29 12:16:44', 'Reported', '61745-streetlight.JPG', 3, 3);
 
 -- --------------------------------------------------------
 
@@ -49,7 +47,6 @@ INSERT INTO `Problems` (`id`, `name`, `lat`, `lon`, `description`, `timestamp`, 
 -- Table structure for table `tbl_problem_types`
 --
 
-DROP TABLE IF EXISTS `tbl_problem_types`;
 CREATE TABLE `tbl_problem_types` (
   `type_id` int(11) NOT NULL,
   `type_name` text NOT NULL,
@@ -75,7 +72,6 @@ INSERT INTO `tbl_problem_types` (`type_id`, `type_name`, `markerImage`) VALUES
 -- Table structure for table `tbl_uploads`
 --
 
-DROP TABLE IF EXISTS `tbl_uploads`;
 CREATE TABLE `tbl_uploads` (
   `id` int(11) NOT NULL,
   `file` varchar(100) NOT NULL,
@@ -89,7 +85,6 @@ CREATE TABLE `tbl_uploads` (
 -- Table structure for table `tbl_users`
 --
 
-DROP TABLE IF EXISTS `tbl_users`;
 CREATE TABLE `tbl_users` (
   `userID` int(11) NOT NULL,
   `userName` varchar(100) NOT NULL,
@@ -148,7 +143,7 @@ ALTER TABLE `tbl_users`
 -- AUTO_INCREMENT for table `Problems`
 --
 ALTER TABLE `Problems`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 --
 -- AUTO_INCREMENT for table `tbl_problem_types`
 --
@@ -179,5 +174,3 @@ ALTER TABLE `Problems`
 --
 ALTER TABLE `tbl_uploads`
   ADD CONSTRAINT `tbl_uploads_Problems_file_fk` FOREIGN KEY (`file`) REFERENCES `Problems` (`file`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-
