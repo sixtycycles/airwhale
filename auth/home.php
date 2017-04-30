@@ -254,7 +254,9 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 },
                 success:function(response){
                     // process on data
+
                     document.getElementById('likeArea').textContent = "Likes: " + response;
+                    document.getElementById(id).setAttribute('style','visibility:hidden;');
 
                 }
 
