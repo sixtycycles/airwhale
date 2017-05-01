@@ -22,7 +22,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="home.php">Report Problems</a></li>
                         <?php
-                        if ($_SESSION['isAdmin']) {
+                        if (isset($_SESSION['isAdmin'])) {
                             echo "<li> <a href='admin.php'>Admin Portal</a></li>";
                         }
                         ?>

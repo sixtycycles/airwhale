@@ -24,6 +24,7 @@ if (!empty($_POST)) {
         die("Connection failed: " . $connection->connect_error);
     }
 // Inserts new row with place data, controll for if file is uploaded or not.
+$description = mysqli_real_escape_string($connection,$description);
 
     if($_FILES['file']['name']!="") {
         move_uploaded_file($file_loc, $folder . $file);
