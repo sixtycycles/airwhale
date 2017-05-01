@@ -332,25 +332,41 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         });
 
         //locate the user form the browser
-        navigator.geolocation.getCurrentPosition(function (position) {
+        if (navigator.geolocation) {
+            console.log("Geolocation is supported.");
+            navigator.geolocation.getCurrentPosition(
+                // Success callback
+                function (position) {
+                    var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-            var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    marker = new google.maps.Marker({
+                        position: pos,
+                        draggable: true,
+                        animation: google.maps.Animation.DROP,
+                        map: map,
+                        label: "YOU ARE HERE",
+                        type: 'myproblem',
+                        preserveViewport: true
+                    });
 
-            marker = new google.maps.Marker({
-                position: pos,
-                draggable: true,
-                animation: google.maps.Animation.DROP,
-                map: map,
-                label: "YOU ARE HERE",
-                type: 'myproblem',
-                preserveViewport: true
-            });
+                    markers.push(marker);
+                    document.getElementById('lat').value = position.coords.latitude;
+                    document.getElementById('lng').value = position.coords.longitude;
 
-            markers.push(marker);
-            document.getElementById('lat').value = position.coords.latitude;
-            document.getElementById('lng').value = position.coords.longitude;
+                }, 
+                // Failure callback
+                function(error){
+                    console.error(error);
+                },
+                // Options
+                {
+                    maximumAge:5000, timeout:5000, enableHighAccuracy:true
+                }
+            );
 
-        });
+        } else {
+            console.log("Geolocation is not supported.");
+        }
 
     }
 
