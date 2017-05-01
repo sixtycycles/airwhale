@@ -268,14 +268,6 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
     //draw map, import xml data of problems and add markers and info to infoindows.
     function initMap() {
         var oronoMaine = {lat: 44.882390656052756, lng: -68.71810913085938};
-        //this thing holds labels fro markers by problem type.
-//        var customLabel = {
-//            'pothole': {label: 'Pothole'},
-//            'streetlight': {label: 'Street Light'},
-//            'fireHydrant': {label: 'Fire Hydrant'},
-//            'grafitti': {label: 'Grafitti'},
-//            'other': {label: 'Other'}
-//        };
 
         //the map where we draw things and interact.
         map = new google.maps.Map(document.getElementById('map'), {
@@ -319,8 +311,6 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     parseFloat(markerElem.getAttribute('lng')));
                 var type = markerElem.getAttribute('type_id');
 
-                // var label = customLabel[type] || {};
-
                 var iconBase = '../assets/icons/png/';
 
                 var icon = {
@@ -334,7 +324,6 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 var marker = new google.maps.Marker({
                     map: map,
                     position: point,
-                    //label: label.label,
                     icon: icon,
                     type: type
                 });
@@ -362,9 +351,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             var status = markerElem.getAttribute('problemStatus');
             var imageFile = markerElem.getAttribute('img');
             var likes = markerElem.getAttribute('likes');
-//            var point = new google.maps.LatLng(
-//                parseFloat(markerElem.getAttribute('lat')),
-//                parseFloat(markerElem.getAttribute('lng')));
+            
             var infowincontent = document.createElement('div');
             infowincontent.setAttribute('class', 'well');
             infowincontent.setAttribute('style', 'width:200px; height:auto');
