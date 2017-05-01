@@ -213,6 +213,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         });
         markers.push(marker);
     }
+
     //  show all markers of a particular category, styles buttons
     function show(category) {
         for (var i = 0; i < markers.length; i++) {
@@ -241,30 +242,25 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
     }
 
-    function updateLikes(id)
-    {
+    function updateLikes(id) {
+        $.ajax({
+            type:"GET",
+            url: '../php/second.php',
+            data: {
+                id:id
+            },
+            success: function(response){
+                // process on data
+                console.log("Likes: " + response);
+                window.likesField.SetText(response);
+                //document.getElementById(id).setAttribute('style','visibility:hidden;');
 
-        $(function()
-        {
-            $.ajax({
-                type:"GET",
-                url: '../php/second.php',
-                data: {
-                    id:id
-                },
-                success:function(response){
-                    // process on data
-
-                    document.getElementById('likeArea').textContent = "Likes: " + response;
-                    document.getElementById(id).setAttribute('style','visibility:hidden;');
-
-                }
-
-            })
-            ;
+            }
 
         });
+
     }
+
     //draw map, import xml data of problems and add markers and info to infoindows.
     function initMap() {
         var oronoMaine = {lat: 44.882390656052756, lng: -68.71810913085938};
@@ -353,19 +349,55 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             var likes = markerElem.getAttribute('likes');
             
             var infowincontent = document.createElement('div');
-            infowincontent.setAttribute('class', 'well');
+            //infowincontent.setAttribute('class', 'well');
             infowincontent.setAttribute('style', 'width:200px; height:auto');
 
-            var likeArea = document.createElement('text');
-            likeArea.textContent = "Likes: " + likes;
-            likeArea.setAttribute('id',"likeArea");
-            infowincontent.appendChild((likeArea));
+            // Little class for making labels that can be restyled.
+            function LabelField(label, text){
+                this.label = label;
+                this.text = text;
+
+                this.element = document.createElement('text');
+                infowincontent.appendChild(this.element);
+                infowincontent.appendChild(document.createElement('br'));
+
+                this.Update();
+            }
+            LabelField.prototype.Update = function() {
+                this.element.innerHTML = "<strong>" + this.label + "</strong>: " + this.text;
+            }
+            LabelField.prototype.SetLabel = function(label) {
+                this.label = label;
+                this.Update();
+            }
+            LabelField.prototype.SetText = function(text) {
+                this.text = text;
+                this.Update();
+            }
+
+            function Divider() {
+                var divider = document.createElement('hr');
+                divider.style.margin = "0.5em 0em";
+                divider.style.padding = "0";
+                infowincontent.appendChild(divider);
+            }
+
+            var typeField = new LabelField("Problem Type", type);
+            var statusField = new LabelField("Status", status);
+            var descriptionField = new LabelField("Problem Description", "<br /> " + description);
+
+            Divider();
+
+            var userField = new LabelField("User", name);
+            var timeField = new LabelField("Time", timestamp);
+
+            Divider();
+
+            window.likesField = new LabelField("Likes", likes);
+            //window.likesField.element.setAttribute('id', "likeArea");
+
             infowincontent.appendChild(document.createElement('br'));
 
-            var strong = document.createElement('strong');
-            strong.textContent = "User: " + name;
-            infowincontent.appendChild(strong);
-            infowincontent.appendChild(document.createElement('br'));
             //make a lil form for the second function.
 //            var likeForm = document.createElement('form');
 //            likeForm.setAttribute('method','GET');
@@ -387,41 +419,26 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 //
 //            infowincontent.appendChild(likeForm);
 //            infowincontent.appendChild(document.createElement('br'));
-            var text = document.createElement('text');
-            text.textContent = "Problem Type: " + type + "-" + id;
-            infowincontent.appendChild(text);
-            infowincontent.appendChild(document.createElement('br'));
-
-            var desc = document.createElement('text');
-            desc.textContent = "Problem Description: " + description;
-            infowincontent.appendChild(desc);
-            infowincontent.appendChild(document.createElement('br'));
-
-            var time = document.createElement('text');
-            time.textContent = "Timestamp: " + timestamp;
-            infowincontent.appendChild(time);
-            infowincontent.appendChild(document.createElement('br'));
-
-            var problemStatus = document.createElement('text');
-            problemStatus.textContent = "Status: " + status;
-            infowincontent.appendChild(problemStatus);
-            infowincontent.appendChild(document.createElement('br'));
 
             var likeButton = document.createElement('button');
-            likeButton.setAttribute('class', 'btn btn-default');
+            likeButton.setAttribute('class', 'btn btn-sm btn-default');
             likeButton.setAttribute('id', id);
             likeButton.setAttribute('name','like_button');
             likeButton.setAttribute('type', 'submit');
-            likeButton.innerHTML = "second this problem";
+            likeButton.innerHTML = "Second this problem";
             likeButton.setAttribute('onclick','updateLikes('+id+')');
 
             infowincontent.appendChild(likeButton);
             infowincontent.appendChild(document.createElement('br'));
-
-            var problemImage = document.createElement('image');
-            problemImage.innerHTML = '<img alt="' + imageFile + '" class="img-fluid img-thumbnail" style="width: 100%; " src="uploads/' + imageFile + '" /> ';
-            infowincontent.appendChild(problemImage);
             infowincontent.appendChild(document.createElement('br'));
+
+            // Append the image file only if we have one specified.
+            if(imageFile){
+                var problemImage = document.createElement('image');
+                problemImage.innerHTML = '<img alt="Image of the problem" class="img-fluid img-thumbnail" style="width: 100%; " src="uploads/' + imageFile + '" /> ';
+                infowincontent.appendChild(problemImage);
+                infowincontent.appendChild(document.createElement('br'));
+            }
 
             return infowincontent;
         }
