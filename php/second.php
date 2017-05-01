@@ -50,6 +50,3 @@ if (!empty($_GET)) {
 
     $connection->close();
 }
-
-
-

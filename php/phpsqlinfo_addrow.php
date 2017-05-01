@@ -40,5 +40,3 @@ if (!empty($_POST)) {
 
     $connection->close();
 }
-?>
-

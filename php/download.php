@@ -10,7 +10,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql2 = "SELECT id, name, lat, lon, description,timestamp,problem_status, file,tbl_problem_types.type_name 
+$sql2 = "SELECT id, name, lat, lon, description, timestamp, problem_status, file, tbl_problem_types.type_name 
 FROM Problems 
   INNER JOIN tbl_problem_types 
     ON (Problems.type_id=tbl_problem_types.type_id);";
@@ -31,4 +31,3 @@ while ($row = mysqli_fetch_assoc($result)) {
 fclose($fp);
 mysqli_close($conn);
 exit();
-?>
