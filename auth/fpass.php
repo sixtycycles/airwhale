@@ -24,33 +24,37 @@ if(isset($_POST['btn-submit']))
         $stmt->execute(array(":token"=>$code,"email"=>$email));
 
         $message= "
-        Hello , $email
-        <br /><br />
-        Someone has requested a password reset for this your account. if that was you, great!<br />
-        Click Following Link To Reset Your Password 
-        <br /><br />
-        <a href='localhost/auth/resetpass.php?id=$id&code=$code'>click here to reset your password</a>
-        <br /><br />
-        if that wasnt you, ignore this email. 
-        thank you,
-        Team Leader
+            Hello, ${email}!
+            <br />
+            <br />
+            A password reset has been requested for your account. If this was not you, please
+            reset your password immediately. 
+            <br />
+            <a href='resetpass.php?id=$id&code=$code'>Click here to reset your password.</a>
+            <br />
+            <br />
+            Thank you!
         ";
         $subject = "Password Reset";
 
         $user->send_mail($email,$message,$subject);
 
-        $msg = "<div class='alert alert-success'>
-     <button class='close' data-dismiss='alert'>&times;</button>
-     We've sent an email to $email.
-                    Please follow the instructions in the email to reset your password. 
-      </div>";
+        $msg = "
+            <div class='alert alert-success'>
+            <button class='close' data-dismiss='alert'>&times;</button>
+            We've sent an email to $email.
+            Please follow the instructions in the email to reset your password. 
+            </div>
+        ";
     }
     else
     {
-        $msg = "<div class='alert alert-danger'>
-     <button class='close' data-dismiss='alert'>&times;</button>
-     <strong>Sorry!</strong>  we dont have an account with that email. did you want to <a href='signup.php'>create an account</a>? 
-       </div>";
+        $msg = "
+            <div class='alert alert-danger'>
+            <button class='close' data-dismiss='alert'>&times;</button>
+            <strong>Sorry!</strong>  we dont have an account with that email. did you want to <a href='signup.php'>create an account</a>? 
+            </div>
+        ";
     }
 }
 ?>
