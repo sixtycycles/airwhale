@@ -31,15 +31,15 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         
             <h1>Administer Problems</h1>
 
-            <form method="POST" action="updateProblems.php">
+            <form method="POST" action="../php/updateProblems.php">
                         
 
                 <p>
-                    <button type="submit" class="btn btn-primary" id="saveChanges" formaction="updateProblems.php">
+                    <button type="submit" class="btn btn-primary" id="saveChanges" formaction="../php/updateProblems.php">
                         Save
                     </button>
 
-                    <a href="download.php">
+                    <a href="../php/download.php">
                         <button type="button" class="btn btn-primary" id="download">
                             Download Problems
                             <span class="glyphicon glyphicon-download"></span>

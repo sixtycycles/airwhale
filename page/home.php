@@ -98,7 +98,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             <div id="form" class="panel panel-default">
                 <div class="panel-heading"><h4>Report a problem</h4></div>
                 <div class="panel-body">
-                    <form method="post" action="phpsqlinfo_addrow.php" enctype="multipart/form-data">
+                    <form method="post" action="../php/phpsqlinfo_addrow.php" enctype="multipart/form-data">
                         <div class="form-group">
 
                             <label for="name">Your Name</label>
@@ -248,7 +248,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         {
             $.ajax({
                 type:"GET",
-                url: 'second.php',
+                url: '../php/second.php',
                 data: {
                     id:id
                 },
@@ -309,7 +309,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         // });
 
         //this guy grabs the xml file from the db, and adds all the problems to the markers array
-        downloadUrl('dump.php', function (data) {
+        downloadUrl('../php/dump.php', function (data) {
             var xml = data.responseXML;
             var downloadedMarkers = xml.documentElement.getElementsByTagName('marker');
 
@@ -382,7 +382,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             //make a lil form for the second function.
 //            var likeForm = document.createElement('form');
 //            likeForm.setAttribute('method','GET');
-//            likeForm.setAttribute('action','second.php');
+//            likeForm.setAttribute('action','../php/second.php');
 //
 //                var hiddenValue = document.createElement('input');
 //                hiddenValue.setAttribute('type', 'hidden');
