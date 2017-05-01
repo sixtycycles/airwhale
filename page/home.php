@@ -188,16 +188,13 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
         document.getElementById('lat').value = event.latLng.lat();
         document.getElementById('lng').value = event.latLng.lng();
+
         //this removes the last click marker from  the user, or if no clicks yet, the auto geolocated marker is moved.
-        function moveMe() {
-            for (var i = 0; i < markers.length; i++) {
-                if (markers[i].type === 'myproblem') {
-                    markers[i].setMap(null);
-                }
+        for (var i = 0; i < markers.length; i++) {
+            if (markers[i].type === 'myproblem') {
+                markers[i].setMap(null);
             }
         }
-
-        moveMe();
 
         var marker = new google.maps.Marker({
             position: event.latLng,
@@ -334,149 +331,114 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             });
         });
 
-        /**
-         * Makes an HTML div containing the information used for the popup
-         * when you click on a marker.
-         */
-        function MakeMarkerWindow(markerElem) {
-            var id = markerElem.getAttribute('id');
-            var name = markerElem.getAttribute('name');
-            var description = markerElem.getAttribute('description');
-            var type = markerElem.getAttribute('type_name');
-            var timestamp = markerElem.getAttribute('timestamp');
-            var status = markerElem.getAttribute('problemStatus');
-            var imageFile = markerElem.getAttribute('img');
-            var likes = markerElem.getAttribute('likes');
-            
-            var infowincontent = document.createElement('div');
-            //infowincontent.setAttribute('class', 'well');
-            infowincontent.setAttribute('style', 'width:200px; height:auto');
-
-            // Little class for making labels that can be restyled.
-            function LabelField(label, text){
-                this.label = label;
-                this.text = text;
-
-                this.element = document.createElement('text');
-                infowincontent.appendChild(this.element);
-                infowincontent.appendChild(document.createElement('br'));
-
-                this.Update();
-            }
-            LabelField.prototype.Update = function() {
-                this.element.innerHTML = "<strong>" + this.label + "</strong>: " + this.text;
-            }
-            LabelField.prototype.SetLabel = function(label) {
-                this.label = label;
-                this.Update();
-            }
-            LabelField.prototype.SetText = function(text) {
-                this.text = text;
-                this.Update();
-            }
-
-            function Divider() {
-                var divider = document.createElement('hr');
-                divider.style.margin = "0.5em 0em";
-                divider.style.padding = "0";
-                infowincontent.appendChild(divider);
-            }
-
-            var typeField = new LabelField("Problem Type", type);
-            var statusField = new LabelField("Status", status);
-            var descriptionField = new LabelField("Problem Description", "<br /> " + description);
-
-            Divider();
-
-            var userField = new LabelField("User", name);
-            var timeField = new LabelField("Time", timestamp);
-
-            Divider();
-
-            window.likesField = new LabelField("Likes", likes);
-            //window.likesField.element.setAttribute('id', "likeArea");
-
-            infowincontent.appendChild(document.createElement('br'));
-
-            //make a lil form for the second function.
-//            var likeForm = document.createElement('form');
-//            likeForm.setAttribute('method','GET');
-//            likeForm.setAttribute('action','../php/second.php');
-//
-//                var hiddenValue = document.createElement('input');
-//                hiddenValue.setAttribute('type', 'hidden');
-//                hiddenValue.setAttribute('value',id);
-//                hiddenValue.setAttribute('name','secondProblem');
-//
-//
-//                var submit = document.createElement('button');
-//                submit.setAttribute('class', 'btn btn-default');
-//                submit.setAttribute('type', 'submit');
-//                submit.innerHTML = "Second This Problem";
-//
-//            likeForm.appendChild(hiddenValue);
-//            likeForm.appendChild(submit);
-//
-//            infowincontent.appendChild(likeForm);
-//            infowincontent.appendChild(document.createElement('br'));
-
-            var likeButton = document.createElement('button');
-            likeButton.setAttribute('class', 'btn btn-sm btn-default');
-            likeButton.setAttribute('id', id);
-            likeButton.setAttribute('name','like_button');
-            likeButton.setAttribute('type', 'submit');
-            likeButton.innerHTML = "Second this problem";
-            likeButton.setAttribute('onclick','updateLikes('+id+')');
-
-            infowincontent.appendChild(likeButton);
-            infowincontent.appendChild(document.createElement('br'));
-            infowincontent.appendChild(document.createElement('br'));
-
-            // Append the image file only if we have one specified.
-            if(imageFile){
-                var problemImage = document.createElement('image');
-                problemImage.innerHTML = '<img alt="Image of the problem" class="img-fluid img-thumbnail" style="width: 100%; " src="uploads/' + imageFile + '" /> ';
-                infowincontent.appendChild(problemImage);
-                infowincontent.appendChild(document.createElement('br'));
-            }
-
-            return infowincontent;
-        }
-
         //locate the user form the browser
-        function locateMe() {
-            navigator.geolocation.getCurrentPosition(function (position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
 
-                var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-                marker = new google.maps.Marker({
-                    position: pos,
-                    draggable: true,
-                    animation: google.maps.Animation.DROP,
-                    map: map,
-                    label: "YOU ARE HERE",
-                    type: 'myproblem',
-                    preserveViewport: true
-                });
-
-                markers.push(marker);
-                document.getElementById('lat').value = position.coords.latitude;
-                document.getElementById('lng').value = position.coords.longitude;
-
-            })
-        }
-
-        locateMe();
-        //add listener to have user place problem marker. .
-        google.maps.event.addListener(map, 'click', function (event) {
-            grabCoords(event);
-            //this one opens the info when you click a marker
-            google.maps.event.addListener(marker, 'click', function () {
-                infowindow.open(map, marker);
+            marker = new google.maps.Marker({
+                position: pos,
+                draggable: true,
+                animation: google.maps.Animation.DROP,
+                map: map,
+                label: "YOU ARE HERE",
+                type: 'myproblem',
+                preserveViewport: true
             });
+
+            markers.push(marker);
+            document.getElementById('lat').value = position.coords.latitude;
+            document.getElementById('lng').value = position.coords.longitude;
 
         });
 
+    }
+
+    /**
+    * Makes an HTML div containing the information used for the popup
+    * when you click on a marker.
+    */
+    function MakeMarkerWindow(markerElem) {
+        var id = markerElem.getAttribute('id');
+        var name = markerElem.getAttribute('name');
+        var description = markerElem.getAttribute('description');
+        var type = markerElem.getAttribute('type_name');
+        var timestamp = markerElem.getAttribute('timestamp');
+        var status = markerElem.getAttribute('problemStatus');
+        var imageFile = markerElem.getAttribute('img');
+        var likes = markerElem.getAttribute('likes');
+        
+        var infowincontent = document.createElement('div');
+        //infowincontent.setAttribute('class', 'well');
+        infowincontent.setAttribute('style', 'width:200px; height:auto');
+
+        // Little class for making labels that can be restyled.
+        function LabelField(label, text){
+            this.label = label;
+            this.text = text;
+
+            this.element = document.createElement('text');
+            infowincontent.appendChild(this.element);
+            infowincontent.appendChild(document.createElement('br'));
+
+            this.Update();
+        }
+        LabelField.prototype.Update = function() {
+            this.element.innerHTML = "<strong>" + this.label + "</strong>: " + this.text;
+        }
+        LabelField.prototype.SetLabel = function(label) {
+            this.label = label;
+            this.Update();
+        }
+        LabelField.prototype.SetText = function(text) {
+            this.text = text;
+            this.Update();
+        }
+
+        function Divider() {
+            var divider = document.createElement('hr');
+            divider.style.margin = "0.5em 0em";
+            divider.style.padding = "0";
+            infowincontent.appendChild(divider);
+        }
+
+        var typeField = new LabelField("Problem Type", type);
+        var statusField = new LabelField("Status", status);
+        var descriptionField = new LabelField("Problem Description", "<br /> " + description);
+
+        Divider();
+
+        var userField = new LabelField("User", name);
+        var timeField = new LabelField("Time", timestamp);
+
+        Divider();
+
+        window.likesField = new LabelField("Likes", likes);
+        //window.likesField.element.setAttribute('id', "likeArea");
+
+        infowincontent.appendChild(document.createElement('br'));
+
+        var likeButton = document.createElement('button');
+        likeButton.setAttribute('class', 'btn btn-sm btn-default');
+        likeButton.setAttribute('id', id);
+        likeButton.setAttribute('name','like_button');
+        likeButton.setAttribute('type', 'submit');
+        likeButton.innerHTML = "Second this problem";
+        likeButton.setAttribute('onclick','updateLikes('+id+')');
+
+        infowincontent.appendChild(likeButton);
+        infowincontent.appendChild(document.createElement('br'));
+        infowincontent.appendChild(document.createElement('br'));
+
+        // Append the image file only if we have one specified.
+        if(imageFile){
+            var problemImage = document.createElement('image');
+            problemImage.innerHTML = '<img alt="Image of the problem" class="img-fluid img-thumbnail" style="width: 100%; " src="uploads/' + imageFile + '" /> ';
+            infowincontent.appendChild(problemImage);
+            infowincontent.appendChild(document.createElement('br'));
+        }
+
+        return infowincontent;
     }
 
     //for grabbing xml
