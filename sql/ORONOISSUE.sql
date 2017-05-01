@@ -3,12 +3,18 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Apr 30, 2017 at 02:59 PM
+-- Generation Time: May 01, 2017 at 08:21 PM
 -- Server version: 5.6.28
 -- PHP Version: 7.0.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `ORONOISSUE`
@@ -19,9 +25,22 @@ USE `ORONOISSUE`;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `likes`
+--
+
+DROP TABLE IF EXISTS `likes`;
+CREATE TABLE `likes` (
+  `user` int(11) NOT NULL,
+  `problem_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `Problems`
 --
 
+DROP TABLE IF EXISTS `Problems`;
 CREATE TABLE `Problems` (
   `id` int(11) NOT NULL,
   `name` varchar(60) NOT NULL,
@@ -35,38 +54,13 @@ CREATE TABLE `Problems` (
   `likes` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `Problems`
---
-
-INSERT INTO `Problems` (`id`, `name`, `lat`, `lon`, `description`, `timestamp`, `problem_status`, `file`, `type_id`, `likes`) VALUES
-  (1, 'admin', 44.884093476429, -68.70162963867188, 0x4772616666697469206f6e2074726565, '2017-04-28 15:25:45', 'Started', NULL, 2, 2);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `likes`
---
-
-CREATE TABLE `likes` (
-  `user` int(11) NOT NULL,
-  `problem_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `likes`
---
-
-INSERT INTO `likes` (`user`, `problem_id`) VALUES
-  (1, 1),
-  (2, 1);
-
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `tbl_problem_types`
 --
 
+DROP TABLE IF EXISTS `tbl_problem_types`;
 CREATE TABLE `tbl_problem_types` (
   `type_id` int(11) NOT NULL,
   `type_name` text NOT NULL,
@@ -78,13 +72,13 @@ CREATE TABLE `tbl_problem_types` (
 --
 
 INSERT INTO `tbl_problem_types` (`type_id`, `type_name`, `markerImage`) VALUES
-  (1, 'Other', 'alert.png'),
-  (2, 'Graffiti', 'graffiti.png'),
-  (3, 'Streetlight Out', 'light.png'),
-  (4, 'Noise Complaint', 'noise.png'),
-  (5, 'Pothole', 'pothole.png'),
-  (6, 'Trash', 'trash.png'),
-  (7, 'Fire Hydrant Issue', NULL);
+(1, 'Other', 'alert.png'),
+(2, 'Graffiti', 'graffiti.png'),
+(3, 'Streetlight Out', 'light.png'),
+(4, 'Noise Complaint', 'noise.png'),
+(5, 'Pothole', 'pothole.png'),
+(6, 'Trash', 'trash.png'),
+(7, 'Fire Hydrant Issue', NULL);
 
 -- --------------------------------------------------------
 
@@ -92,6 +86,7 @@ INSERT INTO `tbl_problem_types` (`type_id`, `type_name`, `markerImage`) VALUES
 -- Table structure for table `tbl_uploads`
 --
 
+DROP TABLE IF EXISTS `tbl_uploads`;
 CREATE TABLE `tbl_uploads` (
   `id` int(11) NOT NULL,
   `file` varchar(100) NOT NULL,
@@ -105,6 +100,7 @@ CREATE TABLE `tbl_uploads` (
 -- Table structure for table `tbl_users`
 --
 
+DROP TABLE IF EXISTS `tbl_users`;
 CREATE TABLE `tbl_users` (
   `userID` int(11) NOT NULL,
   `userName` varchar(100) NOT NULL,
@@ -115,16 +111,15 @@ CREATE TABLE `tbl_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `tbl_users`
---
-
-INSERT INTO `tbl_users` (`userID`, `userName`, `userEmail`, `userPass`, `userStatus`, `tokenCode`) VALUES
-  (1, 'admin', 'test@test.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'A', ''),
-  (2, 'Rod', 'sixtycycles@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Y', '02f0cc0a7dc2c0e8ed94b2a41248717d');
-
---
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `likes`
+--
+ALTER TABLE `likes`
+  ADD PRIMARY KEY (`user`,`problem_id`),
+  ADD KEY `likes_tbl_users_userID_fk` (`problem_id`);
 
 --
 -- Indexes for table `Problems`
@@ -133,13 +128,6 @@ ALTER TABLE `Problems`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `Problems_file_uindex` (`file`),
   ADD KEY `Problems_tbl_problem_types_type_id_fk` (`type_id`);
-
---
--- Indexes for table `likes`
---
-ALTER TABLE `likes`
-  ADD PRIMARY KEY (`user`,`problem_id`),
-  ADD KEY `likes_tbl_users_userID_fk` (`problem_id`);
 
 --
 -- Indexes for table `tbl_problem_types`
@@ -191,12 +179,6 @@ ALTER TABLE `tbl_users`
 --
 
 --
--- Constraints for table `Problems`
---
-ALTER TABLE `Problems`
-  ADD CONSTRAINT `Problems_tbl_problem_types_type_id_fk` FOREIGN KEY (`type_id`) REFERENCES `tbl_problem_types` (`type_id`);
-
---
 -- Constraints for table `likes`
 --
 ALTER TABLE `likes`
@@ -204,7 +186,17 @@ ALTER TABLE `likes`
   ADD CONSTRAINT `likes_tbl_users_userID_fk` FOREIGN KEY (`problem_id`) REFERENCES `Problems` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `Problems`
+--
+ALTER TABLE `Problems`
+  ADD CONSTRAINT `Problems_tbl_problem_types_type_id_fk` FOREIGN KEY (`type_id`) REFERENCES `tbl_problem_types` (`type_id`);
+
+--
 -- Constraints for table `tbl_uploads`
 --
 ALTER TABLE `tbl_uploads`
   ADD CONSTRAINT `tbl_uploads_Problems_file_fk` FOREIGN KEY (`file`) REFERENCES `Problems` (`file`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
