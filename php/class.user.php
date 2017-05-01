@@ -62,15 +62,15 @@ class USER
                         $_SESSION['userSession'] = $userRow['userID'];
                         return true;
                     } else {
-                        header("Location: index.php?error");
+                        header("Location: ../page/index.php?error");
                         exit;
                     }
                 } else {
-                    header("Location: index.php?inactive");
+                    header("Location: ../page/index.php?inactive");
                     exit;
                 }
             } else {
-                header("Location: index.php?error");
+                header("Location: ../page/index.php?error");
                 exit;
             }
         } catch (PDOException $ex) {
