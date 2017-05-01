@@ -25,9 +25,9 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 <?php require_once "../partials/navbar.php"; ?>
 
 <div class="container-fluid">
-    <div class="">
+    <div class="row">
 
-        <div class="col-md-8 col=lg-8">
+        <div class="col-md-6 col=lg-6">
         
             <h1>Administer Problems</h1>
 
@@ -122,6 +122,16 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 </div> <!-- End problemList -->
             </form>
 
+        </div>
+        <!-- instructions area-->
+        <div class="col-lg-4">
+            <h3>Instructions</h3>
+            <p>To administer a problem, choose one of the three buttons next to the problem.
+                You can delete, mark as started, or mark as completed. the problem will collapse,
+                and you can click the <strong>Save</strong></strong> button at the top of the page to submit changes.
+                to abandon changes, just refresh the page.
+            </p>
+            <p>You can also download a CSV of the problem records. all data except images are included as of this point. </p>
         </div>
     </div>
 
