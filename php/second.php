@@ -1,5 +1,5 @@
 <?php
-//header('Location: home.php');
+//header('Location: ../page/home.php');
 session_start();
 require_once('phpsqlinfo_dbinfo.php');
 
