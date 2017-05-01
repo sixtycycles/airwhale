@@ -331,6 +331,11 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             });
         });
 
+        // Add click listener to map to allow the user to place their location manually
+        google.maps.event.addListener(map, 'click', function (event) {
+            grabCoords(event);
+        });
+
         //locate the user form the browser
         if (navigator.geolocation) {
             console.log("Geolocation is supported.");
