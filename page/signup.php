@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'class.user.php';
+require_once '../php/class.user.php';
 
 $reg_user = new USER();
 
@@ -38,7 +38,7 @@ if(isset($_POST['btn-signup']))
             //$key = base64_encode($id);
             //$id = $key;
 
-            $url = "localhost:8888/airwhale/auth/verify.php?id=${id}&code=${code}";
+            $url = "localhost:8888/airwhale/page/verify.php?id=${id}&code=${code}";
 
             $message = "
                 <p>

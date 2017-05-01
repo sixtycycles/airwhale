@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'class.user.php';
+require_once '../php/class.user.php';
 $user_home = new USER();
 if (!$user_home->is_admin()) {
     $user_home->redirect('index.php');
@@ -50,7 +50,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 <div id="problemList" class="">
 
                         <?php
-                        require_once("phpsqlinfo_dbinfo.php");
+                        require_once("../php/phpsqlinfo_dbinfo.php");
 
                         $connection = mysqli_connect('localhost', $username, $password, $database, $port);
                         if (!$connection) {

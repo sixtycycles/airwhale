@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'class.user.php';
+require_once '../php/class.user.php';
 $user_home = new USER();
 
 if (!$user_home->is_logged_in()) {
@@ -42,7 +42,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 <!--This renders the filter buttons from problem types in DB -->
                 <?php
                 if ($_SESSION['userSession']) {
-                    require_once("phpsqlinfo_dbinfo.php");
+                    require_once("../php/phpsqlinfo_dbinfo.php");
 
                     $connection = mysqli_connect('localhost', $username, $password, $database, $port);
                     if (!$connection) {
@@ -115,7 +115,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                             <select class="form-control" id='type' name='type'>
                                 <?php
                                 if ($_SESSION['userSession']) {
-                                    require_once("phpsqlinfo_dbinfo.php");
+                                    require_once("../php/phpsqlinfo_dbinfo.php");
                                     $connection = mysqli_connect('localhost', $username, $password, $database, $port);
                                     if (!$connection) {
                                         die('Not connected : ' . mysqli_error($connection));

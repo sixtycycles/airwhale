@@ -1,5 +1,5 @@
 <?php
-require_once 'class.user.php';
+require_once '../php/class.user.php';
 $user = new USER();
 
 if (empty($_GET['id']) && empty($_GET['code'])) {
@@ -20,18 +20,22 @@ if (isset($_GET['id']) && isset($_GET['code'])) {
             $cpass = $_POST['confirm-pass'];
 
             if ($cpass !== $pass) {
-                $msg = "<div class='alert alert-block'>
-      <button class='close' data-dismiss='alert'>&times;</button>
-      <strong>Sorry!</strong>  Password Doesn't match. 
-      </div>";
+                $msg = "
+                    <div class='alert alert-block'>
+                        <button class='close' data-dismiss='alert'>&times;</button>
+                        <strong>Sorry!</strong> Password does not match.
+                    </div>
+                ";
             } else {
                 $stmt = $user->runQuery("UPDATE tbl_users SET userPass=:upass WHERE userID=:uid");
                 $stmt->execute(array(":upass" => sha1($cpass), ":uid" => $rows['userID']));
 
-                $msg = "<div class='alert alert-success'>
-      <button class='close' data-dismiss='alert'>&times;</button>
-      Password Changed.
-      </div>";
+                $msg = "
+                    <div class='alert alert-success'>
+                        <button class='close' data-dismiss='alert'>&times;</button>
+                        Password Changed.
+                    </div>
+                ";
                 header("refresh:5;index.php");
             }
         }
