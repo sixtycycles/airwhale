@@ -4,11 +4,11 @@ require_once('phpsqlinfo_dbinfo.php');
 
 if (!empty($_POST)) {
 // Gets data from URL parameters.
-    $name = trim(htmlspecialchars($_POST['name']));
-    $description = trim(htmlspecialchars($_POST['description']));
-    $lat = trim(htmlspecialchars($_POST['lat']));
-    $lon = trim(htmlspecialchars($_POST['lng']));
-    $type = trim(htmlspecialchars($_POST['type']));
+    $name = trim(($_POST['name']));
+    $description = trim(($_POST['description']));
+    $lat = trim(($_POST['lat']));
+    $lon = trim(($_POST['lng']));
+    $type = trim(($_POST['type']));
 //file handling
     $file = rand(1000, 100000) . "-" . $_FILES['file']['name'];
     $file = rand(1000, 100000) . "-" . $_FILES['file']['name'];
@@ -23,8 +23,15 @@ if (!empty($_POST)) {
     if ($connection->connect_error) {
         die("Connection failed: " . $connection->connect_error);
     }
-// Inserts new row with place data, controll for if file is uploaded or not.
-$description = mysqli_real_escape_string($connection,$description);
+    //escape ...ALL THE THINGS: this is probably overkill, but for names and such i stops chars breaking things
+    $name = mysqli_real_escape_string($connection,$name);
+    $description = mysqli_real_escape_string($connection,$description);
+    $lat = mysqli_real_escape_string($connection,$lat);
+    $lon = mysqli_real_escape_string($connection,$lon);
+    $type = mysqli_real_escape_string($connection,$type);
+
+    // Inserts new row with place data, controll for if file is uploaded or not.
+
 
     if($_FILES['file']['name']!="") {
         move_uploaded_file($file_loc, $folder . $file);
