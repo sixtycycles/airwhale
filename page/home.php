@@ -454,7 +454,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         // Append the image file only if we have one specified.
         if(imageFile){
             var problemImage = document.createElement('image');
-            problemImage.innerHTML = '<img alt="Image of the problem" class="img-fluid img-thumbnail" style="width: 100%; " src="uploads/' + imageFile + '" /> ';
+            problemImage.innerHTML = '<img alt="Image of the problem" class="img-fluid img-thumbnail" style="width: 100%; " src="../auth/uploads/' + imageFile + '" /> ';
             infowincontent.appendChild(problemImage);
             infowincontent.appendChild(document.createElement('br'));
         }

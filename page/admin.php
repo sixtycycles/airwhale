@@ -103,7 +103,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                                     "<strong>Description:</strong><p> " . $row['description'] . "</p>" .
 
                                     // Add photo row if photo is uploaded
-                                    ($row['file'] ? "<strong>Photo of Problem:</strong><br /> <img class='img-fluid img-thumbnail' src='uploads/" . $row['file'] . "'>" : "" ) .
+                                    ($row['file'] ? "<strong>Photo of Problem:</strong><br /> <img class='img-fluid img-thumbnail' src='../auth/uploads/" . $row['file'] . "'>" : "" ) .
                                 
                                 "</div>" .
 

@@ -11,11 +11,11 @@ if (!empty($_POST)) {
     $type = trim(($_POST['type']));
 //file handling
     $file = rand(1000, 100000) . "-" . $_FILES['file']['name'];
-    $file = rand(1000, 100000) . "-" . $_FILES['file']['name'];
+//    $file = rand(1000, 100000) . "-" . $_FILES['file']['name'];
     $file_loc = $_FILES['file']['tmp_name'];
     $file_size = $_FILES['file']['size'];
     $file_type = $_FILES['file']['type'];
-    $folder = "uploads/";
+    $folder = "../auth/uploads/";
 
 // Opens a connection to a MySQL server.
     $connection = mysqli_connect("localhost", $username, $password, $database, 8889);
@@ -35,8 +35,8 @@ if (!empty($_POST)) {
 
     if($_FILES['file']['name']!="") {
         move_uploaded_file($file_loc, $folder . $file);
-        $imgQuery = "INSERT INTO tbl_uploads (file,type,size) VALUES('$file','$file_type','$file_size')";
-        $result2 = mysqli_query($connection, $imgQuery);
+//        $imgQuery = "INSERT INTO tbl_uploads (file,type,size) VALUES('$file','$file_type','$file_size')";
+//        $result2 = mysqli_query($connection, $imgQuery);
 
         $query = "INSERT INTO Problems ( name, lat, lon, description, type_id, file ) VALUES ( '$name','$lat', '$lon','$description', '$type','$file');";
     }else{
