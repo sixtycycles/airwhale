@@ -487,16 +487,13 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
-                request.onreadystatechange = doNothing;
+                request.onreadystatechange = function() {} ;
                 callback(request, request.status);
             }
         };
 
         request.open('GET', url, true);
         request.send(null);
-    }
-
-    function doNothing() {
     }
 
 </script>
