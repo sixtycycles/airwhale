@@ -332,6 +332,49 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             });
         });
 
+        /**
+         * Creates a centering button for the specified map
+         * inside of the given div.
+         */
+        function CenterControl(controlDiv, map) {
+
+            // Set CSS for the control border.
+            var controlUI = document.createElement('div');
+            controlUI.style.backgroundColor = '#fff';
+            controlUI.style.border = '2px solid #fff';
+            controlUI.style.borderRadius = '3px';
+            controlUI.style.boxShadow = '0 1px 3px rgba(0,0,0,.3)';
+            controlUI.style.cursor = 'pointer';
+            controlUI.style.margin = '11px 11px';
+
+            controlUI.style.textAlign = 'center';
+            controlUI.title = 'Click to recenter the map';
+            controlDiv.appendChild(controlUI);
+
+            // Set CSS for the control interior.
+            var controlText = document.createElement('div');
+            controlText.style.color = 'rgb(25,25,25)';
+            controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+            controlText.style.fontSize = '12px';
+            controlText.style.lineHeight = '24px';
+            controlText.style.paddingLeft = '10px';
+            controlText.style.paddingRight = '10px';
+            controlText.innerHTML = 'Center';
+            controlUI.appendChild(controlText);
+
+            // Setup the click event listeners: simply set the map to Chicago.
+            controlUI.addEventListener('click', function() {
+                map.setCenter(oronoMaine);
+            });
+
+        }
+
+        // Add a "Center" button to top right of the map.
+        var centerControlDiv = document.createElement('div');
+        var centerControl = new CenterControl(centerControlDiv, map);
+        centerControlDiv.index = 1;
+        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerControlDiv);
+
         // Add click listener to map to allow the user to place their location manually
         google.maps.event.addListener(map, 'click', function (event) {
             grabCoords(event);
