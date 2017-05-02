@@ -54,7 +54,7 @@ if(isset($_POST['btn-login']))
                     ?>
                     <div class='alert alert-danger'>
                         <strong>Sorry, that doesn't seem to be correct! Did you mistype something?</strong>
-                    </div>;
+                    </div>
                     <?php
                 };
                 ?>
