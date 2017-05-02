@@ -130,6 +130,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                         "</div>";
                 };
 
+                mysqli_close($connection);
 
                 ?>
 

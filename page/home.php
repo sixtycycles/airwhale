@@ -83,7 +83,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     };
                     echo "</div>";
 
-                    //
+                    mysqli_close($connection);
+
                 }
                 ?>
             </div>
@@ -143,6 +144,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                                             echo "<option ${selected} value='${id}'>${name}</option>";
                                             $index = $index + 1;
                                         }
+
+                                        mysqli_close($connection);
                                     }
 
                                     ?>
