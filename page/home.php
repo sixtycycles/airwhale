@@ -92,7 +92,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         </div>
 
         <!-- problem entry area-->
-        <div class="col-md-4 col=lg-4">
+        <div class="col-md-4 col-lg-4">
 
             <div id="form" class="panel panel-default">
                 <div class="panel-heading"><h4>Report a problem</h4></div>
@@ -249,7 +249,6 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 position: latLng,
                 map: map,
                 animation: google.maps.Animation.DROP,
-                type: "myproblem",
                 draggable: true
 
             });
