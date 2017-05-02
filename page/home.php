@@ -194,33 +194,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
     //var boundary;
     var markers = [];
 
-    //grab  lat lng data form click on map, also replace "you are here" with this location. (prevents stacking of user markers.
-    function grabCoords(event) {
-
-        document.getElementById('lat').value = event.latLng.lat();
-        document.getElementById('lng').value = event.latLng.lng();
-
-        //this removes the last click marker from  the user, or if no clicks yet, the auto geolocated marker is moved.
-        for (var i = 0; i < markers.length; i++) {
-            if (markers[i].type === 'myproblem') {
-                markers[i].setMap(null);
-            }
-        }
-
-        var marker = new google.maps.Marker({
-            position: event.latLng,
-            map: map,
-            animation: google.maps.Animation.DROP,
-            type: "myproblem",
-            draggable: true
-
-        });
-        marker.addListener('click', function () {
-            infowindow.setContent("your problem goes here");
-            infowindow.open(map, marker);
-        });
-        markers.push(marker);
-    }
+    var eventMarker;
 
     // show all markers of a particular category, styles buttons
     function show(category) {
@@ -263,6 +237,35 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             }
 
         });
+
+    }
+
+    /**
+     * Makes the "you are here" marker if it doesn't exist, then moves it.
+     */
+    function SetEventMarkerPos(latLng){
+        if(!eventMarker){
+            eventMarker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                animation: google.maps.Animation.DROP,
+                type: "myproblem",
+                draggable: true
+
+            });
+            eventMarker.addListener('click', function () {
+                infowindow.setContent("your problem goes here");
+                infowindow.open(map, eventMarker);
+            });
+            google.maps.event.addListener(eventMarker, 'dragend', function(event){
+                console.log("Dragged");
+                document.getElementById('lat').value = event.latLng.lat();
+                document.getElementById('lng').value = event.latLng.lng();
+            });
+        }
+
+        eventMarker.setPosition(latLng);
+        //map.panTo(latLng);
 
     }
 
@@ -315,16 +318,16 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 };
 
                 // we add the property type to the marker object to filter by problem type later
-                var marker = new google.maps.Marker({
+                var newMarker = new google.maps.Marker({
                     map: map,
                     position: point,
                     icon: icon,
                     type: type
                 });
-                markers.push(marker);
+                markers.push(newMarker);
                 // opens infowin when clicking marker.
-                marker.addListener('click', function () {
-                    infowindow.open(map, marker);
+                newMarker.addListener('click', function () {
+                    infowindow.open(map, newMarker);
                     infowindow.setContent(MakeMarkerWindow(markerElem));
 
                 });
@@ -377,7 +380,11 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Add click listener to map to allow the user to place their location manually
         google.maps.event.addListener(map, 'click', function (event) {
-            grabCoords(event);
+            // Set fields in form
+            document.getElementById('lat').value = event.latLng.lat();
+            document.getElementById('lng').value = event.latLng.lng();
+
+            SetEventMarkerPos(event.latLng);
         });
 
         // Locate the user from the browser
@@ -387,19 +394,10 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 function (position) {
                     var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-                    marker = new google.maps.Marker({
-                        position: pos,
-                        draggable: true,
-                        animation: google.maps.Animation.DROP,
-                        map: map,
-                        label: "YOU ARE HERE",
-                        type: 'myproblem',
-                        preserveViewport: true
-                    });
-
-                    markers.push(marker);
                     document.getElementById('lat').value = position.coords.latitude;
                     document.getElementById('lng').value = position.coords.longitude;
+
+                    SetEventMarkerPos(pos);
 
                 }, 
                 // Failure callback
@@ -415,6 +413,17 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         } else {
             console.log("Geolocation is not supported.");
         }
+
+        $("#lat").on('input', function(){
+            var latValue = document.getElementById('lat').value;
+            var lngValue = document.getElementById('lng').value;
+            SetEventMarkerPos(new google.maps.LatLng(latValue, lngValue));
+        });
+        $("#lng").on('input', function(){
+            var latValue = document.getElementById('lat').value;
+            var lngValue = document.getElementById('lng').value;
+            SetEventMarkerPos(new google.maps.LatLng(latValue, lngValue));
+        });
 
     }
 
