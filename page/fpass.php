@@ -25,7 +25,7 @@ if(isset($_POST['btn-submit']))
 
         $path = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
         $path .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER['SERVER_PORT'] . dirname($_SERVER["PHP_SELF"]);
-        
+
         $message= "
             Hello, ${email}!
             <br />
@@ -55,7 +55,7 @@ if(isset($_POST['btn-submit']))
         $msg = "
             <div class='alert alert-danger'>
             <button class='close' data-dismiss='alert'>&times;</button>
-            <strong>Sorry!</strong>  we dont have an account with that email. did you want to <a href='signup.php'>create an account</a>? 
+            <strong>Sorry!</strong> We dont have an account with that email. Did you want to <a href='signup.php'>create an account</a>? 
             </div>
         ";
     }
@@ -78,7 +78,7 @@ if(isset($_POST['btn-submit']))
 <div class="container">
 
     <form class="form-signin" method="post">
-        <h2 class="form-signin-heading">Forgot your password? no problem!</h2><hr />
+        <h2 class="form-signin-heading">Forgot your password? No problem!</h2><hr />
 
         <?php
         if(isset($msg))

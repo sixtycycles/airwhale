@@ -41,31 +41,39 @@ if(isset($_POST['btn-login']))
         ?>
         <div class='alert alert-error'>
             <button class='close' data-dismiss='alert'>&times;</button>
-            <strong>Sorry!</strong> This Account is not Activated Go to your Inbox and Activate it.
+            <strong>Sorry!</strong> This account is not activated! Go to your inbox and activate it.
         </div>
         <?php
     }
     ?>
-    <form class="form-signin" method="post">
-        <?php
-        if(isset($_GET['error']))
-        {
-            ?>
-            <div class='alert alert-success'>
-                <button class='close' data-dismiss='alert'>&times;</button>
-                <strong>Sorry that doesn't seem to be correct! Did you mistype something?</strong>
-            </div>
-            <?php
-        }
-        ?>
-        <h2 class="form-signin-heading">Please log in to report problems</h2><hr />
-        <input type="email" class="input-block-level" placeholder="Email address" name="txtemail" required />
-        <input type="password" class="input-block-level" placeholder="Password" name="txtupass" required />
-        <hr />
-        <button class="btn btn-large btn-primary" type="submit" name="btn-login">Log In</button>
-        <a href="signup.php" class="btn btn-large">Sign Up</a><hr />
-        <a href="fpass.php">Lost your Password?</a>
-    </form>
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <form class="form-signin" method="post">
+                <?php
+                if(isset($_GET['error']))
+                {
+                    ?>
+                    <div class='alert alert-success'>
+                        <button class='close' data-dismiss='alert'>&times;</button>
+                        <strong>Sorry, that doesn't seem to be correct! Did you mistype something?</strong>
+                    </div>
+                    <?php
+                }
+                ?>
+                <h2 class="form-signin-heading">Please log in to report problems.</h2><hr />
+                <div class="form-group">
+                    <label for="txtemail">Email Address</label>
+                    <input type="email" class="input-block-level form-control" style="margin-bottom: 1em;" placeholder="Email address" name="txtemail" required />
+                    <label for="txtupass">Password</label>
+                    <input type="password" class="input-block-level form-control" style="" placeholder="Password" name="txtupass" required />
+                </div>
+                <hr />
+                <button class="btn btn-large btn-primary" type="submit" name="btn-login">Log In</button>
+                <a href="signup.php" class="btn btn-large">Sign Up</a><hr />
+                <a href="fpass.php">Lost your Password?</a>
+            </form>
+        </div>
+    </div>
 
 </div> <!-- /container -->
 

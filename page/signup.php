@@ -25,8 +25,8 @@ if(isset($_POST['btn-signup']))
     {
         $msg = "
             <div class='alert alert-error'>
-            <button class='close' data-dismiss='alert'>&times;</button>
-            <strong>Sorry!</strong>  This email is already registered; please try another one.
+                <button class='close' data-dismiss='alert'>&times;</button>
+                <strong>Sorry!</strong>  This email is already registered; please try another one.
             </div>
             ";
     }
@@ -46,18 +46,13 @@ if(isset($_POST['btn-signup']))
             $message = "
                 <p>
                     Hello ${uname},
-                    <br /><br />
+                    <br />
                     Welcome to the Citizen Problem Reporter!<br/>
                     To complete your registration, please click the following link:<br/>
-                    <br /><br />
+                    <br />
                     <a href='${url}'>Click HERE to Activate :)</a> <br />
                     <br />
-
-                    Direct activation link:
-
-                    <a href='${url}'>${url}</a><br />
-                    <br />
-                    Thanks!
+                    Thank you!
                 </p>
                 ";
 
@@ -75,7 +70,7 @@ if(isset($_POST['btn-signup']))
         }
         else
         {
-            echo "Sorry, query could not execute...";
+            echo "Query could not execute!";
         }
     }
 }
@@ -114,14 +109,14 @@ if(isset($_POST['btn-signup']))
             <div class="form-group">
                 <form method="post">
                     <h2>Sign Up for an Account</h2><hr />
-                    <h4>Only users with accounts can enter problems</h4>
-                    <label for="txtuname" class="control-label">Pick a user name:</label>
+                    <h4>Only users with accounts can enter problems.</h4>
+                    <label for="txtuname" class="control-label">Username:</label>
                     <input type="text" class="form-control" placeholder="JaneDoe2017" name="txtuname" required /><br />
-                    <label for="txtemail">please enter your email address:</label>
+                    <label for="txtemail">Email:</label>
                     <input type="email" class="form-control" placeholder="Email address" name="txtemail" required /><br />
-                    <label for="txtpass">pick a password:</label>
+                    <label for="txtpass">Password:</label>
                     <input type="password" class="form-control" placeholder="Password" name="txtpass" required id='pw1'/><br />
-                    <label for="txtpass2">enter it again:</label>
+                    <label for="txtpass2">Password again:</label>
                     <input type="password" class="form-control" placeholder="re-enter password" name="txtpass2" required id='pw2' onblur="check()"/><br />
 
                     <hr />
