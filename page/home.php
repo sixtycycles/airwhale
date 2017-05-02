@@ -99,69 +99,79 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     <form method="post" action="../php/phpsqlinfo_addrow.php" enctype="multipart/form-data">
                         <div class="form-group">
 
-                            <label for="name">Your Name</label>
-                            <input class="form-control" type='text' id='name' name='name' placeholder="Your Name"
-                                   value="<?php
-                                   echo $row1['userName'];
-                                   ?>"/>
+                            <div class="form-group">
+                                <label for="name">Your Name</label>
+                                <input class="form-control" type='text' id='name' name='name' placeholder="Your Name"
+                                    value="<?php
+                                    echo $row1['userName'];
+                                    ?>"/>
+                            </div>
 
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name='email' class="form-control"
-                                   placeholder="Email" value="<?php echo $row1['userEmail']; ?>"/>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name='email' class="form-control"
+                                    placeholder="Email" value="<?php echo $row1['userEmail']; ?>"/>
+                            </div>
 
-                            <label for="type">What type of problem?</label>
-                            <select class="form-control" id='type' name='type'>
-                                <?php
-                                if ($_SESSION['userSession']) {
-                                    require_once("../php/phpsqlinfo_dbinfo.php");
-                                    $connection = mysqli_connect('localhost', $username, $password, $database, $port);
-                                    if (!$connection) {
-                                        die('Not connected : ' . mysqli_error($connection));
+                            <div class="form-group">
+                            <label for="type">Problem Type</label>
+                                <select class="form-control" id='type' name='type'>
+                                    <?php
+                                    if ($_SESSION['userSession']) {
+                                        require_once("../php/phpsqlinfo_dbinfo.php");
+                                        $connection = mysqli_connect('localhost', $username, $password, $database, $port);
+                                        if (!$connection) {
+                                            die('Not connected : ' . mysqli_error($connection));
+                                        }
+                                        $db_selected = mysqli_select_db($connection, $database);
+                                        if (!$db_selected) {
+                                            die ('Can\'t use db : ' . mysqli_error($connection));
+                                        }
+                                        $query = "SELECT * FROM tbl_problem_types;";
+                                        $result = mysqli_query($connection, $query);
+
+                                        if (!$result) {
+                                            die('Invalid query: ' . mysqli_error($connection));
+                                        }
+
+                                        // Make each row in the "problem type" dropdown
+                                        $index = 0;
+                                        while ($row = @mysqli_fetch_assoc($result)) {
+                                            $id = $row['type_id'];
+                                            $name = $row['type_name'];
+                                            $selected = $index == 0 ? "SELECTED" : ""; // Select the first row
+                                            echo "<option ${selected} value='${id}'>${name}</option>";
+                                            $index = $index + 1;
+                                        }
                                     }
-                                    $db_selected = mysqli_select_db($connection, $database);
-                                    if (!$db_selected) {
-                                        die ('Can\'t use db : ' . mysqli_error($connection));
-                                    }
-                                    $query = "SELECT * FROM tbl_problem_types;";
-                                    $result = mysqli_query($connection, $query);
 
-                                    if (!$result) {
-                                        die('Invalid query: ' . mysqli_error($connection));
-                                    }
+                                    ?>
+                                </select>
+                            </div>
 
-                                    // Make each row in the "problem type" dropdown
-                                    $index = 0;
-                                    while ($row = @mysqli_fetch_assoc($result)) {
-                                        $id = $row['type_id'];
-                                        $name = $row['type_name'];
-                                        $selected = $index == 0 ? "SELECTED" : ""; // Select the first row
-                                        echo "<option ${selected} value='${id}'>${name}</option>";
-                                        $index = $index + 1;
-                                    }
-                                }
+                            <div class="form-group">
+                                <label for="description">Description of problem</label>
+                                <input class="form-control" type='text' id='description' name='description'/>
+                            </div>
 
-                                ?>
-                            </select>
-
-                            <label for="description">Description of problem</label>
-                            <input class="form-control" type='text' id='description' name='description'/>
-
-                            <!--                            <h4>How should we contact you? </h4>-->
-                            <!--                            <label for="phone">Phone Number</label>-->
-                            <!--                            <input type="tel" class="form-control" name='phone' id="phone" placeholder="123.456.7890">-->
-                            <h4>Upload a picture of the issue</h4>
-                            <input type="file" class="form-control-file " aria-describedby="fileHelp" name="file"/>
+                            <h4>Upload a picture of the issue (optional)</h4>
+                            <input type="file" accept="image/*" class="btn btn-sm form-control-file" aria-describedby="fileHelp" name="file"/>
 
                             <h4>Coordinates</h4>
-                            (or click the map where the problem is)<br>
-                            <div class="input-group">
+                            <p>(or click the map where the problem is)</p>
+                            <div class="form-group">
+                                <label for="lat" class="sr-only">Latitude</label>
                                 <input class="form-control" type="text" name="lat" id="lat" placeholder="Latitude">
+                            </div>
+                            <div class="form-group">
+                                <label for="lng" class="sr-only">Longitude</label>
                                 <input class="form-control" type="text" name="lng" id="lng" placeholder="Longitude">
                             </div>
                             <hr>
                             <input class="btn btn-success form-control" type='submit' value='Save'/>
                         </div>
                     </form>
+                    
                 </div>
             </div>
         </div>
