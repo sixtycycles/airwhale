@@ -23,6 +23,9 @@ if(isset($_POST['btn-submit']))
         $stmt = $user->runQuery("UPDATE tbl_users SET tokenCode=:token WHERE userEmail=:email");
         $stmt->execute(array(":token"=>$code,"email"=>$email));
 
+        $path = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
+        $path .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER['SERVER_PORT'] . dirname($_SERVER["PHP_SELF"]);
+        
         $message= "
             Hello, ${email}!
             <br />
@@ -30,7 +33,7 @@ if(isset($_POST['btn-submit']))
             A password reset has been requested for your account. If this was not you, please
             reset your password immediately. 
             <br />
-            <a href='resetpass.php?id=$id&code=$code'>Click here to reset your password.</a>
+            <a href='${path}/resetpass.php?id=$id&code=$code'>Click here to reset your password.</a>
             <br />
             <br />
             Thank you!

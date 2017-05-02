@@ -39,7 +39,7 @@ if(isset($_GET['id']) && isset($_GET['code']))
             $msg = "
                 <div class='alert alert-error'>
                 <button class='close' data-dismiss='alert'>&times;</button>
-                <strong>Oh snap!</strong>  Your account is allready activated : <a href='index.php'>Login here</a>
+                <strong>Oh snap!</strong>  Your account is allready activated: <a href='index.php'>Login here</a>
                 </div>
                 ";
         }

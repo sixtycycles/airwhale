@@ -22,9 +22,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
     <title>Orono Problem Reporter</title>
 </head>
 
-
 <body>
-
 <!-- Import navbar -->
 <?php require_once "../partials/navbar.php"; ?>
 

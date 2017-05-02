@@ -38,7 +38,10 @@ if(isset($_POST['btn-signup']))
             //$key = base64_encode($id);
             //$id = $key;
 
-            $url = "localhost:8888/airwhale/page/verify.php?id=${id}&code=${code}";
+            $path = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
+            $path .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER['SERVER_PORT'] . dirname($_SERVER["PHP_SELF"]);
+
+            $url = "${path}/verify.php?id=${id}&code=${code}";
 
             $message = "
                 <p>
@@ -108,26 +111,27 @@ if(isset($_POST['btn-signup']))
 <div class="container">
     <div class="row">
         <div class="col-lg-6 col-md-6">
-    <div class="form-group">
-            <form method="post">
-        <h2>Sign Up for an Account</h2><hr />
-        <h4>Only users with accounts can enter problems</h4>
-        <label for="txtuname" class="control-label">Pick a user name:</label>
-        <input type="text" class="form-control" placeholder="JaneDoe2017" name="txtuname" required /><br />
-        <label for="txtemail">please enter your email address:</label>
-        <input type="email" class="form-control" placeholder="Email address" name="txtemail" required /><br />
-        <label for="txtpass">pick a password:</label>
-        <input type="password" class="form-control" placeholder="Password" name="txtpass" required id='pw1'/><br />
-        <label for="txtpass2">enter it again:</label>
-        <input type="password" class="form-control" placeholder="re-enter password" name="txtpass2" required id='pw2' onblur="check()"/><br />
+            <div class="form-group">
+                <form method="post">
+                    <h2>Sign Up for an Account</h2><hr />
+                    <h4>Only users with accounts can enter problems</h4>
+                    <label for="txtuname" class="control-label">Pick a user name:</label>
+                    <input type="text" class="form-control" placeholder="JaneDoe2017" name="txtuname" required /><br />
+                    <label for="txtemail">please enter your email address:</label>
+                    <input type="email" class="form-control" placeholder="Email address" name="txtemail" required /><br />
+                    <label for="txtpass">pick a password:</label>
+                    <input type="password" class="form-control" placeholder="Password" name="txtpass" required id='pw1'/><br />
+                    <label for="txtpass2">enter it again:</label>
+                    <input type="password" class="form-control" placeholder="re-enter password" name="txtpass2" required id='pw2' onblur="check()"/><br />
 
-        <hr />
-        <button class="btn btn-large btn-primary" type="submit" name="btn-signup">Sign Up</button>
-        <a href="index.php"  class="btn btn-large">Log In</a>
-    </form>
+                    <hr />
+                    <button class="btn btn-large btn-primary" type="submit" name="btn-signup">Sign Up</button>
+                    <a href="index.php"  class="btn btn-large">Log In</a>
+                </form>
+            </div>
+        </div>
     </div>
-</div></div>
-        <!-- /container -->
+    <!-- /container -->
 </div>
 </body>
 </html>
