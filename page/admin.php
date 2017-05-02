@@ -24,6 +24,14 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 <!-- Import navbar -->
 <?php require_once "../partials/navbar.php"; ?>
 
+<div id="deleteConfirmModal" class="modal hide fade">
+    <div class="modal-body">Are you sure?</div>
+    <div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn btn-primary" id="deleteConfirmButton">Delete</button>
+    <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+    </div>
+</div>
+
 <div class="container-fluid">
     <div class="row">
 
@@ -54,12 +62,12 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
                         $connection = mysqli_connect('localhost', $username, $password, $database, $port);
                         if (!$connection) {
-                            die('Not connected : ' . mysqli_error($connection));
+                            die('Not connected: ' . mysqli_error($connection));
                         }
 
                         $db_selected = mysqli_select_db($connection, $database);
                         if (!$db_selected) {
-                            die ('Can\'t use db : ' . mysqli_error($connection));
+                            die ('Can\'t use db: ' . mysqli_error($connection));
                         }
                         //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
                         $query = "SELECT *
@@ -84,15 +92,14 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                                 "<div class='panel-heading clearfix'>" .
                                     "<div class='pull-left'>" .
                                         // "<h3 class='panel-title pull-left'>Panel title</h3>" . "<br />" .
-                                        //"<strong>ID</strong>: " . $row['id'] . "<br />" .
                                         "<strong>Type:</strong> " . $row['type_name'] . "<br />" .
                                         "<strong>Status:</strong> " . $row['problem_status'] .
                                     "</div>" .
 
                                     "<div class='btn-group pull-right'>" .
-                                        "<button class='btn btn-sm btn-primary' onclick='beginProblem(\"" . $row['id'] . "\")'>Start</button>" .
-                                        "<button class='btn btn-sm btn-success' onclick='resolveProblem(\"" . $row['id'] . "\")'>Complete</button>" .
-                                        "<button class='btn btn-sm btn-danger' onclick='deleteProblem(\"" . $row['id'] . "\")'>Delete</button>" .
+                                        "<button class='btn btn-sm btn-primary' onclick='beginProblem(\"${row['id']}\")'>Start</button>" .
+                                        "<button class='btn btn-sm btn-success' onclick='resolveProblem(\"${row['id']}\")'>Complete</button>" .
+                                        "<button class='btn btn-sm btn-danger' onclick='deleteProblem(\"${row['id']}\")'>Delete</button>" .
                                     "</div>" .
                                 
                                 "</div>" .
@@ -100,7 +107,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                                 "<div class='panel-body'>" .
                                     // Add photo row if photo is uploaded
                                     ($row['file'] ? "<a href='${image_path}'><img class='img-fluid img-thumbnail' style='float: right; max-width: 40%; min-width: 25%; height: auto;' src='${image_path}'></a>" : "" ) .
-                                    "<p><strong>Submitted by</strong> ${row['name']} <strong>on</strong> ${row['timestamp']}</p>" .
+                                    "<strong>Submitted by</strong> ${row['name']} <strong>on</strong> ${row['timestamp']}<br />" .
+                                    "<strong>ID</strong>: " . $row['id'] . "<br />" .
                                     "<strong>Description</strong><p> " . $row['description'] . "</p>" .
                                 "</div>" .
 
@@ -139,9 +147,25 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         var completeList = [];
 
         function deleteProblem(id) {
+
+            //console.log("ok");
+            //var $form = $(this).closest('form');
+            //e.preventDefault();
+            // $('#deleteConfirmModal').modal({
+            //     backdrop: 'static',
+            //     keyboard: false
+            // })
+            // .on('click', '#deleteConfirmButton', function(e) {
+            //     //$form.trigger('submit');
+            //     deleteList.push(id);
+            //     document.getElementById(id).innerHTML = "Problem #" + id + " Deleted!";
+            //     document.getElementById('deleteList').setAttribute('value', deleteList);
+            // });
+
             deleteList.push(id);
-            document.getElementById(id).innerHTML = "Problem #" + id + " Deleted!";
+            document.getElementById(id).innerHTML = "Problem #" + id + " deleted!";
             document.getElementById('deleteList').setAttribute('value', deleteList);
+
         }
 
         function beginProblem(id) {
