@@ -280,6 +280,11 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
         map.data.loadGeoJson('../assets/GIS/OronoBoundary.geojson');
 
+        // Set the style properties for polygons in the map
+        map.data.setStyle({
+          strokeWeight: 1
+        });
+
         // KML LAYERS
         roads = new google.maps.KmlLayer({
             url: 'http://sixtycycles.github.io/CPR_KML/Orono_Roads.kml',
