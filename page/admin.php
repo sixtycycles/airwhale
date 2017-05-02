@@ -127,9 +127,9 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         <div class="col-lg-4">
             <h3>Instructions</h3>
             <p>To administer a problem, choose one of the three buttons next to the problem.
-                You can delete, mark as started, or mark as completed. the problem will collapse,
-                and you can click the <strong>Save</strong></strong> button at the top of the page to submit changes.
-                to abandon changes, just refresh the page.
+                You can delete, mark as started, or mark as completed. You can click the 
+                <strong>Save</strong> button at the top of the page to submit changes.
+                To abandon changes, just refresh the page.
             </p>
             <p>You can also download a CSV of the problem records. all data except images are included as of this point. </p>
         </div>
