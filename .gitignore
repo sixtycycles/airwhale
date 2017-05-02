@@ -1,6 +1,7 @@
 
 page/uploads
 auth/uploads
+.idea
 
 # Created by https://www.gitignore.io/api/osx,linux,windows
 

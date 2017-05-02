@@ -29,7 +29,6 @@ if(isset($_GET['id']) && isset($_GET['code']))
 
             $msg = "
                 <div class='alert alert-success'>
-                    <button class='close' data-dismiss='alert'>&time</button>
                     Your account is now activated. <a href='index.php'>Log in here.</a>
                 </div>
                 ";
@@ -38,7 +37,6 @@ if(isset($_GET['id']) && isset($_GET['code']))
         {
             $msg = "
                 <div class='alert alert-error'>
-                    <button class='close' data-dismiss='alert'>&times;</button>
                     Your account is already activated. <a href='index.php'>Log in here.</a>
                 </div>
                 ";
@@ -48,7 +46,6 @@ if(isset($_GET['id']) && isset($_GET['code']))
     {
         $msg = "
             <div class='alert alert-error'>
-                <button class='close' data-dismiss='alert'>&times;</button>
                 No account found. <a href='signup.php'>Sign up here.</a>
             </div>
             ";
