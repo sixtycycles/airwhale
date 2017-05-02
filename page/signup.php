@@ -110,7 +110,7 @@ if(isset($_POST['btn-signup']))
                 <form method="post">
                     <h2>Sign Up for an Account</h2><hr />
                     <h4>Only users with accounts can enter problems.</h4>
-                    <label for="txtuname" class="control-label">Username:</label>
+                    <label for="txtuname" class="control-label">Your Name:</label>
                     <input type="text" class="form-control" placeholder="JaneDoe2017" name="txtuname" required /><br />
                     <label for="txtemail">Email:</label>
                     <input type="email" class="form-control" placeholder="Email address" name="txtemail" required /><br />
