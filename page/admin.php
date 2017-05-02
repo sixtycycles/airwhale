@@ -85,7 +85,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                                     "<div class='pull-left'>" .
                                         // "<h3 class='panel-title pull-left'>Panel title</h3>" . "<br />" .
                                         //"<strong>ID</strong>: " . $row['id'] . "<br />" .
-                                        "<strong>Type</strong>: " . $row['type_name'] . "<br />" .
+                                        "<strong>Type:</strong> " . $row['type_name'] . "<br />" .
                                         "<strong>Status:</strong> " . $row['problem_status'] .
                                     "</div>" .
 
