@@ -78,13 +78,15 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                         //loops over all problems sort by type
                         while ($row = @mysqli_fetch_assoc($result)) {
                             // Make a new panel for each problem
+                            $image_path = "../auth/uploads/${row['file']}";
                             echo "<div class='panel panel-default' id='" . $row['id'] . "'> " .
 
                                 "<div class='panel-heading clearfix'>" .
                                     "<div class='pull-left'>" .
                                         // "<h3 class='panel-title pull-left'>Panel title</h3>" . "<br />" .
-                                        "<strong>ID</strong>: " . $row['id'] . "<br />" .
-                                        "<strong>Type</strong>: " . $row['type_name'] . "" .
+                                        //"<strong>ID</strong>: " . $row['id'] . "<br />" .
+                                        "<strong>Type</strong>: " . $row['type_name'] . "<br />" .
+                                        "<strong>Status:</strong> " . $row['problem_status'] .
                                     "</div>" .
 
                                     "<div class='btn-group pull-right'>" .
@@ -97,14 +99,12 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
                                 "<div class='panel-body'> " .
                                     //"<div class='col-sm-8 col-md-6 col-lg-4'> " .
-                                    "<strong>Name:</strong> <p>" . $row['name'] . "</p>" .
-                                    "<strong>Status:</strong><p> " . $row['problem_status'] . "</p>" .
+                                     // Add photo row if photo is uploaded
+                                    ($row['file'] ? "<a href='../auth/uploads/${row['file']}'><img class='img-fluid img-thumbnail' style='float: right; max-width: 40%; min-width: 25%; height: auto;' src='../auth/uploads/${row['file']}'></a>" : "" ) .
+                                    "<strong>Submitted By</strong> <p>" . $row['name'] . "</p>" .
+                                    //"<strong>Status:</strong><p> " . $row['problem_status'] . "</p>" .
                                     "<strong>Time</strong> <p>" . $row['timestamp'] . "</p>" .
-                                    "<strong>Description:</strong><p> " . $row['description'] . "</p>" .
-
-                                    // Add photo row if photo is uploaded
-                                    ($row['file'] ? "<strong>Photo of Problem:</strong><br /> <img class='img-fluid img-thumbnail' src='../auth/uploads/" . $row['file'] . "'>" : "" ) .
-                                
+                                    "<strong>Description</strong><p> " . $row['description'] . "</p>" .
                                 "</div>" .
 
                             "</div>";
