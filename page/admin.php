@@ -24,23 +24,26 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 <!-- Import navbar -->
 <?php require_once "../partials/navbar.php"; ?>
 
-<div id="deleteConfirmModal" class="modal hide fade">
-    <div class="modal-body">Are you sure?</div>
-    <div class="modal-footer">
-    <button type="button" data-dismiss="modal" class="btn btn-primary" id="deleteConfirmButton">Delete</button>
-    <button type="button" data-dismiss="modal" class="btn">Cancel</button>
-    </div>
-</div>
-
 <div class="container-fluid">
+    <h1>Administer Problems</h1>
+    <!-- instructions area-->
+    <div class="row">
+        <div class="col-md-8">
+            <h3>Instructions</h3>
+            <p>To administer a problem, choose one of the three buttons next to the problem.
+                You can delete, mark as started, or mark as completed. You can click the
+                <strong>Save</strong> button at the top of the page to submit changes.
+                To abandon changes, just refresh the page.
+            </p>
+            <p>You can also download a CSV of the problem records. all data except images are included as of this point. </p>
+        </div>
+    </div>
+
     <div class="row">
 
-        <div class="col-md-6 col=lg-6">
-        
-            <h1>Administer Problems</h1>
+        <div class="col-md-8">
 
-            <form method="POST" action="../php/updateProblems.php">
-                        
+            <form method="POST">
 
                 <p>
                     <button type="submit" class="btn btn-primary" id="saveChanges" formaction="../php/updateProblems.php">
@@ -55,88 +58,83 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     </a>
                 </p>
 
-                <div id="problemList" class="">
+                <div class='form' style="visibility: hidden">
+                    <input name="deleteList" id="deleteList" value="">
+                    <input name="startList" id="startList" value="">
+                    <input name="completeList" id="completeList" value="">
+                </div>
 
-                        <?php
-                        require_once("../php/phpsqlinfo_dbinfo.php");
+            </form>
 
-                        $connection = mysqli_connect('localhost', $username, $password, $database, $port);
-                        if (!$connection) {
-                            die('Not connected: ' . mysqli_error($connection));
-                        }
+            <div id="problemList" class="">
 
-                        $db_selected = mysqli_select_db($connection, $database);
-                        if (!$db_selected) {
-                            die ('Can\'t use db: ' . mysqli_error($connection));
-                        }
-                        //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
-                        $query = "SELECT *
+                <?php
+                require_once("../php/phpsqlinfo_dbinfo.php");
+
+                $connection = mysqli_connect('localhost', $username, $password, $database, $port);
+                if (!$connection) {
+                    die('Not connected: ' . mysqli_error($connection));
+                }
+
+                $db_selected = mysqli_select_db($connection, $database);
+                if (!$db_selected) {
+                    die ('Can\'t use db: ' . mysqli_error($connection));
+                }
+                //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
+                $query = "SELECT *
                             FROM Problems
                             INNER JOIN tbl_problem_types ON (Problems.type_id=tbl_problem_types.type_id)
                             ORDER BY id ASC 
                             ;";
 
-                        $result = mysqli_query($connection, $query);
+                $result = mysqli_query($connection, $query);
 
-                        if (!$result) {
-                            die('Invalid query: ' . mysqli_error($connection));
-                        }
-
-
-                        //loops over all problems sort by type
-                        while ($row = @mysqli_fetch_assoc($result)) {
-                            // Make a new panel for each problem
-                            $image_path = "../auth/uploads/${row['file']}";
-                            echo "<div class='panel panel-default' id='" . $row['id'] . "'> " .
-
-                                "<div class='panel-heading clearfix'>" .
-                                    "<div class='pull-left'>" .
-                                        // "<h3 class='panel-title pull-left'>Panel title</h3>" . "<br />" .
-                                        "<strong>Type:</strong> " . $row['type_name'] . "<br />" .
-                                        "<strong>Status:</strong> " . $row['problem_status'] .
-                                    "</div>" .
-
-                                    "<div class='btn-group pull-right'>" .
-                                        "<button class='btn btn-sm btn-primary' onclick='beginProblem(\"${row['id']}\")'>Start</button>" .
-                                        "<button class='btn btn-sm btn-success' onclick='resolveProblem(\"${row['id']}\")'>Complete</button>" .
-                                        "<button class='btn btn-sm btn-danger' onclick='deleteProblem(\"${row['id']}\")'>Delete</button>" .
-                                    "</div>" .
-                                
-                                "</div>" .
-
-                                "<div class='panel-body'>" .
-                                    // Add photo row if photo is uploaded
-                                    ($row['file'] ? "<a href='${image_path}'><img class='img-fluid img-thumbnail' style='float: right; max-width: 40%; min-width: 25%; height: auto;' src='${image_path}'></a>" : "" ) .
-                                    "<strong>Submitted by</strong> ${row['name']} <strong>on</strong> ${row['timestamp']}<br />" .
-                                    "<strong>ID</strong>: " . $row['id'] . "<br />" .
-                                    "<strong>Description</strong><p> " . $row['description'] . "</p>" .
-                                "</div>" .
-
-                            "</div>";
-                        };
+                if (!$result) {
+                    die('Invalid query: ' . mysqli_error($connection));
+                }
 
 
-                        ?>
+                //loops over all problems sort by type
+                while ($row = @mysqli_fetch_assoc($result)) {
+                    // Make a new panel for each problem
+                    $image_path = "../auth/uploads/${row['file']}";
+                    echo "<div class='panel panel-default' id='" . $row['id'] . "'> " .
 
-                        <div class='form' style="visibility: hidden">
-                            <input name="deleteList" id="deleteList" value="">
-                            <input name="startList" id="startList" value="">
-                            <input name="completeList" id="completeList" value="">
-                        </div>
+                            "<div class='panel-heading clearfix'>" .
+                                "<div class='pull-left'>" .
+                                // "<h3 class='panel-title pull-left'>Panel title</h3>" . "<br />" .
+                                "<strong>Type:</strong> " . $row['type_name'] . "<br />" .
+                                "<strong>Status:</strong> " . $row['problem_status'] .
+                            "</div>" .
 
-                </div> <!-- End problemList -->
-            </form>
+                            "<div class='btn-group pull-right'>" .
+                                "<button class='btn btn-sm btn-primary' onclick='beginProblem(\"${row['id']}\")'>Start</button>" .
+                                "<button class='btn btn-sm btn-success' onclick='resolveProblem(\"${row['id']}\")'>Complete</button>" .
+                                "<button class='btn btn-sm btn-danger' onclick='deleteProblem(\"${row['id']}\")'>Delete</button>" .
+                            "</div>" .
 
-        </div>
-        <!-- instructions area-->
-        <div class="col-lg-4">
-            <h3>Instructions</h3>
-            <p>To administer a problem, choose one of the three buttons next to the problem.
-                You can delete, mark as started, or mark as completed. You can click the 
-                <strong>Save</strong> button at the top of the page to submit changes.
-                To abandon changes, just refresh the page.
-            </p>
-            <p>You can also download a CSV of the problem records. all data except images are included as of this point. </p>
+                            "</div>" .
+
+                            "<div class='panel-body'>" .
+                                // Add photo row if photo is uploaded
+                                ($row['file'] ?
+                                    "<a href='${image_path}'>
+                                        <img class='img-fluid img-thumbnail' style='float: right; max-width: 40%; min-width: 25%; height: auto;' src='${image_path}'>
+                                     </a>" :
+                                    "" ) .
+                                "<strong>Submitted by</strong> ${row['name']} <strong>on</strong> ${row['timestamp']}<br />" .
+                                "<strong>ID</strong>: " . $row['id'] . "<br />" .
+                                "<strong>Description</strong><p> " . $row['description'] . "</p>" .
+                            "</div>" .
+
+                        "</div>";
+                };
+
+
+                ?>
+
+            </div> <!-- End problemList -->
+
         </div>
     </div>
 
@@ -148,23 +146,13 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         function deleteProblem(id) {
 
-            //console.log("ok");
-            //var $form = $(this).closest('form');
-            //e.preventDefault();
-            // $('#deleteConfirmModal').modal({
-            //     backdrop: 'static',
-            //     keyboard: false
-            // })
-            // .on('click', '#deleteConfirmButton', function(e) {
-            //     //$form.trigger('submit');
-            //     deleteList.push(id);
-            //     document.getElementById(id).innerHTML = "Problem #" + id + " Deleted!";
-            //     document.getElementById('deleteList').setAttribute('value', deleteList);
-            // });
+            var conf = confirm("Would you like to delete this problem?");
 
-            deleteList.push(id);
-            document.getElementById(id).innerHTML = "Problem #" + id + " deleted!";
-            document.getElementById('deleteList').setAttribute('value', deleteList);
+            if(conf) {
+                deleteList.push(id);
+                document.getElementById(id).innerHTML = "Problem #" + id + " deleted!";
+                document.getElementById('deleteList').setAttribute('value', deleteList);
+            }
 
         }
 
