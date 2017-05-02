@@ -21,12 +21,21 @@ if (!empty($_POST)) {
 
     for ($j = 0; $j <= sizeof($startList); $j++) {
         $query1 = "UPDATE Problems SET problem_status = 'Started' WHERE id = $startList[$j] ";
+        $start_time = "UPDATE problem_timelines SET start_timestamp = NOW() WHERE id = $startList[$j]";
         $result = mysqli_query($connection, $query1);
+    if (sizeof($startList>0)){
+        $result2 = mysqli_query($connection,$start_time);
+        }
     }
 
     for ($k = 0; $k <= sizeof($completeList); $k++) {
-        $query2 = "UPDATE Problems SET problem_status = 'Completed' WHERE id = $completeList[$k] ";
-        $result = mysqli_query($connection, $query2);
+        $query3 = "UPDATE Problems SET problem_status = 'Completed' WHERE id = $completeList[$k] ";
+        $complete_time = "UPDATE problem_timelines SET complete_timestamp = NOW() where id = $completeList[$k]";
+        $result = mysqli_query($connection, $query3);
+        if(sizeof($completeList>0)) {
+            $result = mysqli_query($connection, $complete_time);
+        }
+
     }
 
     $connection->close();
