@@ -97,13 +97,10 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                                 
                                 "</div>" .
 
-                                "<div class='panel-body'> " .
-                                    //"<div class='col-sm-8 col-md-6 col-lg-4'> " .
-                                     // Add photo row if photo is uploaded
-                                    ($row['file'] ? "<a href='../auth/uploads/${row['file']}'><img class='img-fluid img-thumbnail' style='float: right; max-width: 40%; min-width: 25%; height: auto;' src='../auth/uploads/${row['file']}'></a>" : "" ) .
-                                    "<strong>Submitted By</strong> <p>" . $row['name'] . "</p>" .
-                                    //"<strong>Status:</strong><p> " . $row['problem_status'] . "</p>" .
-                                    "<strong>Time</strong> <p>" . $row['timestamp'] . "</p>" .
+                                "<div class='panel-body'>" .
+                                    // Add photo row if photo is uploaded
+                                    ($row['file'] ? "<a href='${image_path}'><img class='img-fluid img-thumbnail' style='float: right; max-width: 40%; min-width: 25%; height: auto;' src='${image_path}'></a>" : "" ) .
+                                    "<p><strong>Submitted by</strong> ${row['name']} <strong>on</strong> ${row['timestamp']}</p>" .
                                     "<strong>Description</strong><p> " . $row['description'] . "</p>" .
                                 "</div>" .
 
