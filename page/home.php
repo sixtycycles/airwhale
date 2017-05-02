@@ -404,7 +404,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 }, 
                 // Failure callback
                 function(error){
-                    console.error(error);
+                    console.warn("ERROR(" + error.code + "): "+ error.message );
                 },
                 // Options
                 {
