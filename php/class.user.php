@@ -47,12 +47,12 @@ class USER
     public function login($email, $upass)
     {
         try {
-            $stmt = $this->conn->prepare("SELECT * FROM tbl_users WHERE userEmail=:email_id");
-            $stmt->execute(array(":email_id" => $email));
+            $stmt = $this->conn->prepare("SELECT * FROM tbl_users WHERE userEmail=:email_id AND userPass = :userPass");
+            $stmt->execute(array(":email_id" => $email, ":userPass" => $upass));
             $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($stmt->rowCount() == 1) {
-                if ($userRow['userStatus'] == "A") {
+                if ($userRow['userStatus'] == "A" && ['userPass'] == sha1($upass)) {
                     $_SESSION['userSession'] = $userRow['userID'];
                     $_SESSION['isAdmin'] = true;
 
