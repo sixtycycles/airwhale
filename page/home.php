@@ -102,15 +102,13 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
                             <div class="form-group">
                                 <label for="name">Your Name</label>
-                                <input class="form-control" type='text' id='name' name='name' placeholder="Your Name"
-                                    value="<?php
-                                    echo $row1['userName'];
-                                    ?>"/>
+                                <input class="form-control" disabled type='text' id='name' name='name' placeholder="Your Name"
+                                    value="<?php echo $row1['userName']; ?>"/>
                             </div>
 
                             <div class="form-group">
                                 <label for="email">Email Address</label>
-                                <input type="email" id="email" name='email' class="form-control"
+                                <input class="form-control" disabled type="email" id="email" name='email'
                                     placeholder="Email" value="<?php echo $row1['userEmail']; ?>"/>
                             </div>
 
@@ -253,7 +251,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
             });
             eventMarker.addListener('click', function () {
-                infowindow.setContent("your problem goes here");
+                infowindow.setContent("Your problem's location");
                 infowindow.open(map, eventMarker);
             });
             google.maps.event.addListener(eventMarker, 'dragend', function(event){
