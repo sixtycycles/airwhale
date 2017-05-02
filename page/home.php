@@ -103,13 +103,13 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                             <div class="form-group">
                                 <label for="name">Your Name</label>
                                 <input class="form-control" disabled type='text' id='name' name='name' placeholder="Your Name"
-                                    value="<?php echo $row1['userName']; ?>"/>
+                                    value="<?php echo $row1['userName']; ?>" autocomplete="off"/>
                             </div>
 
                             <div class="form-group">
                                 <label for="email">Email Address</label>
                                 <input class="form-control" disabled type="email" id="email" name='email'
-                                    placeholder="Email" value="<?php echo $row1['userEmail']; ?>"/>
+                                    placeholder="Email" value="<?php echo $row1['userEmail']; ?>" autocomplete="off"/>
                             </div>
 
                             <div class="form-group">
@@ -151,22 +151,23 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                             </div>
 
                             <div class="form-group">
-                                <label for="description">Description of problem</label>
-                                <input class="form-control" type='text' id='description' name='description'/>
+                                <label for="description">Description of Problem</label>
+                                <input class="form-control" type='text' id='description' name='description'
+                                       autocomplete="off" style="resize: vertical; overflow: auto;"/>
                             </div>
 
-                            <h4>Upload a picture of the issue (optional)</h4>
+                            <h4>Picture of the Issue (optional)</h4>
                             <input type="file" accept="image/*" class="btn btn-sm form-control-file" aria-describedby="fileHelp" name="file"/>
 
                             <h4>Coordinates</h4>
                             <p>(or click the map where the problem is)</p>
                             <div class="form-group">
                                 <label for="lat" class="sr-only">Latitude</label>
-                                <input class="form-control" type="text" name="lat" id="lat" placeholder="Latitude">
+                                <input class="form-control" type="text" name="lat" id="lat" placeholder="Latitude" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label for="lng" class="sr-only">Longitude</label>
-                                <input class="form-control" type="text" name="lng" id="lng" placeholder="Longitude">
+                                <input class="form-control" type="text" name="lng" id="lng" placeholder="Longitude" autocomplete="off">
                             </div>
                             <hr>
                             <input class="btn btn-success form-control" type='submit' value='Save'/>
