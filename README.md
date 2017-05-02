@@ -6,7 +6,7 @@ This is a mapping application that allows the citizens of Orono, Maine to report
 
 ## Usage
 
-The user is asked to sign up for an account by entering a username and a password and an email. An email will be sent to the user with a confirmation link. Logging in is neccesary to use the application, so as to prevent spamming, and abuse. After logging in, the user is presented with a map of Orono, and is geolocated via their browser. If the user has disabled geolocation, or if they are not at the location of the issue, they can click on the map to locate their issue.
+Users must log in to use the application, so as to prevent spamming, and abuse. The user is asked to sign up for an account by entering a username, a password and an email. An email will be sent to the user with a confirmation link. After logging in, the user is presented with a map of Orono, and is geolocated via their browser. If the user has disabled geolocation, or if they are not at the location of the issue, they can click on the map to locate their issue.
 
 The user is associated with the problem for contact and status updates. They are prompted to enter a description of the problem, and to select a type of problem to report. 
 
