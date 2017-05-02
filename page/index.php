@@ -63,9 +63,11 @@ if(isset($_POST['btn-login']))
                 <h2 class="form-signin-heading">Please log in to report problems.</h2><hr />
                 <div class="form-group">
                     <label for="txtemail">Email Address</label>
-                    <input type="email" class="input-block-level form-control" style="margin-bottom: 1em;" placeholder="Email address" name="txtemail" required />
+                    <input type="email" class="input-block-level form-control" placeholder="Email address" name="txtemail" required />
+                </div>
+                <div class="form-group">
                     <label for="txtupass">Password</label>
-                    <input type="password" class="input-block-level form-control" style="" placeholder="Password" name="txtupass" required />
+                    <input type="password" class="input-block-level form-control" placeholder="Password" name="txtupass" required />
                 </div>
                 <hr />
                 <button class="btn btn-large btn-primary" type="submit" name="btn-login">Log In</button>
