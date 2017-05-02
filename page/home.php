@@ -26,7 +26,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 <!-- Import navbar -->
 <?php require_once "../partials/navbar.php"; ?>
 
-<!--Main area -->
+<!-- Main area -->
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8 col-lg-8">
@@ -37,7 +37,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             </div>
             <!-- problem Filter area-->
             <div class="well" id="filterArea">
-                <!--This renders the filter buttons from problem types in DB -->
+                <!-- This renders the filter buttons from problem types in DB -->
                 <?php
                 if ($_SESSION['userSession']) {
                     require_once("../php/phpsqlinfo_dbinfo.php");
@@ -219,26 +219,24 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         markers.push(marker);
     }
 
-    //  show all markers of a particular category, styles buttons
+    // show all markers of a particular category, styles buttons
     function show(category) {
         for (var i = 0; i < markers.length; i++) {
             if (markers[i].type === category) {
                 markers[i].setMap(map);
-                //console.log(category)
             }
 
         }
-        //change buttons and onclick functions to the right one after click.
+        // change buttons and onclick functions to the right one after click.
         document.getElementById(category).setAttribute('class', 'btn btn-primary');
         document.getElementById(category).setAttribute('onclick', "hide('" + category + "')");
     }
 
-    //  hides all markers of a particular category, styles buttons
+    // hides all markers of a particular category, styles buttons
     function hide(category) {
         for (var i = 0; i < markers.length; i++) {
             if (markers[i].type === category) {
                 markers[i].setMap(null);
-                //console.log(category)
             }
         }
         //change buttons and onclick functions to the right one after click.
@@ -256,7 +254,6 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             },
             success: function(response){
                 // process on data
-                console.log("Likes: " + response);
                 window.likesField.SetText(response);
                 //document.getElementById(id).setAttribute('style','visibility:hidden;');
 
@@ -285,7 +282,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
           strokeWeight: 1
         });
 
-        // KML LAYERS
+        // Road KML layer
         roads = new google.maps.KmlLayer({
             url: 'http://sixtycycles.github.io/CPR_KML/Orono_Roads.kml',
             map: map,
@@ -293,20 +290,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             clickable: false
 
         });
-        // surroundingTowns = new google.maps.KmlLayer({
-        //     url: 'http://sixtycycles.github.io/CPR_KML/TownswithoutOrono.kmz',
-        //     map: map,
-        //     preserveViewport: true,
-        //     info: "<h4>Please Select an Area In Orono</h4>"
-        // });
-        // boundary = new google.maps.KmlLayer({
-        //     url: 'http://sixtycycles.github.io/CPR_KML/OronoBoundary.kmz',
-        //     map: map,
-        //     preserveViewport: true,
-        //     clickable: false
-        // });
 
-        //this guy grabs the xml file from the db, and adds all the problems to the markers array
+        // this guy grabs the xml file from the db, and adds all the problems to the markers array
         downloadUrl('../php/dump.php', function (data) {
             var xml = data.responseXML;
             var downloadedMarkers = xml.documentElement.getElementsByTagName('marker');
@@ -326,7 +311,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     // anchor: new google.maps.Point(0, 0) // anchor
                 };
 
-                //we add the property type to the marker object to filter by problem type later
+                // we add the property type to the marker object to filter by problem type later
                 var marker = new google.maps.Marker({
                     map: map,
                     position: point,
@@ -334,7 +319,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                     type: type
                 });
                 markers.push(marker);
-                //opens infowin when clicking marker.
+                // opens infowin when clicking marker.
                 marker.addListener('click', function () {
                     infowindow.open(map, marker);
                     infowindow.setContent(MakeMarkerWindow(markerElem));
@@ -349,9 +334,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             grabCoords(event);
         });
 
-        //locate the user form the browser
+        // Locate the user from the browser
         if (navigator.geolocation) {
-            console.log("Geolocation is supported.");
             navigator.geolocation.getCurrentPosition(
                 // Success callback
                 function (position) {
@@ -448,7 +432,6 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         Divider();
 
         window.likesField = new LabelField("Likes", likes);
-        //window.likesField.element.setAttribute('id', "likeArea");
 
         infowincontent.appendChild(document.createElement('br'));
 
@@ -475,7 +458,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         return infowincontent;
     }
 
-    //for grabbing xml
+    // for grabbing xml
     function downloadUrl(url, callback) {
         var request = window.ActiveXObject ?
             new ActiveXObject('Microsoft.XMLHTTP') :
