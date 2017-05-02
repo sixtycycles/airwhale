@@ -255,7 +255,6 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 infowindow.open(map, eventMarker);
             });
             google.maps.event.addListener(eventMarker, 'dragend', function(event){
-                console.log("Dragged");
                 document.getElementById('lat').value = event.latLng.lat();
                 document.getElementById('lng').value = event.latLng.lng();
             });
