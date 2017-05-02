@@ -40,7 +40,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 <!-- This renders the filter buttons from problem types in DB -->
                 <?php
                 if ($_SESSION['userSession']) {
-                    require_once("../php/phpsqlinfo_dbinfo.php");
+                    require_once "../php/phpsqlinfo_dbinfo.php";
 
                     $connection = mysqli_connect('localhost', $username, $password, $database, $port);
                     if (!$connection) {

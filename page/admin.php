@@ -69,9 +69,9 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             <div id="problemList" class="">
 
                 <?php
-                require_once("../php/phpsqlinfo_dbinfo.php");
+                require_once "../php/phpsqlinfo_dbinfo.php";
 
-                $connection = mysqli_connect('localhost', $username, $password, $database, $port);
+                $connection = mysqli_connect($server, $username, $password, $database, $port);
                 if (!$connection) {
                     die('Not connected: ' . mysqli_error($connection));
                 }
