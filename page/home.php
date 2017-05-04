@@ -287,7 +287,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Road KML layer
         roads = new google.maps.KmlLayer({
-            url: 'http://sixtycycles.github.io/CPR_KML/Orono_Roads.kml',
+            url: 'http://sixtycycles.github.io/CPR_KML/Orono_Roads_wgs84.kmz',
             map: map,
             preserveViewport: true,
             clickable: false
