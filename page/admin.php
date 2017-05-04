@@ -35,7 +35,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 <strong>Save</strong> button at the top of the page to submit changes.
                 To abandon changes, just refresh the page.
             </p>
-            <p>You can also download a CSV of the problem records. all data except images are included as of this point. </p>
+            <p>You can also download a CSV of the problem records. all data except images are included as of this
+                point. </p>
         </div>
     </div>
 
@@ -46,7 +47,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             <form method="POST">
 
                 <p>
-                    <button type="submit" class="btn btn-primary" id="saveChanges" formaction="../php/updateProblems.php">
+                    <button type="submit" class="btn btn-primary" id="saveChanges"
+                            formaction="../php/updateProblems.php">
                         Save
                     </button>
 
@@ -82,10 +84,10 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 }
                 //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
                 $query = "SELECT *
-                            FROM Problems
-                            INNER JOIN tbl_problem_types ON (Problems.type_id=tbl_problem_types.type_id)
-                            ORDER BY id ASC 
-                            ;";
+                          FROM Problems
+                          INNER JOIN tbl_problem_types ON (Problems.type_id=tbl_problem_types.type_id)
+                          INNER JOIN problem_timelines ON (Problems.id = problem_timelines.id)
+                          ORDER BY Problems.id ASC;";
 
                 $result = mysqli_query($connection, $query);
 
@@ -100,33 +102,34 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     $image_path = "../auth/uploads/${row['file']}";
                     echo "<div class='panel panel-default' id='" . $row['id'] . "'> " .
 
-                            "<div class='panel-heading clearfix'>" .
-                                "<div class='pull-left'>" .
-                                // "<h3 class='panel-title pull-left'>Panel title</h3>" . "<br />" .
-                                "<strong>Type:</strong> " . $row['type_name'] . "<br />" .
-                                "<strong>Status:</strong> " . $row['problem_status'] .
-                            "</div>" .
+                        "<div class='panel-heading clearfix'>" .
+                        "<div class='pull-left'>" .
+                        // "<h3 class='panel-title pull-left'>Panel title</h3>" . "<br />" .
+                        "<strong>Type:</strong> " . $row['type_name'] . "<br />" .
+                        "<strong>Status:</strong> " . $row['problem_status'] .
+                        "</div>" .
 
-                            "<div class='btn-group pull-right'>" .
-                                "<button class='btn btn-sm btn-primary' onclick='beginProblem(\"${row['id']}\")'>Start</button>" .
-                                "<button class='btn btn-sm btn-success' onclick='resolveProblem(\"${row['id']}\")'>Complete</button>" .
-                                "<button class='btn btn-sm btn-danger' onclick='deleteProblem(\"${row['id']}\")'>Delete</button>" .
-                            "</div>" .
+                        "<div class='btn-group pull-right'>" .
+                        "<button class='btn btn-sm btn-primary' onclick='beginProblem(\"${row['id']}\")'>Start</button>" .
+                        "<button class='btn btn-sm btn-success' onclick='resolveProblem(\"${row['id']}\")'>Complete</button>" .
+                        "<button class='btn btn-sm btn-danger' onclick='deleteProblem(\"${row['id']}\")'>Delete</button>" .
+                        "</div>" .
 
-                            "</div>" .
+                        "</div>" .
 
-                            "<div class='panel-body'>" .
-                                // Add photo row if photo is uploaded
-                                ($row['file'] ?
-                                    "<a href='${image_path}'>
+                        "<div class='panel-body'>" .
+                        // Add photo row if photo is uploaded
+                        ($row['file'] ?
+                            "<a href='${image_path}'>
                                         <img class='img-fluid img-thumbnail' style='float: right; max-width: 40%; min-width: 25%; height: auto;' src='${image_path}'>
                                      </a>" :
-                                    "" ) .
-                                "<strong>Submitted by</strong> ${row['name']} <strong>on</strong> ${row['timestamp']}<br />" .
-                                "<strong>ID</strong>: " . $row['id'] . "<br />" .
-                                "<strong>Description</strong><p> " . $row['description'] . "</p>" .
-                            "</div>" .
-
+                            "") .
+                        "<strong>Submitted by</strong> ${row['name']} <strong>on</strong> ${row['create_timestamp']}<br />" .
+                        ($row['start_timestamp'] ? "<strong>Project Start Date: </strong>" . $row['start_timestamp'] . "<br />" : "").
+                        ($row['complete_timestamp'] ? "<strong>Project Completion Date: </strong>" . $row['complete_timestamp'] . "<br />" : "" ).
+                        "<strong>ID</strong>: " . $row['id'] . "<br />" .
+                        "<strong>Description</strong><p> " . $row['description'] . "</p>" .
+                        "</div>" .
                         "</div>";
                 };
 
@@ -149,7 +152,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             var conf = confirm("Would you like to delete this problem?");
 
-            if(conf) {
+            if (conf) {
                 deleteList.push(id);
                 document.getElementById(id).innerHTML = "Problem #" + id + " deleted!";
                 document.getElementById('deleteList').setAttribute('value', deleteList);
@@ -170,7 +173,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
     </script>
-<!--END Scripts -->
+    <!--END Scripts -->
 </div>
 
 </body>
