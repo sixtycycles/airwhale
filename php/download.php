@@ -10,7 +10,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql2 = "SELECT Problems.id, name, lat, lon, description,problem_status, pTimes.create_timestamp,pTimes.start_timestamp,pTimes.complete_timestamp, file, pTypes.type_name 
+$sql2 = "SELECT Problems.id, name, lat, lon, description,problem_status, pTimes.create_timestamp,pTimes.start_timestamp,pTimes.complete_timestamp, Problems.likes, pTypes.type_name 
 FROM Problems 
   INNER JOIN tbl_problem_types as pTypes
     ON (Problems.type_id = pTypes.type_id)
@@ -21,7 +21,7 @@ $result = mysqli_query($conn, $sql2) or die ("Selection Error " . mysqli_error($
 
 $fp = fopen('php://output', 'w');
 
-$headings = ['PROBLEM_ID', 'USERNAME', 'LATTITUDE', 'LONGITUDE', 'DESCRIPTION','STATUS', 'CREATE_DATETIME','START_DATETIME','COMPLETE_DATETIME', 'IMAGE_NAME', 'PROBLEM_TYPE'];
+$headings = ['PROBLEM_ID', 'USERNAME', 'LATTITUDE', 'LONGITUDE', 'DESCRIPTION','STATUS', 'CREATE_DATETIME','START_DATETIME','COMPLETE_DATETIME', 'LIKES', 'PROBLEM_TYPE'];
 
 fputcsv($fp, $headings);
 
