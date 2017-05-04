@@ -102,13 +102,13 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
                             <div class="form-group">
                                 <label for="name">Your Name</label>
-                                <input class="form-control" disabled type='text' id='name' name='name' placeholder="Your Name"
+                                <input class="form-control" readonly type='text' id='name' name='name' placeholder="Your Name"
                                     value="<?php echo $row1['userName']; ?>" autocomplete="off"/>
                             </div>
 
                             <div class="form-group">
                                 <label for="email">Email Address</label>
-                                <input class="form-control" disabled type="email" id="email" name='email'
+                                <input class="form-control" readonly type="email" id="email" name='email'
                                     placeholder="Email" value="<?php echo $row1['userEmail']; ?>" autocomplete="off"/>
                             </div>
 
