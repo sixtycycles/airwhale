@@ -273,7 +273,8 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         //the map where we draw things and interact.
         map = new google.maps.Map(document.getElementById('map'), {
             center: oronoMaine,
-            zoom: 13
+            zoom: 13,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
         });
         infowindow = new google.maps.InfoWindow({content: ""});
         messagewindow = new google.maps.InfoWindow({content: ""});
@@ -377,6 +378,9 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Add click listener to map to allow the user to place their location manually
         google.maps.event.addListener(map, 'click', function (event) {
+            // Close the infowindow if it's up
+            infowindow.close();
+
             // Set fields in form
             document.getElementById('lat').value = event.latLng.lat();
             document.getElementById('lng').value = event.latLng.lng();
@@ -440,7 +444,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         
         var infowincontent = document.createElement('div');
         //infowincontent.setAttribute('class', 'well');
-        infowincontent.setAttribute('style', 'width:200px; height:auto');
+        infowincontent.setAttribute('style', 'width:200px; height:auto; padding-right: 2em;');
 
         // Little class for making labels that can be restyled.
         function LabelField(label, text){
