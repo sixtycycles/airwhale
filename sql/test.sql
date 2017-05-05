@@ -66,9 +66,14 @@ CREATE TABLE `Problems` (
 -- Dumping data for table `Problems`
 --
 
-INSERT INTO `Problems` (`id`, `name`, `lat`, `lon`, `description`, `timestamp`, `problem_status`, `file`, `type_id`, `likes`) VALUES
-(1, 'admin', 44.884093476429, -68.70162963867188, 0x4772616666697469206f6e2074726565, '2017-04-28 15:25:45', 'Started', NULL, 2, 2);
-
+INSERT INTO ORONOISSUE.Problems (name, lat, lon, description, timestamp, problem_status, file, type_id, likes) VALUES ('admin', 44.89296405121482, -68.6609137058258, 0x546865726520697320736F6D65206772616666697469206F6E207468652073696465206F662074686973206275696C64696E672E, '2017-05-05 19:25:12', 'Started', '51958-graffiti.jpg', 2, 0);
+INSERT INTO ORONOISSUE.Problems (name, lat, lon, description, timestamp, problem_status, file, type_id, likes) VALUES ('admin', 44.88793984050824, -68.66930365562439, 0x74686572652069732061206C69676874206F7574206F6E207468697320737472656574212069747320736361727921, '2017-05-05 19:26:45', 'Reported', '52907-streetlight.JPG', 3, 0);
+INSERT INTO ORONOISSUE.Problems (name, lat, lon, description, timestamp, problem_status, file, type_id, likes) VALUES ('admin', 44.90342911396686, -68.70695114135742, 0x4E4F4953455920574F4F445321, '2017-05-05 19:27:18', 'Reported', '16454-Couch in the Woods.jpg', 4, 1);
+INSERT INTO ORONOISSUE.Problems (name, lat, lon, description, timestamp, problem_status, file, type_id, likes) VALUES ('admin', 44.90402944832199, -68.67437839508057, 0x746865726520697320612062696720706F74686F6C652068657265212069747320676F6E6E61206D65737320757020736F6D65206361727321, '2017-05-05 19:28:10', 'Started', '69659-pothole2.jpg', 5, 0);
+INSERT INTO ORONOISSUE.Problems (name, lat, lon, description, timestamp, problem_status, file, type_id, likes) VALUES ('admin', 44.87065198742505, -68.69040727615356, 0x746865206C696768742068617320676F6E65206F7574212077652061726520686176696E672074726F75626C6520736565696E672E, '2017-05-05 19:28:55', 'Completed', '12417-streetlight2.JPG', 3, 2);
+INSERT INTO ORONOISSUE.Problems (name, lat, lon, description, timestamp, problem_status, file, type_id, likes) VALUES ('admin', 44.88821728567946, -68.75629037618637, 0x4120545245452046454C4C20444F574E, '2017-05-05 19:29:50', 'Reported', '98775-fallen_tree.jpg', 6, 3);
+INSERT INTO ORONOISSUE.Problems (name, lat, lon, description, timestamp, problem_status, file, type_id, likes) VALUES ('admin', 44.88397184807364, -68.67982864379883, 0x736F6D656F6E65207061696E746564206F6E207468657365207468696E677321, '2017-05-05 19:30:55', 'Reported', '51182-grafitti.jpg', 2, 0);
+INSERT INTO ORONOISSUE.Problems (name, lat, lon, description, timestamp, problem_status, file, type_id, likes) VALUES ('admin', 44.88664761249026, -68.71673583984375, 0x74686520666972652068796472616E74206973207370726179696E672077617465722065766572797768657265212066756E2C2062757420776173746566756C2E, '2017-05-05 19:31:44', 'Reported', '97030-firehydrant2.jpg', 7, 0);
 -- --------------------------------------------------------
 
 --
