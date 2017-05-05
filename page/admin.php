@@ -5,9 +5,6 @@ $user_home = new USER();
 if (!$user_home->is_admin()) {
     $user_home->redirect('index.php');
 }
-$stmt = $user_home->runQuery("SELECT * FROM tbl_users WHERE userID=:uid");
-$stmt->execute(array(":uid" => $_SESSION['userSession']));
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -30,13 +27,16 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
     <div class="row">
         <div class="col-md-8">
             <h3>Instructions</h3>
-            <p>To administer a problem, choose one of the three buttons next to the problem.
+            <p>
+                To administer a problem, choose one of the three buttons next to the problem.
                 You can delete, mark as started, or mark as completed. You can click the
                 <strong>Save</strong> button at the top of the page to submit changes.
                 To abandon changes, just refresh the page.
             </p>
-            <p>You can also download a CSV of the problem records. all data except images are included as of this
-                point. </p>
+            <p>
+                You can also download a CSV of the problem records. all data except
+                images are included as of this point.
+            </p>
         </div>
     </div>
 
@@ -71,69 +71,55 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             <div id="problemList" class="">
 
                 <?php
-                require_once "../php/phpsqlinfo_dbinfo.php";
-
-                $connection = mysqli_connect($server, $username, $password, $database, $port);
-                if (!$connection) {
-                    die('Not connected: ' . mysqli_error($connection));
-                }
-
-                $db_selected = mysqli_select_db($connection, $database);
-                if (!$db_selected) {
-                    die ('Can\'t use db: ' . mysqli_error($connection));
-                }
-                //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
                 $query = "SELECT *
                           FROM Problems
-                          INNER JOIN tbl_problem_types ON (Problems.type_id=tbl_problem_types.type_id)
+                          INNER JOIN tbl_problem_types ON (Problems.type_id = tbl_problem_types.type_id)
                           INNER JOIN problem_timelines ON (Problems.id = problem_timelines.id)
                           ORDER BY Problems.id ASC;";
 
-                $result = mysqli_query($connection, $query);
+                $stmt = $user_home->runQuery($query);
+                $success = $stmt->execute();
 
-                if (!$result) {
-                    die('Invalid query: ' . mysqli_error($connection));
+                if(!$success){
+                    die("Could not query the server!");
                 }
 
-
                 //loops over all problems sort by type
-                while ($row = @mysqli_fetch_assoc($result)) {
+                foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
                     // Make a new panel for each problem
                     $image_path = "../auth/uploads/${row['file']}";
-                    echo "<div class='panel panel-default' id='" . $row['id'] . "'> " .
+                    echo "" .
+                        "<div class='panel panel-default' id='" . $row['id'] . "'> " .
 
-                        "<div class='panel-heading clearfix'>" .
-                        "<div class='pull-left'>" .
-                        // "<h3 class='panel-title pull-left'>Panel title</h3>" . "<br />" .
-                        "<strong>Type:</strong> " . $row['type_name'] . "<br />" .
-                        "<strong>Status:</strong> " . $row['problem_status'] .
-                        "</div>" .
+                            "<div class='panel-heading clearfix'>" .
+                                "<div class='pull-left'>" .
+                                    // "<h3 class='panel-title pull-left'>Panel title</h3>" . "<br />" .
+                                    "<strong>Type:</strong> ${row['type_name']}<br />" .
+                                    "<strong>Status:</strong> " . $row['problem_status'] .
+                                "</div>" .
 
-                        "<div class='btn-group pull-right'>" .
-                        "<button class='btn btn-sm btn-primary' onclick='beginProblem(\"${row['id']}\")'>Start</button>" .
-                        "<button class='btn btn-sm btn-success' onclick='resolveProblem(\"${row['id']}\")'>Complete</button>" .
-                        "<button class='btn btn-sm btn-danger' onclick='deleteProblem(\"${row['id']}\")'>Delete</button>" .
-                        "</div>" .
+                                "<div class='btn-group pull-right'>" .
+                                    "<button class='btn btn-sm btn-primary' onclick='beginProblem(\"${row['id']}\")'>Start</button>" .
+                                    "<button class='btn btn-sm btn-success' onclick='resolveProblem(\"${row['id']}\")'>Complete</button>" .
+                                    "<button class='btn btn-sm btn-danger' onclick='deleteProblem(\"${row['id']}\")'>Delete</button>" .
+                                "</div>" .
 
-                        "</div>" .
+                            "</div>" .
 
-                        "<div class='panel-body'>" .
-                        // Add photo row if photo is uploaded
-                        ($row['file'] ?
-                            "<a href='${image_path}'>
+                            "<div class='panel-body'>" .
+                                // Add photo row if photo is uploaded
+                                ($row['file'] ?
+                                    "<a href='${image_path}'>
                                         <img class='img-fluid img-thumbnail' style='float: right; max-width: 40%; min-width: 25%; height: auto;' src='${image_path}'>
-                                     </a>" :
-                            "") .
-                        "<strong>Submitted by</strong> ${row['name']} <strong>on</strong> ${row['create_timestamp']}<br />" .
-                        ($row['start_timestamp'] ? "<strong>Project Start Date: </strong>" . $row['start_timestamp'] . "<br />" : "").
-                        ($row['complete_timestamp'] ? "<strong>Project Completion Date: </strong>" . $row['complete_timestamp'] . "<br />" : "" ).
-                        "<strong>ID</strong>: " . $row['id'] . "<br />" .
-                        "<strong>Description</strong><p> " . $row['description'] . "</p>" .
-                        "</div>" .
+                                     </a>" : "") .
+                                "<strong>Submitted by</strong> ${row['name']} <strong>on</strong> ${row['create_timestamp']}<br />" .
+                                ($row['start_timestamp'] ? "<strong>Project Start Date: </strong> ${row['start_timestamp']}<br />" : "").
+                                ($row['complete_timestamp'] ? "<strong>Project Completion Date: </strong>${row['complete_timestamp']}<br />" : "" ).
+                                "<strong>ID</strong>: ${row['id']}<br />" .
+                                "<strong>Description</strong><p> ${row['description']}</p>" .
+                            "</div>" .
                         "</div>";
                 };
-
-                mysqli_close($connection);
 
                 ?>
 
