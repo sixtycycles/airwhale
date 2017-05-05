@@ -13,4 +13,3 @@ if($user->is_logged_in()!="")
     $user->logout();
     $user->redirect('index.php');
 }
-?>
