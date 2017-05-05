@@ -40,43 +40,26 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                 <!-- This renders the filter buttons from problem types in DB -->
                 <?php
                 if ($_SESSION['userSession']) {
-                    require_once "../php/phpsqlinfo_dbinfo.php";
-
-                    $connection = mysqli_connect('localhost', $username, $password, $database, $port);
-                    if (!$connection) {
-                        die('Not connected : ' . mysqli_error($connection));
-                    }
-
-                    $db_selected = mysqli_select_db($connection, $database);
-                    if (!$db_selected) {
-                        die ('Can\'t use db : ' . mysqli_error($connection));
-                    }
-                    //$query = "SELECT id,type FROM Problems GROUP BY type ASC;";
-
-                    //$query = "SELECT id, type_id, COUNT(type_id) FROM Problems GROUP BY type_id ASC;";
                     $query = "SELECT id, Problems.type_id, type_name, COUNT(Problems.type_id)
                             FROM Problems, tbl_problem_types
                             WHERE (Problems.type_id=tbl_problem_types.type_id)
                             GROUP BY Problems.type_id ASC
                             ;";
 
-
-                    $result = mysqli_query($connection, $query);
-
-                    if (!$result) {
-                        die('Invalid query: ' . mysqli_error($connection));
-                    }
+                    $stmt = $user_home->runQuery($query);
+                    $stmt->execute();
 
                     echo "<div class='form-group'>";
                     echo "<h4>Filters</h4>";
-                    while ($row = @mysqli_fetch_assoc($result)) {
+
+                    foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
 
                         echo '<button 
-                        name=\'filters_params\' 
-                        class=\'btn btn-primary\' 
-                        onclick=\'hide(' . '"' . $row['type_id'] . '"' . ')\' 
-                        id=\'' . $row['type_id'] . '\'> '
-                            . $row['type_name'] .
+                            name=\'filters_params\' 
+                            class=\'btn btn-primary\' 
+                            onclick=\'hide(' . '"' . $row['type_id'] . '"' . ')\' 
+                            id=\'' . $row['type_id'] . '\'> ' .
+                            $row['type_name'] .
                             " <span class='badge'> " . $row['COUNT(Problems.type_id)'] . " </span>" . ' 
                         </button> ';
 
@@ -116,35 +99,19 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
                             <label for="type">Problem Type</label>
                                 <select class="form-control" id='type' name='type'>
                                     <?php
-                                    if ($_SESSION['userSession']) {
-                                        require_once("../php/phpsqlinfo_dbinfo.php");
-                                        $connection = mysqli_connect('localhost', $username, $password, $database, $port);
-                                        if (!$connection) {
-                                            die('Not connected : ' . mysqli_error($connection));
-                                        }
-                                        $db_selected = mysqli_select_db($connection, $database);
-                                        if (!$db_selected) {
-                                            die ('Can\'t use db : ' . mysqli_error($connection));
-                                        }
                                         $query = "SELECT * FROM tbl_problem_types;";
-                                        $result = mysqli_query($connection, $query);
-
-                                        if (!$result) {
-                                            die('Invalid query: ' . mysqli_error($connection));
-                                        }
+                                        $stmt = $user_home->runQuery($query);
+                                        $stmt->execute();
 
                                         // Make each row in the "problem type" dropdown
                                         $index = 0;
-                                        while ($row = @mysqli_fetch_assoc($result)) {
+                                        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
                                             $id = $row['type_id'];
                                             $name = $row['type_name'];
                                             $selected = $index == 0 ? "SELECTED" : ""; // Select the first row
                                             echo "<option ${selected} value='${id}'>${name}</option>";
                                             $index = $index + 1;
                                         }
-
-                                        mysqli_close($connection);
-                                    }
 
                                     ?>
                                 </select>
