@@ -1,5 +1,5 @@
 '''----------------------------------------------------------------------------------
-Author:        Tara Mullen & Rod O'Connor
+Author:        Tara Mullen, Rod O'Connor, Jon Cole
 Version:       ArcGIS 10.4
 Project:       Citizen none-emergancy reporting
 Required Arguements: csv file
@@ -88,4 +88,6 @@ for row in reader:
     row =[point_obj,problem_ID,username,descr,type,crt_date,strt_date,comp_date,status,likes]
     insertcursor.insertRow(row)
 
+
 del insertcursor
+arcpy.CheckInExtension('Spatial')
