@@ -27,8 +27,8 @@ The requirements as outlined by the client:
 * Upload images of the Problems
 
 This application attempts facilitate communication between citizens and the Town of Orono. With a developed reporting system that allows the town employees to view, organize and track the problems the Town should have few problems planning their response to the issues in Orono.
-
-Conceptual model:
+***
+### Conceptual model: ###
 
 
 
@@ -40,12 +40,11 @@ Description of data sources - Discuss how or from where data were collected or g
   * Town of orono outline, adapted from (METWP24) at Maine office of GIS [METWP24](http://www.maine.gov/megis/catalog/shps/state/MEGIS_Town_Bdys.zip)
 * Google Maps
   * Basemap, centered on Orono Maine.
-  * Javascript API
+  * [Javascript API](https://developers.google.com/maps/documentation/javascript/3.exp/reference.)
 * Town of Orono
-  * Outline of project requirements, interface mockup
-  * Contact information for various town officials
-* Users
-  * Submit problem data to populate system.
+  * Outline of project requirements, interface mockup.(*c/o Avinash Rude, Town of Orono*)
+  * [Contact information](http://orono.org/149/Departments) for various town officials
+
 
 
 
@@ -54,7 +53,7 @@ Original - listened to client describe the issue
 Interpreted client’s description to develop rough outline of the application
 Met with Professor to discuss development of the application
 Email client with follow up questions to gather more information -->
-
+***
 ### Methodology: ###
 
    The initial project outline given in our meeting with the Town planners served as our starting point for this application. We compiled a shortlist of functionality the application required and began the process of examining technologies to use. We determined that for the functionality required in this project, ArcGis Online was not the best solution as, while it met many of the needs of the project, and also had the advantage of keeping the solution within the software ecosystem that the Town currently utilizes, the effort to conform the tools available to suit the needs of the project was too great. We ultimately settled on using free web mapping API’s, and hosting the application on the Town’s server. We would create a tool to migrate the data from the application to a compatible format for the town to address the incompatibility issues by this solution.
