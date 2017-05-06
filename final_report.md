@@ -109,15 +109,15 @@ Khodke, Pradeep. “How to Send HTML Format eMails in PHP Using PHPMailer | Codi
 *click title for link to most recent version.*
 
 ```
-'''
-Author:        Tara Mullen & Rod O'Connor
+'''----------------------------------------------------------------------------------
+Author:        Tara Mullen, Rod O'Connor, Jon Cole
 Version:       ArcGIS 10.4
 Project:       Citizen none-emergancy reporting
 Required Arguements: csv file
 Description: This program turns a cvs file into a shapefile headings are in:
-"PROBLEM_ID,USERNAME,LATTITUDE,LONGITUDE,DESCRIPTION,TYPE,SUBMIT_DATETIME,STATUS,IMAGE_NAME"
-'''
-
+            "PROBLEM_ID,USERNAME,LATTITUDE,LONGITUDE,DESCRIPTION,TYPE,SUBMIT_DATETIME,STATUS,IMAGE_NAME"
+            order
+-------------------------------------------------------------------------------'''
 import arcpy
 import re, os
 from arcpy import env
@@ -199,5 +199,7 @@ for row in reader:
     row =[point_obj,problem_ID,username,descr,type,crt_date,strt_date,comp_date,status,likes]
     insertcursor.insertRow(row)
 
+
 del insertcursor
+arcpy.CheckInExtension('Spatial')
 ```
