@@ -38,10 +38,10 @@ Description of data sources - Discuss how or from where data were collected or g
 * [ME GIS website](http://www.maine.gov/megis/catalog/)
   * Orono roads polygon adapted from [911RDS](https://geolibrary-maine.opendata.arcgis.com/datasets/a7024b7148634880bf1bba0f3cff8848_1?geometry=-83.388%2C42.935%2C-54.56%2C47.572)
   * Town of orono outline, adapted from (METWP24) at Maine office of GIS [METWP24](http://www.maine.gov/megis/catalog/shps/state/MEGIS_Town_Bdys.zip)
-* Google Maps
+* [Google Maps](https://developers.google.com/maps/)
   * Basemap, centered on Orono Maine.
   * [Javascript API](https://developers.google.com/maps/documentation/javascript/3.exp/reference.)
-* Town of Orono
+* [Town of Orono](http://orono.org)
   * Outline of project requirements, interface mockup.(*c/o Avinash Rude, Town of Orono*)
   * [Contact information](http://orono.org/149/Departments) for various town officials
 
@@ -98,12 +98,15 @@ Email client with follow up questions to gather more information -->
 “Google Maps JavaScript API V3 Reference | Google Maps JavaScript API.” Google Developers. Accessed May 6, 2017. https://developers.google.com/maps/documentation/javascript/3.exp/reference.
 “PHPMailer/PHPMailer.” GitHub. Accessed May 6, 2017. https://github.com/PHPMailer/PHPMailer.
 
+ESRI 2011. ArcGIS Desktop: Release 10.3 Redlands, CA: Environmental Systems Research Institute.
+
 Khodke, Pradeep. “Easy Ajax Image Upload with jQuery, PHP | Coding Cage.” Accessed May 6, 2017. http://www.codingcage.com/2015/12/easy-ajax-image-upload-with-jquery-php.html.
 
 Khodke, Pradeep. “How to Send HTML Format eMails in PHP Using PHPMailer | Coding Cage.” Accessed May 6, 2017. http://www.codingcage.com/2016/03/how-to-send-html-emails-in-php-with.html.
 
 ***
-### Appendix A: Python Code ###
+### [Appendix A: Python Code](https://github.com/sixtycycles/airwhale/blob/rework/python/arcmap_import_tool.py) ###
+*click title for link to most recent version.*
 
 ```
 '''
