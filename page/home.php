@@ -246,6 +246,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         infowindow = new google.maps.InfoWindow({content: ""});
         messagewindow = new google.maps.InfoWindow({content: ""});
 
+        // Boundary layer
         var oronoBoundaryLayer = new google.maps.Data();
         oronoBoundaryLayer.loadGeoJson('../assets/GIS/OronoBoundary.geojson');
         oronoBoundaryLayer.setStyle({
@@ -253,7 +254,7 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
         });
         oronoBoundaryLayer.setMap(map);
 
-
+        // Roads layer
         var oronoRoadsLayer = new google.maps.Data();
         oronoRoadsLayer.loadGeoJson('../assets/GIS/Orono_Roads_wgs84.geojson');
         oronoRoadsLayer.setStyle({
@@ -262,15 +263,6 @@ $row1 = $stmt->fetch(PDO::FETCH_ASSOC);
             clickable: false
         });
         oronoRoadsLayer.setMap(map);
-
-        // Road KML layer
-//        roads = new google.maps.KmlLayer({
-//            url: 'http://sixtycycles.github.io/CPR_KML/Orono_Roads_wgs84.kmz',
-//            map: map,
-//            preserveViewport: true,
-//            clickable: false
-//
-//        });
 
         // this guy grabs the xml file from the db, and adds all the problems to the markers array
         downloadUrl('../php/dump.php', function (data) {
